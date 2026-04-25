@@ -6,3 +6,144 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model User {
+  id String @id @default(uuid())
+
+  nickname String @unique()
+  role     Role   @default(USER)
+
+  email    String @unique
+  password String
+
+  novels   Novel[]
+  comments Comment[]
+
+  novelRates   NovelRate[]
+  commentRates CommentRate[]
+
+  canComment  Boolean @default(true) @map("can_comment")
+  canAddNovel Boolean @default(true) @map("can_add_novel")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("users")
+}
+
+model Novel {
+  id String @id @default(uuid())
+
+  title     String @unique
+  author    String
+  imagePath String @map("image_path")
+  language  Lang
+
+  novelGenres NovelGenre[]
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
+
+  chapters   Chapter[]
+  comments   Comment[]
+  novelRates NovelRate[]
+
+  isDeleted Boolean  @default(false) @map("is_deleted")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("novels")
+}
+
+model NovelGenre {
+  novel   Novel  @relation(fields: [novelId], references: [id])
+  novelId String @map("novel_id")
+
+  genre Genre
+
+  @@id([novelId, genre])
+  @@map("novel_genres")
+}
+
+model Chapter {
+  id String @id @default(uuid())
+
+  title String
+  text  String
+
+  novel   Novel  @relation(fields: [novelId], references: [id])
+  novelId String @map("novel_id")
+
+  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("chapters")
+}
+
+model Comment {
+  id String @id @default(uuid())
+
+  text String
+
+  novel   Novel  @relation(fields: [novelId], references: [id])
+  novelId String @map("novel_id")
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String @map("user_id")
+
+  commentRates CommentRate[]
+
+  isDeleted Boolean  @default(false) @map("is_deleted")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("comments")
+}
+
+model NovelRate {
+  novel   Novel  @relation(fields: [novelId], references: [id])
+  novelId String @map("novel_id")
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String @map("user_id")
+
+  rate Int
+
+  @@unique([userId, novelId])
+  @@map("novel_rates")
+}
+
+model CommentRate {
+  comment   Comment @relation(fields: [commentId], references: [id])
+  commentId String  @map("comment_id")
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String  @map("user_id")
+
+  isPositive Boolean @map("is_positive")
+
+  @@unique([userId, commentId])
+  @@map("comment_rates")
+}
+
+enum Role {
+  USER
+  ADMIN
+  SUPERADMIN
+}
+
+enum Genre {
+  FANTASY
+  ACTION
+  ADVENTURE
+  ROMANCE
+  DRAMA
+  COMEDY
+  SCI_FI
+  MYSTERY
+  HORROR
+  SUPERNATURAL
+  ISEKAI
+  REINCARNATION
+  REGRESSION
+  SLICE_OF_LIFE
+}
+
+enum Lang {
+  UKRAINIAN
+  ENGLISH
+}
