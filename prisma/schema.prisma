@@ -33,14 +33,14 @@ model User {
 model Novel {
   id String @id @default(uuid())
 
-  title     String @unique
+  title     String
   author    String
   imagePath String @map("image_path")
   language  Lang
 
   novelGenres NovelGenre[]
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @map("user_id")
 
   chapters   Chapter[]
@@ -54,7 +54,7 @@ model Novel {
 }
 
 model NovelGenre {
-  novel   Novel  @relation(fields: [novelId], references: [id])
+  novel   Novel  @relation(fields: [novelId], references: [id], onDelete: Cascade)
   novelId String @map("novel_id")
 
   genre Genre
@@ -69,7 +69,7 @@ model Chapter {
   title String
   text  String
 
-  novel   Novel  @relation(fields: [novelId], references: [id])
+  novel   Novel  @relation(fields: [novelId], references: [id], onDelete: Cascade)
   novelId String @map("novel_id")
 
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -83,9 +83,9 @@ model Comment {
 
   text String
 
-  novel   Novel  @relation(fields: [novelId], references: [id])
+  novel   Novel  @relation(fields: [novelId], references: [id], onDelete: Cascade)
   novelId String @map("novel_id")
-  user    User   @relation(fields: [userId], references: [id])
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId  String @map("user_id")
 
   commentRates CommentRate[]
@@ -97,9 +97,9 @@ model Comment {
 }
 
 model NovelRate {
-  novel   Novel  @relation(fields: [novelId], references: [id])
+  novel   Novel  @relation(fields: [novelId], references: [id], onDelete: Cascade)
   novelId String @map("novel_id")
-  user    User   @relation(fields: [userId], references: [id])
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId  String @map("user_id")
 
   rate Int
@@ -109,9 +109,9 @@ model NovelRate {
 }
 
 model CommentRate {
-  comment   Comment @relation(fields: [commentId], references: [id])
+  comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
   commentId String  @map("comment_id")
-  user      User    @relation(fields: [userId], references: [id])
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String  @map("user_id")
 
   isPositive Boolean @map("is_positive")
