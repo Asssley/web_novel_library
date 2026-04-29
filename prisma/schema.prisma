@@ -71,6 +71,8 @@ model Chapter {
   title String
   text  String
 
+  chapterNumber Int @map("chapter_number")
+
   novel   Novel  @relation(fields: [novelId], references: [id], onDelete: Cascade)
   novelId String @map("novel_id")
 
@@ -80,6 +82,7 @@ model Chapter {
   updatedAt DateTime @updatedAt @map("updated_at")
   createdAt DateTime @default(now()) @map("created_at")
 
+  @@unique([chapterNumber, novelId])
   @@map("chapters")
 }
 
