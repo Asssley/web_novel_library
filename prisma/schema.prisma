@@ -34,10 +34,10 @@ model User {
 model Novel {
   id String @id @default(uuid())
 
-  title     String
-  author    String
-  imagePath String @map("image_path")
-  language  Lang
+  title       String
+  description String
+  imagePath   String @map("image_path")
+  language    Lang
 
   novelGenres NovelGenre[]
 
