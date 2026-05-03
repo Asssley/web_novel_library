@@ -8,11 +8,6 @@ import { UpdateEmailDto } from './dto/update-email.dto';
 export class UserController {
   constructor(private readonly userService: UserService) { }
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
-  }
-
   @Patch(':id/email')
   updateEmail(@Param('id') id: string, @Body() dto: UpdateEmailDto) {
     return this.userService.updateEmail(id, dto);
