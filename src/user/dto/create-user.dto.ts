@@ -4,21 +4,15 @@ export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(20)
-  nickname: string;
+  nickname!: string;
 
   @IsString()
   @IsNotEmpty()
   @IsEmail()
-  email: string;
+  email!: string;
 
   @IsString()
   @IsNotEmpty()
   @MinLength(8)
-  password: string;
-
-  constructor (nickname: string, email: string, password: string) {
-    this.nickname = nickname;
-    this.email = email;
-    this.password = password;
-  }
+  password!: string;
 }
