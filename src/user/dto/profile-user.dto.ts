@@ -1,4 +1,4 @@
-import { User } from "../../generated/prisma/client";
+import { User } from "../../generated/client.js";
 
 export class UserProfile implements Pick<User, "nickname" | "email" | "createdAt">  {
   nickname!: string;

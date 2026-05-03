@@ -1,12 +1,10 @@
-import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdatePasswordDto } from './dto/update-password.dto';
-import { PrismaService } from '../prisma/prisma.service';
-import { UserProfile } from './dto/profile-user.dto';
-import { AuthUserDto } from './dto/auth-user.dto';
-import { UpdateEmailDto } from './dto/update-email.dto';
-import { comparePasswords, hashPassword } from '../common/utils/password.util';
-import { Prisma } from '../generated/prisma/client';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { UpdatePasswordDto } from './dto/update-password.dto.js';
+import { PrismaService } from '../prisma/prisma.service.js';
+import { UserProfile } from './dto/profile-user.dto.js';
+import { UpdateEmailDto } from './dto/update-email.dto.js';
+import { hashPassword } from '../common/utils/password.util.js';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
 
 @Injectable()
 export class UserService {
@@ -26,7 +24,10 @@ export class UserService {
       });
       return user.id;
     } catch (err) {
-      if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2025') {
+      if (
+        err instanceof PrismaClientKnownRequestError &&
+        err.code === 'P2025'
+      ) {
         throw new NotFoundException();
       }
       throw err;
@@ -48,8 +49,23 @@ export class UserService {
 
       return user.id;
     } catch (err) {
-      if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2025') {
+      if (
+        err instanceof PrismaClientKnownRequestError &&
+        err.code === 'P2025'
+      ) {
         throw new NotFoundException();
+      }
+      if (
+        err instanceof PrismaClientKnownRequestError &&
+        err.code === 'P2002'
+      ) {
+        const target = err.meta?.target as string[] | undefined;
+
+        if (target?.includes('email')) {
+          throw new ConflictException('Email already exists');
+        }
+
+        throw new ConflictException('Unique constraint violation');
       }
       throw err;
     }
