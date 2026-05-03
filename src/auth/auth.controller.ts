@@ -2,10 +2,7 @@ import { Controller, Post, Body, Res, UseGuards, Req } from '@nestjs/common';
 import { AuthService } from './auth.service.js';
 import { CreateUserDto } from '../user/dto/create-user.dto.js';
 import { LoginDto } from './dto/login.dto.js';
-import { AuthGuard } from '@nestjs/passport';
 import type { Response } from "express";
-import { RolesGuard } from './guards/roles.guard.js';
-import { Roles } from './decorators/roles.decorator.js';
 
 @Controller('auth')
 export class AuthController {
@@ -38,10 +35,4 @@ export class AuthController {
     return { succes: true }
   }
 
-  @UseGuards(AuthGuard("jwt"), RolesGuard)
-  @Roles("no", 'Useer', "USER", "ds")
-  @Post('me')
-  async me(@Req() req) {
-    return req.user;
-  }
 }
