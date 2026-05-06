@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { isDev } from '../common/utils/is-dev.util.js';
 import { PrismaService } from '../prisma/prisma.service.js';
@@ -7,7 +7,6 @@ import type { CreateUserDto } from '../user/dto/create-user.dto.js';
 import type { LoginDto } from './dto/login.dto.js';
 import type { Request, Response } from 'express';
 import { comparePasswords, hashPassword } from '../common/utils/password.util.js';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
 
 @Injectable()
 export class AuthService {
@@ -19,35 +18,15 @@ export class AuthService {
   async register(res: Response, dto: CreateUserDto) {
     const hashedPassword = await hashPassword(dto.password);
 
-    try {
-      const user = await this.prismaService.user.create({
-        data: {
-          nickname: dto.nickname,
-          email: dto.email,
-          password: hashedPassword
-        }
-      });
-
-      this.auth(res, user.id)
-    } catch (err) {
-      if (
-        err instanceof PrismaClientKnownRequestError &&
-        err.code === 'P2002'
-      ) {
-        const target = err.meta?.target as string[] | undefined;
-
-        if (target?.includes('email')) {
-          throw new ConflictException('Email already exists');
-        }
-
-        if (target?.includes('nickname')) {
-          throw new ConflictException('Nickname already exists');
-        }
-
-        throw new ConflictException('Unique constraint violation');
+    const user = await this.prismaService.user.create({
+      data: {
+        nickname: dto.nickname,
+        email: dto.email,
+        password: hashedPassword
       }
-      throw err;
-    }
+    });
+
+    this.auth(res, user.id)
   }
 
   async login(res: Response, dto: LoginDto) {

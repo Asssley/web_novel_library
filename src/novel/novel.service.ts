@@ -4,7 +4,6 @@ import { PrismaService } from '../prisma/prisma.service.js';
 import * as path from "path";
 import * as fs from "fs";
 import { v4 as uuid } from 'uuid';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
 import { NovelInfo } from './interfaces/novel-info.interface.js';
 
 
@@ -17,52 +16,35 @@ export class NovelService {
     file: Express.Multer.File,
     dto: CreateNovelDto,
   ) {
-    try {
-      const user = await this.prismaService.user.findFirst({
-        where: {
-          id: userId,
-          canAddNovel: false
-        }
-      });
-
-      if (user) throw new ForbiddenException();
-      
-      const imagePath = this.saveImage(file);
-      const genres = [...new Set(dto.genres ?? [])];
-
-      const novel = await this.prismaService.novel.create({
-        data: {
-          title: dto.title,
-          description: dto.description,
-          language: dto.language,
-          imagePath,
-          userId,
-
-          genres: {
-            create: genres?.map((genre) => ({
-              genre,
-            })) || [],
-          },
-        },
-      });
-
-      return { data: { id: novel.id } };
-
-    } catch (err) {
-      if (
-        err instanceof PrismaClientKnownRequestError &&
-        err.code === 'P2002'
-      ) {
-        const target = err.meta?.target as string[] | undefined;
-
-        if (target?.includes('title')) {
-          throw new ConflictException('Title already exists');
-        }
-
-        throw new ConflictException('Unique constraint violation');
+    const user = await this.prismaService.user.findFirst({
+      where: {
+        id: userId,
+        canAddNovel: false
       }
-      throw err;
-    }
+    });
+
+    if (user) throw new ForbiddenException();
+
+    const imagePath = this.saveImage(file);
+    const genres = [...new Set(dto.genres ?? [])];
+
+    const novel = await this.prismaService.novel.create({
+      data: {
+        title: dto.title,
+        description: dto.description,
+        language: dto.language,
+        imagePath,
+        userId,
+
+        genres: {
+          create: genres?.map((genre) => ({
+            genre,
+          })) || [],
+        },
+      },
+    });
+
+    return { data: { id: novel.id } };
   }
 
   async updateImage(
@@ -77,7 +59,7 @@ export class NovelService {
     });
 
     if (!novel) throw new NotFoundException();
-    
+
     if (novel.userId !== userId) throw new ForbiddenException();
 
     this.saveImage(file, novel.imagePath);
@@ -124,7 +106,7 @@ export class NovelService {
     });
 
     if (!novel) throw new NotFoundException();
-    
+
     return { succes: true };
   }
 

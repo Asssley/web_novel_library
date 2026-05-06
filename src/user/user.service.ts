@@ -13,62 +13,30 @@ export class UserService {
   async updatePassword(id: string, dto: UpdatePasswordDto): Promise<string> {
     const hashedPassword = await hashPassword(dto.password);
 
-    try {
-      const user = await this.prismaService.user.update({
-        where: {
-          id
-        },
-        data: {
-          password: hashedPassword
-        }
-      });
-      return user.id;
-    } catch (err) {
-      if (
-        err instanceof PrismaClientKnownRequestError &&
-        err.code === 'P2025'
-      ) {
-        throw new NotFoundException();
+    const user = await this.prismaService.user.update({
+      where: {
+        id
+      },
+      data: {
+        password: hashedPassword
       }
-      throw err;
-    }
+    });
+    return user.id;
   }
 
   async updateEmail(id: string, dto: UpdateEmailDto): Promise<string> {
     const email = dto.email;
 
-    try {
-      const user = await this.prismaService.user.update({
-        where: {
-          id
-        },
-        data: {
-          email
-        }
-      });
-
-      return user.id;
-    } catch (err) {
-      if (
-        err instanceof PrismaClientKnownRequestError &&
-        err.code === 'P2025'
-      ) {
-        throw new NotFoundException();
+    const user = await this.prismaService.user.update({
+      where: {
+        id
+      },
+      data: {
+        email
       }
-      if (
-        err instanceof PrismaClientKnownRequestError &&
-        err.code === 'P2002'
-      ) {
-        const target = err.meta?.target as string[] | undefined;
+    });
 
-        if (target?.includes('email')) {
-          throw new ConflictException('Email already exists');
-        }
-
-        throw new ConflictException('Unique constraint violation');
-      }
-      throw err;
-    }
+    return user.id;
   }
 
   async getProfileData(id: string): Promise<UserProfile> {
