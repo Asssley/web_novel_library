@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, Req, UseGuards } from '@nestjs/common';
 import { NovelService } from './novel.service.js';
 import { CreateNovelDto } from './dto/create-novel.dto.js';
 import { FileInterceptor } from '@nestjs/platform-express';
