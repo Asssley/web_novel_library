@@ -76,10 +76,8 @@ export class AuthService {
   async refresh(req: Request, res: Response) {
     const refreshToken = req.cookies["access_token"];
 
-    if (!refreshToken) {
-      throw new UnauthorizedException();
-    }
-
+    if (!refreshToken) throw new UnauthorizedException();
+    
     const payload = await this.jwtService.verifyAsync(refreshToken);
 
     if (payload) {
@@ -92,10 +90,8 @@ export class AuthService {
         }
       });
 
-      if (!user) {
-        throw new NotFoundException();
-      }
-
+      if (!user) throw new NotFoundException();
+      
       return this.auth(res, user.id);
     }
   }
@@ -111,10 +107,8 @@ export class AuthService {
       }
     });
 
-    if (!user) {
-      throw new NotFoundException();
-    }
-
+    if (!user) throw new NotFoundException();
+  
     return user;
   }
 
