@@ -28,23 +28,28 @@ export class NovelService {
     const imagePath = this.saveImage(file);
     const genres = [...new Set(dto.genres ?? [])];
 
-    const novel = await this.prismaService.novel.create({
-      data: {
-        title: dto.title,
-        description: dto.description,
-        language: dto.language,
-        imagePath,
-        userId,
+    try {
+      const novel = await this.prismaService.novel.create({
+        data: {
+          title: dto.title,
+          description: dto.description,
+          language: dto.language,
+          imagePath,
+          userId,
 
-        genres: {
-          create: genres?.map((genre) => ({
-            genre,
-          })) || [],
+          genres: {
+            create: genres?.map((genre) => ({
+              genre,
+            })) || [],
+          },
         },
-      },
-    });
+      });
 
-    return { data: { id: novel.id } };
+      return { data: { id: novel.id } };
+    } catch (err) {
+      this.deleteImage(imagePath);
+      throw err;
+    }
   }
 
   async updateImage(
@@ -131,4 +136,16 @@ export class NovelService {
     return fileName;
   }
 
+  private async deleteImage(fileName: string): Promise<void> {
+    const uploadDir = path.join(__dirname, '..', '..', '..', 'uploads');
+    const filePath = path.join(uploadDir, fileName);
+
+    try {
+      await fs.promises.unlink(filePath);
+    } catch (err) {
+      if ((err as any).code !== 'ENOENT') {
+        throw err;
+      }
+    }
+  }
 }
