@@ -34,7 +34,7 @@ model User {
 model Novel {
   id String @id @default(uuid())
 
-  title       String
+  title       String @unique
   description String
   imagePath   String @map("image_path")
   language    Lang
