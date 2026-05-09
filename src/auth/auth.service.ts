@@ -5,7 +5,7 @@ import { PrismaService } from '../prisma/prisma.service.js';
 import { JwtPayload } from './interfaces/jwt-payload.interface.js';
 import type { CreateUserDto } from '../user/dto/create-user.dto.js';
 import type { LoginDto } from './dto/login.dto.js';
-import type { Request, Response } from 'express';
+import type { Response } from 'express';
 import { comparePasswords, hashPassword } from '../common/utils/password.util.js';
 
 @Injectable()
@@ -50,29 +50,8 @@ export class AuthService {
 
   async logout(res: Response) {
     res.clearCookie("access_token");
-  }
-
-  async refresh(req: Request, res: Response) {
-    const refreshToken = req.cookies["access_token"];
-
-    if (!refreshToken) throw new UnauthorizedException();
     
-    const payload = await this.jwtService.verifyAsync(refreshToken);
-
-    if (payload) {
-      const user = await this.prismaService.user.findUnique({
-        where: {
-          id: payload.id
-        },
-        select: {
-          id: true
-        }
-      });
-
-      if (!user) throw new NotFoundException();
-      
-      return this.auth(res, user.id);
-    }
+    return { succes: true };
   }
 
   async validate(id: string) {
@@ -87,7 +66,7 @@ export class AuthService {
     });
 
     if (!user) throw new NotFoundException();
-  
+
     return user;
   }
 
@@ -99,9 +78,9 @@ export class AuthService {
 
   private generateToken(id: string) {
     const payload: JwtPayload = { id };
-    const accessToken = this.jwtService.sign(payload, { });
+    const accessToken = this.jwtService.sign(payload, {});
 
-    return accessToken ;
+    return accessToken;
   }
 
   private setCookie(res: Response, value: string) {
