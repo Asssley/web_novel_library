@@ -5,5 +5,6 @@ import { NovelController } from './novel.controller.js';
 @Module({
   controllers: [NovelController],
   providers: [NovelService],
+  exports: [NovelService]
 })
 export class NovelModule {}
