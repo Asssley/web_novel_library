@@ -10,7 +10,7 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
 export class UserService {
   constructor(private readonly prismaService: PrismaService) { }
 
-  async updatePassword(id: string, dto: UpdatePasswordDto): Promise<string> {
+  async updatePassword(id: string, dto: UpdatePasswordDto) {
     const hashedPassword = await hashPassword(dto.password);
 
     const user = await this.prismaService.user.update({
@@ -21,10 +21,11 @@ export class UserService {
         password: hashedPassword
       }
     });
-    return user.id;
+
+    return { succes: true };
   }
 
-  async updateEmail(id: string, dto: UpdateEmailDto): Promise<string> {
+  async updateEmail(id: string, dto: UpdateEmailDto) {
     const email = dto.email;
 
     const user = await this.prismaService.user.update({
@@ -36,10 +37,10 @@ export class UserService {
       }
     });
 
-    return user.id;
+    return { succes: true };
   }
 
-  async getProfileData(id: string): Promise<UserProfile> {
+  async getProfileData(id: string) {
     const user = await this.prismaService.user.findUnique({
       where: {
         id
