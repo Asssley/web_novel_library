@@ -16,9 +16,10 @@ model User {
   email    String @unique
   password String
 
-  novels    Novel[]
-  comments  Comment[]
-  bookmarks Bookmark[]
+  novels      Novel[]
+  savedNovels SavedNovels[]
+  comments    Comment[]
+  bookmarks   Bookmark[]
 
   novelRates   NovelRate[]
   commentRates CommentRate[]
@@ -44,10 +45,11 @@ model Novel {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @map("user_id")
 
-  chapters   Chapter[]
-  comments   Comment[]
-  rates NovelRate[]
-  bookMarks  Bookmark[]
+  chapters    Chapter[]
+  comments    Comment[]
+  rates       NovelRate[]
+  savedNovels SavedNovels[]
+  bookMarks   Bookmark[]
 
   isHidden  Boolean  @default(false) @map("is_hidden")
   createdAt DateTime @default(now()) @map("created_at")
@@ -63,6 +65,17 @@ model NovelGenre {
 
   @@id([novelId, genre])
   @@map("novel_genres")
+}
+
+model SavedNovels {
+  novel   Novel  @relation(fields: [novelId], references: [id], onDelete: Cascade)
+  novelId String @map("novel_id")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
+
+  @@id([novelId, userId])
+  @@map("saved_novels")
 }
 
 model Chapter {

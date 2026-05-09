@@ -6,6 +6,7 @@ import { UserModule } from './user/user.module.js';
 import { AuthModule } from './auth/auth.module.js';
 import { ConfigModule } from '@nestjs/config';
 import { NovelModule } from './novel/novel.module.js';
+import { SavedModule } from './saved/saved.module';
 
 @Module({
   imports: [
@@ -13,7 +14,8 @@ import { NovelModule } from './novel/novel.module.js';
     UserModule,
     AuthModule,
     ConfigModule.forRoot({ isGlobal: true }),
-    NovelModule
+    NovelModule,
+    SavedModule
   ],
   controllers: [AppController],
   providers: [AppService],
