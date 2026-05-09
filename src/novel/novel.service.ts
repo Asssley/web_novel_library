@@ -116,11 +116,6 @@ export class NovelService {
       };
     }
 
-    // language
-    if (dto.language) {
-      where.language = dto.language;
-    }
-
     // sorting
     let orderBy: any = {};
 
@@ -175,7 +170,7 @@ export class NovelService {
     };
   }
 
-    getPopular(limit = 5) {
+  getPopular(limit = 5) {
     return this.getList({
       limit,
       sortBy: 'rating',
@@ -199,7 +194,6 @@ export class NovelService {
     });
   }
 
-
   async updateImage(
     userId: string,
     novelId: string,
@@ -216,6 +210,7 @@ export class NovelService {
     if (novel.userId !== userId) throw new ForbiddenException();
 
     this.saveImage(file, novel.imagePath);
+
     return { succes: true };
   }
 

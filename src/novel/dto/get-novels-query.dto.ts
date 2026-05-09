@@ -1,5 +1,5 @@
 import { ArrayNotEmpty, Equals, IsArray, IsEnum, IsNumber, IsString, Min } from "class-validator";
-import { Genre, Lang } from "../../generated/enums.js";
+import { Genre } from "../../generated/enums.js";
 import { Transform } from "class-transformer";
 
 export class GetNovelsQueryDto {
@@ -29,8 +29,4 @@ export class GetNovelsQueryDto {
     Array.isArray(value) ? value : [value]
   )
   genres?: Genre[];
-
-  @IsString()
-  @IsEnum(Lang)
-  language?: Lang;
 }
