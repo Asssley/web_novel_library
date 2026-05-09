@@ -1,10 +1,11 @@
-import { ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateNovelDto } from './dto/create-novel.dto.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 import * as path from "path";
 import * as fs from "fs";
 import { v4 as uuid } from 'uuid';
 import { NovelInfo } from './interfaces/novel-info.interface.js';
+import { GetNovelsQueryDto } from './dto/get-novels-query.dto.js';
 
 
 @Injectable()
@@ -52,25 +53,6 @@ export class NovelService {
     }
   }
 
-  async updateImage(
-    userId: string,
-    novelId: string,
-    file: Express.Multer.File,
-  ) {
-    const novel = await this.prismaService.novel.findFirst({
-      where: {
-        id: novelId
-      }
-    });
-
-    if (!novel) throw new NotFoundException();
-
-    if (novel.userId !== userId) throw new ForbiddenException();
-
-    this.saveImage(file, novel.imagePath);
-    return { succes: true };
-  }
-
   async getById(novelId: string) {
     const novel = await this.prismaService.novel.findFirst({
       where: {
@@ -100,6 +82,116 @@ export class NovelService {
     };
 
     return { data: { novel: result } };
+  }
+
+  async getList(dto: GetNovelsQueryDto) {
+    const page = dto.page ?? 1;
+    const limit = dto.limit ?? 10;
+
+    const skip = (page - 1) * limit;
+
+    const sortBy = dto.sortBy ?? 'title';
+    const order = dto.order ?? 'asc';
+
+    const where: any = {
+      isHidden: false,
+    };
+
+    // search
+    if (dto.search) {
+      where.title = {
+        contains: dto.search,
+        mode: 'insensitive',
+      };
+    }
+
+    // genres
+    if (dto.genres?.length) {
+      where.novelGenres = {
+        some: {
+          genre: {
+            in: dto.genres,
+          },
+        },
+      };
+    }
+
+    // language
+    if (dto.language) {
+      where.language = dto.language;
+    }
+
+    // sorting
+    let orderBy: any = {};
+
+    if (sortBy === 'rating') {
+      orderBy = [
+        {
+          novelRates: {
+            _count: 'desc',
+          },
+        },
+      ]
+    } else if (sortBy === 'updatedAt') {
+      orderBy = {
+        chapters: {
+          _count: order,
+        },
+      };
+    } else {
+      orderBy = {
+        [sortBy]: order,
+      };
+    }
+
+    const [novels, total] = await Promise.all([
+      this.prismaService.novel.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy,
+        include: {
+          genres: {
+            select: { genre: true },
+          },
+        },
+      }),
+
+      this.prismaService.novel.count({ where }),
+    ]);
+
+    return {
+      novels: novels.map(n => ({
+        ...n,
+        genres: n.genres.map(g => g.genre),
+      })),
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+      filters: dto,
+    };
+  }
+
+  async updateImage(
+    userId: string,
+    novelId: string,
+    file: Express.Multer.File,
+  ) {
+    const novel = await this.prismaService.novel.findFirst({
+      where: {
+        id: novelId
+      }
+    });
+
+    if (!novel) throw new NotFoundException();
+
+    if (novel.userId !== userId) throw new ForbiddenException();
+
+    this.saveImage(file, novel.imagePath);
+    return { succes: true };
   }
 
   async deleteById(userId: string, novelId: string) {
