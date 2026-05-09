@@ -175,6 +175,31 @@ export class NovelService {
     };
   }
 
+    getPopular(limit = 5) {
+    return this.getList({
+      limit,
+      sortBy: 'rating',
+      order: 'desc',
+    });
+  }
+
+  getLatest(limit = 5) {
+    return this.getList({
+      limit,
+      sortBy: 'createdAt',
+      order: 'desc',
+    });
+  }
+
+  getRecentlyUpdated(limit = 5) {
+    return this.getList({
+      limit,
+      sortBy: 'updatedAt',
+      order: 'desc',
+    });
+  }
+
+
   async updateImage(
     userId: string,
     novelId: string,
