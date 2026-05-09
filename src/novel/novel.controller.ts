@@ -3,7 +3,6 @@ import { NovelService } from './novel.service.js';
 import { CreateNovelDto } from './dto/create-novel.dto.js';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '@nestjs/passport';
-import { NovelIdDto } from './dto/nonvel-id.dto.js';
 import { ImageFile } from './decorators/image-file.decorator.js';
 
 @Controller('novel')
@@ -23,13 +22,13 @@ export class NovelController {
 
   @UseGuards(AuthGuard("jwt"))
   @UseInterceptors(FileInterceptor('image'))
-  @Patch("update-image")
+  @Patch("update-image/:id")
   async updateImage(
     @Req() req,
     @ImageFile() file: Express.Multer.File,
-    @Body() dto: NovelIdDto
+    @Param("id") novelId: string
   ) {
-    return this.novelService.updateImage(req.user.id, dto.novelId, file);
+    return this.novelService.updateImage(req.user.id, novelId, file);
   }
 
   @Get(":id")
@@ -38,11 +37,11 @@ export class NovelController {
   }
 
   @UseGuards(AuthGuard("jwt"))
-  @Delete()
+  @Delete(":id")
   async deleteById(
     @Req() req,
-    @Body() dto: NovelIdDto
+    @Param("id") novelId: string
   ) {
-    return this.novelService.deleteById(req.user.id, dto.novelId);
+    return this.novelService.deleteById(req.user.id, novelId);
   }
 }
