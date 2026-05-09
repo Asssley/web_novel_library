@@ -229,6 +229,8 @@ export class NovelService {
 
     if (!novel) throw new NotFoundException();
 
+    this.deleteImage(novel.imagePath);
+
     return { succes: true };
   }
 
