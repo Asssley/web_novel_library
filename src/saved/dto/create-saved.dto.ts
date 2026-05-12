@@ -2,6 +2,6 @@ import { IsString, IsUUID } from "class-validator";
 
 export class CreateSavedDto {
   @IsString()
-  @IsUUID() 
+  @IsUUID()
   novelId!: string;
 }

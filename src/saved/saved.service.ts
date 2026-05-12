@@ -8,6 +8,18 @@ export class SavedService {
   constructor(private readonly prismaService: PrismaService) { }
 
   async create(userId: string, dto: CreateSavedDto) {
+    const novel = this.prismaService.novel.findUnique({
+      where: {
+        id: dto.novelId,
+        isHidden: false
+      },
+      select: {
+        id: true
+      }
+    });
+
+    if (!novel) throw new NotFoundException();
+
     const savedNovel = await this.prismaService.savedNovels.create({
       data: {
         userId: userId,
@@ -61,11 +73,11 @@ export class SavedService {
         skip,
         take: limit,
         orderBy,
-        include: {
-          genres: {
-            select: { genre: true },
-          },
-        },
+        select: {
+          id: true,
+          imagePath: true,
+          title: true,
+        }
       }),
 
       this.prismaService.novel.count({ where }),
@@ -74,7 +86,6 @@ export class SavedService {
     return {
       novels: novels.map(n => ({
         ...n,
-        genres: n.genres.map(g => g.genre),
       })),
       pagination: {
         page,
