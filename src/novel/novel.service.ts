@@ -145,11 +145,11 @@ export class NovelService {
         skip,
         take: limit,
         orderBy,
-        include: {
-          genres: {
-            select: { genre: true },
-          },
-        },
+        select: {
+          id: true,
+          imagePath: true,
+          title: true,
+        }
       }),
 
       this.prismaService.novel.count({ where }),
@@ -158,7 +158,6 @@ export class NovelService {
     return {
       novels: novels.map(n => ({
         ...n,
-        genres: n.genres.map(g => g.genre),
       })),
       pagination: {
         page,
