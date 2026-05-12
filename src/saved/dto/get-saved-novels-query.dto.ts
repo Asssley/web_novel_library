@@ -1,11 +1,11 @@
-import { Equals, IsNumber, IsString, Min } from "class-validator";
+import { Equals, IsInt, IsString, Min } from "class-validator";
 
 export class GetSavedNovelsQueryDto {
-  @IsNumber()
+  @IsInt()
   @Min(1)
   page?: number;
 
-  @IsNumber()
+  @IsInt()
   @Min(1)
   limit?: number;
 

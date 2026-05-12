@@ -1,11 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, Req, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Patch, Param, Delete, UseInterceptors, Req, UseGuards } from '@nestjs/common';
 import { NovelService } from './novel.service.js';
 import { CreateNovelDto } from './dto/create-novel.dto.js';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '@nestjs/passport';
 import { ImageFile } from './decorators/image-file.decorator.js';
 
-@Controller('novel')
+@Controller('novels')
 export class NovelController {
   constructor(private readonly novelService: NovelService) { }
 
@@ -29,11 +29,6 @@ export class NovelController {
     @Param("id") novelId: string
   ) {
     return this.novelService.updateImage(req.user.id, novelId, file);
-  }
-
-  @Get(":id")
-  async getById(@Param("id") id: string) {
-    return this.novelService.getById(id);
   }
 
   @UseGuards(AuthGuard("jwt"))

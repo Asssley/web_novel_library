@@ -1,10 +1,8 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {  Injectable, NotFoundException } from '@nestjs/common';
 import { UpdatePasswordDto } from './dto/update-password.dto.js';
 import { PrismaService } from '../prisma/prisma.service.js';
-import { UserProfile } from './dto/profile-user.dto.js';
 import { UpdateEmailDto } from './dto/update-email.dto.js';
 import { hashPassword } from '../common/utils/password.util.js';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
 
 @Injectable()
 export class UserService {
@@ -22,6 +20,8 @@ export class UserService {
       }
     });
 
+    if (!user) throw new NotFoundException();
+
     return { succes: true };
   }
 
@@ -36,6 +36,8 @@ export class UserService {
         email
       }
     });
+
+    if (!user) throw new NotFoundException();
 
     return { succes: true };
   }
