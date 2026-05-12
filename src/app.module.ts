@@ -6,7 +6,10 @@ import { UserModule } from './user/user.module.js';
 import { AuthModule } from './auth/auth.module.js';
 import { ConfigModule } from '@nestjs/config';
 import { NovelModule } from './novel/novel.module.js';
-import { SavedModule } from './saved/saved.module';
+import { SavedModule } from './saved/saved.module.js';
+import { ChapterModule } from './chapter/chapter.module.js';
+import { BookmarksModule } from './bookmarks/bookmarks.module.js';
+import { NovelRateModule } from './novel-rate/novel-rate.module.js';
 
 @Module({
   imports: [
@@ -15,7 +18,10 @@ import { SavedModule } from './saved/saved.module';
     AuthModule,
     ConfigModule.forRoot({ isGlobal: true }),
     NovelModule,
-    SavedModule
+    SavedModule,
+    ChapterModule,
+    BookmarksModule,
+    NovelRateModule
   ],
   controllers: [AppController],
   providers: [AppService],
