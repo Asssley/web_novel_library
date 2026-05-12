@@ -1,13 +1,13 @@
-import { ArrayNotEmpty, Equals, IsArray, IsEnum, IsNumber, IsString, Min } from "class-validator";
+import { ArrayNotEmpty, Equals, IsArray, IsEnum, IsInt, IsString, Min } from "class-validator";
 import { Genre } from "../../generated/enums.js";
 import { Transform } from "class-transformer";
 
 export class GetNovelsQueryDto {
-  @IsNumber()
+  @IsInt()
   @Min(1)
   page?: number;
 
-  @IsNumber()
+  @IsInt()
   @Min(1)
   limit?: number;
 
