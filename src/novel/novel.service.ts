@@ -91,7 +91,7 @@ export class NovelService {
     const skip = (page - 1) * limit;
 
     const sortBy = dto.sortBy ?? 'title';
-    const order = dto.order ?? 'asc';
+    const order = dto.order ?? 'desc';
 
     const where: any = {
       isHidden: false,
@@ -122,8 +122,8 @@ export class NovelService {
     if (sortBy === 'rating') {
       orderBy = [
         {
-          novelRates: {
-            _count: 'desc',
+          rates: {
+            _count: order,
           },
         },
       ]
