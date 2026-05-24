@@ -1,0 +1,75 @@
+<div class="novel-page">
+  <div class="novel-sections">
+
+    <!-- Оновлені -->
+    <section class="novel-group">
+      <div class="group-header">
+        <h2>Resently updated</h2>
+      </div>
+
+      <div class="novels-row">
+        <% recentlyUpdated.novels.forEach(novel=> { %>
+          <a href="/novels/<%= novel.id %>" class="novel-card">
+
+            <div class="novel-image-wrapper">
+              <img src="/images/uploads/<%= novel.imagePath %>" alt="<%= novel.title %>" class="novel-image">
+            </div>
+
+            <div class="novel-title" title="<%= novel.title %>">
+              <%= novel.title %>
+            </div>
+
+          </a>
+          <% }) %>
+      </div>
+    </section>
+
+    <!-- Популярні -->
+    <section class="novel-group">
+      <div class="group-header">
+        <h2>Popular</h2>
+      </div>
+
+      <div class="novels-row">
+        <% popular.novels.forEach(novel=> { %>
+          <a href="/novels/<%= novel.id %>" class="novel-card">
+
+            <div class="novel-image-wrapper">
+              <img src="/images/uploads/<%= novel.imagePath %>" alt="<%= novel.title %>" class="novel-image">
+            </div>
+
+            <div class="novel-title" title="<%= novel.title %>">
+              <%= novel.title %>
+            </div>
+
+          </a>
+          <% }) %>
+      </div>
+    </section>
+
+
+    <!-- Нові -->
+    <section class="novel-group">
+      <div class="group-header">
+        <h2>New</h2>
+      </div>
+
+      <div class="novels-row">
+        <% latest.novels.forEach(novel=> { %>
+          <a href="/novels/<%= novel.id %>" class="novel-card">
+
+            <div class="novel-image-wrapper">
+              <img src="/images/uploads/<%= novel.imagePath %>" alt="<%= novel.title %>" class="novel-image">
+            </div>
+
+            <div class="novel-title" title="<%= novel.title %>">
+              <%= novel.title %>
+            </div>
+
+          </a>
+          <% }) %>
+      </div>
+    </section>
+
+  </div>
+</div>
