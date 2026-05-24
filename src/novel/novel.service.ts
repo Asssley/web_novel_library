@@ -250,7 +250,7 @@ export class NovelService {
   }
 
   private async deleteImage(fileName: string): Promise<void> {
-    const uploadDir = path.join(__dirname, '..', '..', '..', 'uploads');
+    const uploadDir = path.join(__dirname, '..', '..', '..', 'public', 'images', 'uploads');
     const filePath = path.join(uploadDir, fileName);
 
     try {
