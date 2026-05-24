@@ -7,24 +7,62 @@ export class NovelRateService {
   constructor(private readonly prismaService: PrismaService) { }
 
   async setRate(userId: string, novelId: string, dto: RateDto) {
-    const rating = await this.prismaService.novelRate.upsert({
+    await this.prismaService.novelRate.upsert({
       where: {
         userId_novelId: {
-          userId: userId,
-          novelId: novelId
-        }
+          userId,
+          novelId,
+        },
       },
       create: {
-        userId: userId,
-        novelId: novelId,
-        rate: dto.rate
+        userId,
+        novelId,
+        rate: dto.rate,
       },
       update: {
-        rate: dto.rate
-      }
+        rate: dto.rate,
+      },
     });
 
-    return { succes: true }
+    const stats = await this.prismaService.novelRate.aggregate({
+      where: {
+        novelId,
+      },
+      _avg: {
+        rate: true,
+      },
+      _count: {
+        rate: true,
+      },
+    });
+
+    const averageRate = stats._avg.rate || 0;
+    const ratingsCount = stats._count.rate || 0;
+
+    const globalStats = await this.prismaService.novelRate.aggregate({
+      _avg: {
+        rate: true,
+      },
+    });
+
+    const globalAverage = globalStats._avg.rate || 0;
+
+    const minVotes = 10;
+
+    const weightedRate =
+      (ratingsCount / (ratingsCount + minVotes)) * averageRate +
+      (minVotes / (ratingsCount + minVotes)) * globalAverage;
+
+    await this.prismaService.novel.update({
+      where: {
+        id: novelId,
+      },
+      data: {
+        weightedRate,
+      },
+    });
+
+    return { success: true };
   }
 
   async getRate(novelId: string) {

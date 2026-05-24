@@ -123,7 +123,7 @@ export class NovelService {
       orderBy = [
         {
           rates: {
-            _count: order,
+            weightedRate: order,
           },
         },
       ]
