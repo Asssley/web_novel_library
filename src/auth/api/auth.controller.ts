@@ -1,10 +1,10 @@
-import { Controller, Post, Body, Res, UseGuards, Req } from '@nestjs/common';
-import { AuthService } from './auth.service.js';
-import { CreateUserDto } from '../user/dto/create-user.dto.js';
-import { LoginDto } from './dto/login.dto.js';
+import { Controller, Post, Body, Res } from '@nestjs/common';
+import { AuthService } from '../auth.service.js';
+import { CreateUserDto } from '../../user/dto/create-user.dto.js';
+import { LoginDto } from '../dto/login.dto.js';
 import type { Response } from "express";
 
-@Controller('auth')
+@Controller('api/auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) { }
 

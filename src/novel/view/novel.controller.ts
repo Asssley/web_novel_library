@@ -1,4 +1,4 @@
-import { Controller, Param, Get, Render, Query } from '@nestjs/common';
+import { Controller, Param, Get, Render, Query, Req } from '@nestjs/common';
 import { NovelService } from '../novel.service.js';
 import { GetNovelsQueryDto } from '../dto/get-novels-query.dto.js';
 import { NovelRateService } from '../../novel-rate/novel-rate.service.js';
@@ -16,12 +16,14 @@ export class NovelController {
   @Get()
   @Render("pages/library")
   async getList(
+    @Req() req,
     @Query() dto: GetNovelsQueryDto,
   ) {
     const data = await this.novelService.getList(dto);
 
     return {
       ...data,
+      user: req.user,
       title: "Library",
       styles: [
         "pages/novel-list.css",
@@ -37,6 +39,7 @@ export class NovelController {
   @Get(":id")
   @Render("pages/novel")
   async getById(
+    @Req() req,
     @Param("id") novelId: string
   ) {
     const novel = await this.novelService.getById(novelId);
@@ -46,11 +49,12 @@ export class NovelController {
     return {
       ...novel,
       novelRate,
+      user: req.user,
       title: novel.novel.title,
       styles: [
         "pages/novel.css"
       ],
       scripts: []
     };
-  } 
+  }
 }
