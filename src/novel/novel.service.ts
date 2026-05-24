@@ -70,6 +70,11 @@ export class NovelService {
             genre: true,
           },
         },
+        user: {
+          select: {
+            nickname: true
+          }
+        }
       },
     });
 
@@ -86,7 +91,7 @@ export class NovelService {
 
   async getList(dto: GetNovelsQueryDto) {
     const page = dto.page ?? 1;
-    const limit = dto.limit ?? 10;
+    const limit = dto.limit ?? 20;
 
     const skip = (page - 1) * limit;
 
@@ -109,7 +114,7 @@ export class NovelService {
     if (dto.genres?.length) {
       where.AND = dto.genres.map(genre => ({
         genres: {
-        some: {
+          some: {
             genre: genre,
           },
         },

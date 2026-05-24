@@ -1,9 +1,9 @@
 import { Controller, Post, Body, Patch, Param, Delete, UseInterceptors, Req, UseGuards } from '@nestjs/common';
-import { NovelService } from './novel.service.js';
-import { CreateNovelDto } from './dto/create-novel.dto.js';
+import { NovelService } from '../novel.service.js';
+import { CreateNovelDto } from '../dto/create-novel.dto.js';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '@nestjs/passport';
-import { ImageFile } from './decorators/image-file.decorator.js';
+import { ImageFile } from '../decorators/image-file.decorator.js';
 
 @Controller('novels')
 export class NovelController {

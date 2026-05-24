@@ -1,0 +1,89 @@
+<div class="novel-page">
+
+  <!-- TOP SECTION -->
+  <div class="novel-header">
+
+    <!-- Image -->
+    <div class="novel-cover">
+      <img src="/images/uploads/<%= novel.imagePath %>" alt="<%= novel.title %>">
+    </div>
+
+    <!-- Info -->
+    <div class="novel-info">
+
+      <h1 class="novel-title">
+        <%= novel.title %>
+      </h1>
+
+      <div class="novel-meta">
+
+        <div>
+          <span class="meta-label">Author:</span>
+          <span><%= novel.user.nickname ?? 'Unknown' %></span>
+        </div>
+
+        <div>
+          <span class="meta-label">Rating:</span>
+          <span>
+            <%= novelRate.rate.avg.rate ? novelRate.rate.avg.rate.toFixed(1) : '0.0' %>
+            (<%= novelRate.rate.count %>)
+          </span>
+        </div>
+
+        <div>
+          <span class="meta-label">Language:</span>
+          <%= novel.language.charAt(0).toUpperCase() + novel.language.slice(1).toLowerCase() %>
+        </div>
+
+        <div>
+          <span class="meta-label">Chapters:</span>
+          <span><%= novel.chaptersCount ?? 0 %></span>
+        </div>
+
+        <div>
+          <span class="meta-label">Genres:</span>
+          <%= novel.genres.map(g => g.toLowerCase()).join(', ') %>
+        </div>
+
+      </div>
+
+      <!-- ACTION BUTTONS -->
+      <div class="novel-actions">
+        <div class="action-row">
+
+          <button class="novel-btn">
+            Rate novel
+          </button>
+
+          <button class="novel-btn save-btn">
+            <i class="bi bi-bookmark-fill"></i>
+            <span>Save</span>
+          </button>
+
+          <a href="/novels/<%= novel.id %>/chapter/<%= lastChapter.id %>" class="novel-btn">
+            Continue reading
+          </a>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <a href="/novels/<%= novel.id %>/chapters" class="novel-btn chapter-button">
+    Chapters
+  </a>
+
+  <!-- DESCRIPTION -->
+  <div class="novel-description">
+
+    <h2>Description</h2>
+
+    <p>
+      <%= novel.description %>
+    </p>
+
+  </div>
+
+</div>

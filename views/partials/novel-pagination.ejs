@@ -1,0 +1,56 @@
+  <!-- Pagination-->
+  <%
+  const params = new URLSearchParams();
+
+  if (filters?.search) {
+    params.set('search', filters.search);
+  }
+
+  if (filters?.sortBy) {
+    params.set('sortBy', filters.sortBy);
+  }
+
+  if (filters?.order) {
+    params.set('order', filters.order);
+  }
+
+  if (filters?.genres?.length) {
+    filters.genres.forEach(g => params.append('genres', g));
+  }
+
+  const prevParams = new URLSearchParams(params);
+  prevParams.set('page', pagination.page - 1);
+
+  const nextParams = new URLSearchParams(params);
+  nextParams.set('page', pagination.page + 1);
+%>
+
+  <div class="pagination">
+
+    <% if (pagination.page > 1) { %>
+    <a href="/novels?<%= prevParams.toString() %>" class="pagination-btn">
+      ‹ Prev
+    </a>
+    <% } else { %>
+    <div class="pagination-btn disabled">
+      ‹ Prev
+    </div>
+    <% } %>
+
+    <div class="pagination-info">
+      <span><%= pagination.page %></span>
+      <span class="pagination-sep">/</span>
+      <span><%= pagination.totalPages %></span>
+    </div>
+
+    <% if (pagination.page < pagination.totalPages) { %>
+    <a href="/novels?<%= nextParams.toString() %>" class="pagination-btn">
+      Next ›
+    </a>
+    <% } else { %>
+    <div class="pagination-btn disabled">
+      Next ›
+    </div>
+    <% } %>
+
+  </div>

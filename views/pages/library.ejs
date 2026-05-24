@@ -1,0 +1,174 @@
+<div class="library-page">
+
+  <!-- Filters -->
+
+  <div class="library-top-bar">
+
+    <div class="top-bar-label">
+      <% if (filters.search) { %>
+      <span>Results for search: "<%= filters.search %>"</span>
+      <% } %>
+    </div>
+
+    <button class="filters-btn" id="filtersBtn">
+      Filters
+    </button>
+
+  </div>
+
+  <!-- Modal vindow for filters -->
+
+  <div class="filters-modal hidden" id="filtersModal">
+    <div class="filters-content">
+
+      <h3>Filters</h3>
+
+      <form id="filtersForm" method="GET" action="/novels">
+
+        <input type="hidden" name="search" value="<%= filters?.search || '' %>">
+
+        <!-- Sort -->
+        <div>
+          <label>Sort by</label>
+
+          <select name="sortBy">
+
+            <option value="title" <%= filters?.sortBy === 'title' ? 'selected' : '' %>>
+              Title
+            </option>
+
+            <option value="rating" <%= filters?.sortBy === 'rating' ? 'selected' : '' %>>
+              Rating
+            </option>
+
+            <option value="updatedAt" <%= filters?.sortBy === 'updatedAt' ? 'selected' : '' %>>
+              Updated
+            </option>
+
+            <option value="createdAt" <%= filters?.sortBy === 'createdAt' ? 'selected' : '' %>>
+              Created
+            </option>
+
+          </select>
+        </div>
+
+        <!-- Order -->
+        <div>
+          <label>Order</label>
+
+          <select name="order">
+
+            <option value="desc" <%= filters?.order === 'desc' ? 'selected' : '' %>>
+              DESC
+            </option>
+
+            <option value="asc" <%= filters?.order === 'asc' ? 'selected' : '' %>>
+              ASC
+            </option>
+
+          </select>
+        </div>
+
+        <!-- Genres -->
+
+        <div class="genres-grid">
+          <label class="checkbox">
+            <input type="checkbox" name="genres" value="FANTASY" <%= filters?.genres?.includes('FANTASY') ? 'checked' : '' %>>
+            <span>Fantasy</span>
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" name="genres" value="ACTION" <%= filters?.genres?.includes('ACTION') ? 'checked' : '' %>>
+            <span>Action</span>
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" name="genres" value="ADVENTURE" <%= filters?.genres?.includes('ADVENTURE') ? 'checked' : '' %>>
+            <span>Adventure</span>
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" name="genres" value="ROMANCE" <%= filters?.genres?.includes('ROMANCE') ? 'checked' : '' %>>
+            <span>Romance</span>
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" name="genres" value="DRAMA" <%= filters?.genres?.includes('DRAMA') ? 'checked' : '' %>>
+            <span>Drama</span>
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" name="genres" value="COMEDY" <%= filters?.genres?.includes('COMEDY') ? 'checked' : '' %>>
+            <span>Comedy</span>
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" name="genres" value="SCI_FI" <%= filters?.genres?.includes('SCI_FI') ? 'checked' : '' %>>
+            <span>Sci-Fy</span>
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" name="genres" value="MYSTERY" <%= filters?.genres?.includes('MYSTERY') ? 'checked' : '' %>>
+            <span>Mystery</span>
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" name="genres" value="HORROR" <%= filters?.genres?.includes('HORROR') ? 'checked' : '' %>>
+            <span>Horror</span>
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" name="genres" value="SUPERNATURAL" <%= filters?.genres?.includes('SUPERNATURAL') ? 'checked' : '' %>>
+            <span>Supernatural</span>
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" name="genres" value="ISEKAI" <%= filters?.genres?.includes('ISEKAI') ? 'checked' : '' %>>
+            <span>Isekai</span>
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" name="genres" value="REINCARNATION" <%= filters?.genres?.includes('REINCARNATION') ? 'checked' : '' %>>
+            <span>Reincarnation</span>
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" name="genres" value="REGRESSION" <%= filters?.genres?.includes('REGRESSION') ? 'checked' : '' %>>
+            <span>Regression</span>
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" name="genres" value="SLICE_OF_LIFE" <%= filters?.genres?.includes('SLICE_OF_LIFE') ? 'checked' : '' %>>
+            <span>Slice of life</span>
+          </label>
+        </div>
+
+        <!-- Aply and submit buttons -->
+
+        <div class="filters-actions">
+          <button type="button" class="reset-btn" id="resetFilters">Reset</button>
+          <button type="submit" class="apply-btn">Apply</button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+  <!-- List of novels -->
+  
+  <%if (!novels.length) { %>
+  <div class="d-flex justify-content-center nothing-found-label">
+    Nothing found
+  </div>
+  <% } else { %>
+
+  <div class="library-grid">
+
+    <% novels.forEach(novel=> { %>
+
+    <a href="/novels/<%= novel.id %>" class="novel-card">
+
+      <div class="novel-image-wrapper">
+        <img src="/images/uploads/<%= novel.imagePath %>" alt="<%= novel.title %>" class="novel-image">
+      </div>
+
+      <div class="novel-title" title="<%= novel.title %>">
+        <%= novel.title %>
+      </div>
+
+    </a>
+
+    <% }) %>
+  </div>
+
+  <%- include("../partials/novel-pagination", { filters, pagination }) %>
+  <% } %>
+</div>

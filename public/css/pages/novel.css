@@ -1,0 +1,158 @@
+.novel-page {
+  width: min(700px, 100%);
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  color: var(--color-text);
+}
+
+/* TOP */
+.novel-header {
+  display: flex;
+  gap: 24px;
+}
+
+.novel-cover img {
+  width: 220px;
+  height: auto;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+/* INFO */
+.novel-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.novel-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
+.novel-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.meta-label {
+  font-weight: 600;
+}
+
+/* ACTIONS */
+.novel-actions {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.action-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.novel-btn {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--color-main-dark);
+  color: var(--color-white);
+}
+
+.save-btn {
+  gap: 5px;
+}
+
+.icon {
+  width: 42px;
+}
+
+.novel-btn:hover {
+  background-color: var(--color-main);
+  color: var(--color-white);
+}
+
+.novel-btn:active {
+  background-color: var(--color-main);
+  scale: 0.95;
+}
+
+/* DESCRIPTION */
+.novel-description h2 {
+  margin-bottom: 10px;
+  font-family: var(--font-base-decorative);
+}
+
+.novel-description p {
+  line-height: 1.6;
+}
+
+/* Mobile */
+
+@media (max-width: 800px) {
+
+  .novel-header {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .novel-cover {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .novel-cover img {
+    width: min(280px, 70vw);
+  }
+
+  .novel-info {
+    width: 100%;
+  }
+
+  .novel-title {
+    text-align: center;
+    font-size: 1.8rem;
+  }
+
+  .novel-meta {
+    gap: 10px;
+  }
+
+  .novel-actions {
+    width: 100%;
+  }
+
+  .chapter-button {
+    width: 100%;
+  }
+
+  .action-row {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .action-row .novel-btn {
+    width: 100%;
+  }
+
+  .novel-description {
+    width: 100%;
+  }
+
+  .novel-description p {
+    word-break: break-word;
+  }
+}
