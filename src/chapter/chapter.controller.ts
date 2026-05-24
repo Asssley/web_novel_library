@@ -2,13 +2,13 @@ import { Controller, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@n
 import { ChapterService } from './chapter.service.js';
 import { CreateChapterDto } from './dto/create-chapter.dto.js';
 import { UpdateChapterDto } from './dto/update-chapter.dto.js';
-import { AuthGuard } from '@nestjs/passport';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
 
 @Controller('novels/:novelId/chapters')
 export class ChapterController {
   constructor(private readonly chapterService: ChapterService) { }
 
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(JwtAuthGuard)
   @Post()
   async create(
     @Req() req,
@@ -18,7 +18,7 @@ export class ChapterController {
     return this.chapterService.create(req.user.id, novelId, dto);
   }
 
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   async update(
     @Req() req,
@@ -29,7 +29,7 @@ export class ChapterController {
     return this.chapterService.update(req.user.id, novelId, chapterId, dto);
   }
 
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async remove(
     @Req() req,

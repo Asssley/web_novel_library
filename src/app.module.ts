@@ -10,6 +10,8 @@ import { SavedModule } from './saved/saved.module.js';
 import { ChapterModule } from './chapter/chapter.module.js';
 import { BookmarksModule } from './bookmarks/bookmarks.module.js';
 import { NovelRateModule } from './novel-rate/novel-rate.module.js';
+import { APP_GUARD } from '@nestjs/core';
+import { OptionalJwtAuthGuard } from './auth/guards/optional-jwt-auth.guard.js';
 
 @Module({
   imports: [
@@ -24,6 +26,12 @@ import { NovelRateModule } from './novel-rate/novel-rate.module.js';
     NovelRateModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide:APP_GUARD,
+      useClass:OptionalJwtAuthGuard
+    }
+  ],
 })
 export class AppModule { }

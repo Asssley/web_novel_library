@@ -2,14 +2,14 @@ import { Controller, Post, Body, Patch, Param, Delete, UseInterceptors, Req, Use
 import { NovelService } from '../novel.service.js';
 import { CreateNovelDto } from '../dto/create-novel.dto.js';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { AuthGuard } from '@nestjs/passport';
 import { ImageFile } from '../decorators/image-file.decorator.js';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard.js';
 
 @Controller('novels')
 export class NovelController {
   constructor(private readonly novelService: NovelService) { }
 
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('image'))
   @Post()
   async create(
@@ -20,7 +20,7 @@ export class NovelController {
     return await this.novelService.create(req.user.id, file, createNovelDto);
   }
 
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('image'))
   @Patch("update-image/:id")
   async updateImage(
@@ -31,7 +31,7 @@ export class NovelController {
     return this.novelService.updateImage(req.user.id, novelId, file);
   }
 
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(JwtAuthGuard)
   @Delete(":id")
   async deleteById(
     @Req() req,

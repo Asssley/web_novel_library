@@ -127,9 +127,7 @@ export class NovelService {
     if (sortBy === 'rating') {
       orderBy = [
         {
-          rates: {
-            weightedRate: order,
-          },
+          weightedRate: order,
         },
       ]
     } else if (sortBy === 'updatedAt') {

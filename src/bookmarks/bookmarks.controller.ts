@@ -1,13 +1,12 @@
 import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
 import { BookmarksService } from './bookmarks.service.js';
-import { AuthGuard } from '@nestjs/passport';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
 
 @Controller('bookmarks')
 export class BookmarksController {
   constructor(private readonly bookmarksService: BookmarksService) {}
 
-  
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(JwtAuthGuard)
   @Get(":id")
   async create(
     @Req() req,

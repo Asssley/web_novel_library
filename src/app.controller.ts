@@ -1,4 +1,4 @@
-import { Controller, Get, Render } from '@nestjs/common';
+import { Controller, Get, Render, Req } from '@nestjs/common';
 import { AppService } from './app.service.js';
 
 @Controller()
@@ -9,11 +9,12 @@ export class AppController {
 
   @Get()
   @Render("pages/home")
-  async getHomePage() {
+  async getHomePage(@Req() req) {
     const data = await this.appService.getHomePage()
 
     return {
       ...data,
+      user: req.user,
       title: "NovelsHere",
       styles: [
         "pages/home.css"
