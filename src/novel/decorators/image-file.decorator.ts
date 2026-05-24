@@ -8,6 +8,7 @@ import {
 export function ImageFile() {
   return UploadedFile(
     new ParseFilePipe({
+      fileIsRequired: true,
       validators: [
         new FileTypeValidator({
           fileType: /(jpg|jpeg|png|webp)$/i,

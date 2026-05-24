@@ -26,7 +26,7 @@ export class NovelService {
 
     if (user) throw new ForbiddenException();
 
-    const imagePath = this.saveImage(file);
+    const imagePath = await this.saveImage(file);
     const genres = [...new Set(dto.genres ?? [])];
 
     try {
@@ -81,7 +81,7 @@ export class NovelService {
 
     };
 
-    return { data: { novel: result } };
+    return { novel: result };
   }
 
   async getList(dto: GetNovelsQueryDto) {
@@ -107,13 +107,13 @@ export class NovelService {
 
     // genres
     if (dto.genres?.length) {
-      where.novelGenres = {
+      where.AND = dto.genres.map(genre => ({
+        genres: {
         some: {
-          genre: {
-            in: dto.genres,
+            genre: genre,
           },
         },
-      };
+      }));
     }
 
     // sorting
@@ -228,11 +228,11 @@ export class NovelService {
     return { succes: true };
   }
 
-  private saveImage(
+  private async saveImage(
     image: Express.Multer.File,
     imageName?: string,
-  ): string {
-    const uploadDir = path.join(__dirname, '..', '..', '..', 'uploads');
+  ): Promise<string> {
+    const uploadDir = path.join(__dirname, '..', '..', '..', 'public', 'images', 'uploads');
 
     const extension = path.extname(image.originalname);
 
