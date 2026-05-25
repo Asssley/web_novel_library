@@ -1,63 +1,71 @@
-import {  Injectable, NotFoundException } from '@nestjs/common';
-import { UpdatePasswordDto } from './dto/update-password.dto.js';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service.js';
-import { UpdateEmailDto } from './dto/update-email.dto.js';
-import { hashPassword } from '../common/utils/password.util.js';
 
 @Injectable()
 export class UserService {
   constructor(private readonly prismaService: PrismaService) { }
 
-  async updatePassword(id: string, dto: UpdatePasswordDto) {
-    const hashedPassword = await hashPassword(dto.password);
-
-    const user = await this.prismaService.user.update({
-      where: {
-        id
-      },
-      data: {
-        password: hashedPassword
-      }
-    });
-
-    if (!user) throw new NotFoundException();
-
-    return { succes: true };
-  }
-
-  async updateEmail(id: string, dto: UpdateEmailDto) {
-    const email = dto.email;
-
-    const user = await this.prismaService.user.update({
-      where: {
-        id
-      },
-      data: {
-        email
-      }
-    });
-
-    if (!user) throw new NotFoundException();
-
-    return { succes: true };
-  }
-
-  async getProfileData(id: string) {
+  async getUserStats(userId: string) {
     const user = await this.prismaService.user.findUnique({
-      where: {
-        id
-      },
+      where: { id: userId },
       select: {
+        id: true,
         nickname: true,
         email: true,
-        createdAt: true
-      }
+        createdAt: true,
+      },
     });
 
-    if (!user) throw new NotFoundException();
+    if (!user) throw new NotFoundException('User not found');
 
-    return user;
+    const [
+      novelCount,
+      savedCount,
+      ratedCount,
+      commentsCount,
+      commentRates,
+    ] = await Promise.all([
+      this.prismaService.novel.count({
+        where: { userId },
+      }),
+      
+      this.prismaService.savedNovels.count({
+        where: { userId },
+      }),
+
+      this.prismaService.novelRate.count({
+        where: { userId },
+      }),
+
+      this.prismaService.comment.count({
+        where: { userId },
+      }),
+
+      this.prismaService.commentRate.groupBy({
+        by: ['isPositive'],
+        where: { userId },
+        _count: true,
+      }),
+    ]);
+
+    const likes =
+      commentRates.find(r => r.isPositive === true)?._count ?? 0;
+
+    const dislikes =
+      commentRates.find(r => r.isPositive === false)?._count ?? 0;
+
+    return {
+      user,
+      stats: {
+        createdNovels: novelCount,
+        savedNovels: savedCount,
+        ratedNovels: ratedCount,
+        comments: commentsCount,
+        commentLikes: likes,
+        commentDislikes: dislikes,
+      },
+    };
   }
-
 }
+
 

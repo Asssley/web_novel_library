@@ -1,19 +1,24 @@
-import { Controller, Body, Patch, Param } from '@nestjs/common';
+import { Controller, Get, Render, Req } from '@nestjs/common';
 import { UserService } from './user.service.js';
-import { UpdatePasswordDto } from './dto/update-password.dto.js';
-import { UpdateEmailDto } from './dto/update-email.dto.js';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) { }
 
-  @Patch(':id/email')
-  async updateEmail(@Param('id') id: string, @Body() dto: UpdateEmailDto) {
-    return this.userService.updateEmail(id, dto);
-  }
+  @Get("profile")
+  @Render("pages/profile")
+  async getProfile(
+    @Req() req
+  ) {
+    const data = await this.userService.getUserStats(req.user.id);
 
-  @Patch(':id/password')
-  async updatePassword(@Param('id') id: string, @Body() dto: UpdatePasswordDto) {
-    return this.userService.updatePassword(id, dto);
+    return {
+      ...data,
+      title: "Profile",
+      styles: [
+        "pages/profile.css"
+      ],
+      scripts: []
+    };
   }
 }

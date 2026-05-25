@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { isDev } from '../common/utils/is-dev.util.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { JwtPayload } from './interfaces/jwt-payload.interface.js';
-import type { CreateUserDto } from '../user/dto/create-user.dto.js';
+import type { CreateUserDto } from "./dto/create-user.dto.js";
 import type { LoginDto } from './dto/login.dto.js';
 import type { Response } from 'express';
 import { comparePasswords, hashPassword } from '../common/utils/password.util.js';
