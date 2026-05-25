@@ -103,6 +103,7 @@ export class NovelService {
     const novel = await this.getById(novelId);
     const novelRate = await this.rateService.getRate(novel.id);
     let lastChapterId: string | null = null;
+    let hasReadedBefore = false;
     let isSaved = false;
 
     try {
@@ -115,6 +116,7 @@ export class NovelService {
 
       const firstChapter = await this.chapterService.findFirst(novel.id);
       lastChapterId = firstChapter?.id ?? null;
+      hasReadedBefore = (firstChapter?.chapterNumber! ?? 0) > 1;
     }
 
     isSaved = await this.SavedService.checkIfSaved(userId ?? "", novel.id);
@@ -123,7 +125,8 @@ export class NovelService {
       ...novel,
       novelRate,
       lastChapterId,
-      isSaved
+      isSaved,
+      hasReadedBefore
     };
   }
 

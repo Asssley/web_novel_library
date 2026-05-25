@@ -124,6 +124,7 @@ export class ChapterService {
       },
       select: {
         id: true,
+        chapterNumber: true
       }
     });
 

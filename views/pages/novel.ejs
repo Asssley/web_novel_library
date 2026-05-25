@@ -67,6 +67,10 @@
           </button>
           <% } %>
 
+          <!-- If user readed before, show 'kontinue reading' othervise show start reading -->
+          <!-- after that check if the last chapter is available, it could be deleted, -->
+          <!-- or even has not be added yet -->
+          <% if (novel.hasReadedBefore) { %>
           <% if (novel.lastChapter) { %>
           <a href="/novels/<%= novel.id %>/chapter/<%= novel.lastChapter.id %>" class="novel-btn">
             Continue reading
@@ -75,6 +79,17 @@
           <a href="#" class="novel-btn disable">
             Continue reading
           </a>
+          <% } %>
+          <% } else { %>
+          <% if (novel.lastChapter) { %>
+          <a href="/novels/<%= novel.id %>/chapter/<%= novel.lastChapter.id %>" class="novel-btn">
+            Start reading
+          </a>
+          <% } else { %>
+          <a href="#" class="novel-btn disable">
+            Start reading
+          </a>
+          <% } %>
           <% } %>
         </div>
 
