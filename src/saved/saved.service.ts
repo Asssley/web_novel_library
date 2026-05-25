@@ -32,61 +32,62 @@ export class SavedService {
 
   async getSavedList(userId: string, dto: GetSavedNovelsQueryDto) {
     const page = dto.page ?? 1;
-    const limit = dto.limit ?? 10;
+    const limit = dto.limit ?? 20;
 
     const skip = (page - 1) * limit;
 
-    const sortBy = dto.sortBy ?? 'title';
+    const sortBy = dto.sortBy ?? 'rates';
     const order = dto.order ?? 'asc';
 
     const where: any = {
-      isHidden: false,
-      userId: userId
+      userId: userId,
+      novel: {
+        is: {
+          isHidden: false
+        }
+      }
     };
 
     // sorting
     let orderBy: any = {};
 
-    if (sortBy === 'rating') {
-      orderBy = [
-        {
-          novelRates: {
-            _count: 'desc',
-          },
-        },
-      ]
-    } else if (sortBy === 'updatedAt') {
+    if (sortBy === "rates") {
       orderBy = {
-        chapters: {
-          _count: order,
-        },
-      };
+        novel: {
+          weightedRate: order
+        }
+      }
     } else {
       orderBy = {
-        [sortBy]: order,
+        novel: {
+          [sortBy]: order,
+        }
       };
     }
 
+
     const [novels, total] = await Promise.all([
-      this.prismaService.novel.findMany({
+      this.prismaService.savedNovels.findMany({
         where,
         skip,
         take: limit,
         orderBy,
         select: {
-          id: true,
-          imagePath: true,
-          title: true,
+          novel: {
+            select: {
+              id: true,
+              imagePath: true,
+              title: true,
+            }
+          }
         }
       }),
 
-      this.prismaService.novel.count({ where }),
+      this.prismaService.savedNovels.count({ where }),
     ]);
 
     return {
-      novels: novels.map(n => ({
-        ...n,
-      })),
+      novels: novels.map(n => n.novel),
       pagination: {
         page,
         limit,
@@ -110,5 +111,16 @@ export class SavedService {
     if (!sacedNovel) throw new NotFoundException();
 
     return { succes: true }
+  }
+
+  async checkIfSaved(userId: string, novelId: string) {
+    const saved = await this.prismaService.savedNovels.count({
+      where: {
+        userId: userId,
+        novelId: novelId
+      }
+    });
+
+    return saved !== 0;
   }
 }

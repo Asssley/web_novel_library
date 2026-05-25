@@ -28,7 +28,7 @@
   <div class="pagination">
 
     <% if (pagination.page > 1) { %>
-    <a href="/novels?<%= prevParams.toString() %>" class="pagination-btn">
+    <a href="<%= path %>?<%= prevParams.toString() %>" class="pagination-btn">
       ‹ Prev
     </a>
     <% } else { %>
@@ -44,7 +44,7 @@
     </div>
 
     <% if (pagination.page < pagination.totalPages) { %>
-    <a href="/novels?<%= nextParams.toString() %>" class="pagination-btn">
+    <a href="<%= path %>?<%= nextParams.toString() %>" class="pagination-btn">
       Next ›
     </a>
     <% } else { %>

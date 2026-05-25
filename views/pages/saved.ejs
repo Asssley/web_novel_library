@@ -5,9 +5,7 @@
   <div class="library-top-bar">
 
     <div class="top-bar-label">
-      <% if (filters.search) { %>
-      <span>Results for search: "<%= filters.search %>"</span>
-      <% } %>
+      <span>Saved novels</span>
     </div>
 
     <button class="filters-btn" id="filtersBtn">
@@ -23,9 +21,7 @@
 
       <h3>Filters</h3>
 
-      <form id="filtersForm" method="GET" action="/novels">
-
-        <input type="hidden" name="search" value="<%= filters?.search || '' %>">
+      <form id="filtersForm" method="GET" action="/saved">
 
         <!-- Sort -->
         <div>
@@ -33,12 +29,12 @@
 
           <select name="sortBy">
 
+            <option value="rates" <%= filters?.sortBy === 'rating' ? 'selected' : '' %>>
+              Rating
+            </option>
+            
             <option value="title" <%= filters?.sortBy === 'title' ? 'selected' : '' %>>
               Title
-            </option>
-
-            <option value="rating" <%= filters?.sortBy === 'rating' ? 'selected' : '' %>>
-              Rating
             </option>
 
             <option value="updatedAt" <%= filters?.sortBy === 'updatedAt' ? 'selected' : '' %>>
@@ -169,6 +165,6 @@
     <% }) %>
   </div>
 
-  <%- include("../partials/novel-pagination", { filters, pagination, path: "/novels" }) %>
+  <%- include("../partials/novel-pagination", { filters, pagination, path: "/saved"}) %>
   <% } %>
 </div>

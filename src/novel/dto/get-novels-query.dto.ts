@@ -21,8 +21,8 @@ export class GetNovelsQueryDto {
 
   @IsOptional()
   @IsString()
-  @IsIn(['title', 'rating', 'updatedAt', 'createdAt'])
-  sortBy?: 'title' | 'rating' | 'updatedAt' | 'createdAt';
+  @IsIn(['title', 'rates', 'updatedAt', 'createdAt'])
+  sortBy?: 'title' | 'rates' | 'updatedAt' | 'createdAt';
 
   @IsOptional()
   @IsString()

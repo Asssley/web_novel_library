@@ -1,19 +1,26 @@
-import { Equals, IsInt, IsString, Min } from "class-validator";
+import { Type } from "class-transformer";
+import { IsIn, IsInt, IsOptional, IsString, Min } from "class-validator";
 
 export class GetSavedNovelsQueryDto {
+  @Type(() => Number)
+  @IsOptional()
   @IsInt()
   @Min(1)
   page?: number;
 
+  @Type(() => Number)
+  @IsOptional()
   @IsInt()
   @Min(1)
   limit?: number;
 
+  @IsOptional()
   @IsString()
-  @Equals(['title', 'rating', 'updatedAt', 'createdAt'])
-  sortBy?: 'title' | 'rating' | 'updatedAt' | 'createdAt';
+  @IsIn(['title', 'rates', 'updatedAt', 'createdAt'])
+  sortBy?: 'title' | 'rates' | 'updatedAt' | 'createdAt';
 
+  @IsOptional()
   @IsString()
-  @Equals(['asc', 'desc'])
+  @IsIn(['asc', 'desc'])
   order?: 'asc' | 'desc';
 }

@@ -1,9 +1,9 @@
 import { Controller, Post, Body, Param, Delete, UseGuards, Req } from '@nestjs/common';
-import { SavedService } from './saved.service.js';
-import { CreateSavedDto } from './dto/create-saved.dto.js';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
+import { SavedService } from '../saved.service.js';
+import { CreateSavedDto } from '../dto/create-saved.dto.js';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard.js';
 
-@Controller('saved-novels')
+@Controller('api/saved')
 export class SavedController {
   constructor(private readonly savedService: SavedService) { }
 
