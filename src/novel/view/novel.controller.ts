@@ -1,16 +1,11 @@
-import { Controller, Param, Get, Render, Query, Req } from '@nestjs/common';
+import { Controller, Param, Get, Render, Query, Req, HttpException } from '@nestjs/common';
 import { NovelService } from '../novel.service.js';
 import { GetNovelsQueryDto } from '../dto/get-novels-query.dto.js';
-import { NovelRateService } from '../../novel-rate/novel-rate.service.js';
-import { BookmarksService } from '../../bookmarks/bookmarks.service.js';
 
 @Controller('novels')
 export class NovelController {
   constructor(
     private readonly novelService: NovelService,
-    private readonly rateService: NovelRateService,
-    private readonly bookmarksService: BookmarksService,
-    // TODO: private readonly commentService: CommentService,
   ) { }
 
   @Get()
@@ -42,19 +37,18 @@ export class NovelController {
     @Req() req,
     @Param("id") novelId: string
   ) {
-    const novel = await this.novelService.getById(novelId);
-    const novelRate = await this.rateService.getRate(novel.novel.id);
-    //const bookmark = this.bookmarksService.getBookmark()
+    const novel = await this.novelService.getFullNovelInfo(req.user.id, novelId)
 
     return {
-      ...novel,
-      novelRate,
+      novel,
       user: req.user,
-      title: novel.novel.title,
+      title: novel.title,
       styles: [
         "pages/novel.css"
       ],
-      scripts: []
+      scripts: [
+        "novel-page.js"
+      ]
     };
   }
 }

@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateNovelDto } from './dto/create-novel.dto.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 import * as path from "path";
@@ -6,12 +6,22 @@ import * as fs from "fs";
 import { v4 as uuid } from 'uuid';
 import { NovelInfo } from './interfaces/novel-info.interface.js';
 import { GetNovelsQueryDto } from './dto/get-novels-query.dto.js';
+import { NovelRateService } from '../novel-rate/novel-rate.service.js';
+import { BookmarksService } from '../bookmarks/bookmarks.service.js';
+import { ChapterService } from '../chapter/chapter.service.js';
+import { SavedService } from '../saved/saved.service.js';
 
 
 @Injectable()
 export class NovelService {
-  constructor(private readonly prismaService: PrismaService) { }
-
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly rateService: NovelRateService,
+    private readonly bookmarksService: BookmarksService,
+    private readonly chapterService: ChapterService,
+    private readonly SavedService: SavedService,
+    // TODO: private readonly commentService: CommentService,
+  ) { }
   async create(
     userId: string,
     file: Express.Multer.File,
@@ -54,7 +64,7 @@ export class NovelService {
   }
 
   async getById(novelId: string) {
-    const novel = await this.prismaService.novel.findFirst({
+    const result = await this.prismaService.novel.findFirst({
       where: {
         id: novelId,
         isHidden: false,
@@ -78,15 +88,43 @@ export class NovelService {
       },
     });
 
-    if (!novel) throw new NotFoundException();
+    if (!result) throw new NotFoundException();
 
-    const result: NovelInfo = {
-      ...novel,
-      genres: novel.genres.map((g) => g.genre),
+    const novel: NovelInfo = {
+      ...result,
+      genres: result.genres.map((g) => g.genre),
 
     };
 
-    return { novel: result };
+    return novel;
+  }
+
+  async getFullNovelInfo(userId: string | null, novelId: string) {
+    const novel = await this.getById(novelId);
+    const novelRate = await this.rateService.getRate(novel.id);
+    let lastChapterId: string | null = null;
+    let isSaved = false;
+
+    try {
+      const bookmark = await this.bookmarksService.getBookmark(userId ?? "", novel.id);
+      lastChapterId = bookmark.id;
+    } catch (err) {
+      if (err instanceof HttpException && err.getStatus() === 500) {
+        throw err;
+      }
+
+      const firstChapter = await this.chapterService.findFirst(novel.id);
+      lastChapterId = firstChapter?.id ?? null;
+    }
+
+    isSaved = await this.SavedService.checkIfSaved(userId ?? "", novel.id);
+
+    return {
+      ...novel,
+      novelRate,
+      lastChapterId,
+      isSaved
+    };
   }
 
   async getList(dto: GetNovelsQueryDto) {
@@ -95,7 +133,7 @@ export class NovelService {
 
     const skip = (page - 1) * limit;
 
-    const sortBy = dto.sortBy ?? 'title';
+    const sortBy = dto.sortBy ?? 'rates';
     const order = dto.order ?? 'desc';
 
     const where: any = {
@@ -123,24 +161,17 @@ export class NovelService {
 
     // sorting
     let orderBy: any = {};
-
-    if (sortBy === 'rating') {
-      orderBy = [
-        {
-          weightedRate: order,
-        },
-      ]
-    } else if (sortBy === 'updatedAt') {
+    
+    if (sortBy === "rates") {
       orderBy = {
-        chapters: {
-          _count: order,
-        },
-      };
-    } else {
+        weightedRate: order
+      }
+    } else { 
       orderBy = {
         [sortBy]: order,
       };
     }
+
 
     const [novels, total] = await Promise.all([
       this.prismaService.novel.findMany({
@@ -175,7 +206,7 @@ export class NovelService {
   getPopular(limit = 5) {
     return this.getList({
       limit,
-      sortBy: 'rating',
+      sortBy: 'rates',
       order: 'desc',
     });
   }

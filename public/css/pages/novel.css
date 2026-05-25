@@ -61,32 +61,39 @@
 .novel-btn {
   padding: 10px 14px;
   border-radius: 10px;
-  border: none;
+  border: 2px solid var(--color-main);
   cursor: pointer;
   text-decoration: none;
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  background: var(--color-main-dark);
-  color: var(--color-white);
+  background: var(--color-main);
+  color: var(--color-text);
 }
 
 .save-btn {
   gap: 5px;
 }
 
-.icon {
-  width: 42px;
+.save-btn-saved {
+  background: transparent;
+  border: 2px solid var(--color-main-dark);
+  color: var(--color-main-dark);
 }
 
-.novel-btn:hover {
+.novel-btn:hover:not(.disable) {
   background-color: var(--color-main);
   color: var(--color-white);
 }
 
-.novel-btn:active {
+.novel-btn:active:not(.disable) {
   background-color: var(--color-main);
   scale: 0.95;
+}
+
+.disable {
+  cursor: default;
+  background: var(--color-btn-hover);
 }
 
 /* DESCRIPTION */

@@ -25,8 +25,8 @@
         <div>
           <span class="meta-label">Rating:</span>
           <span>
-            <%= novelRate.rate.avg.rate ? novelRate.rate.avg.rate.toFixed(1) : '0.0' %>
-            (<%= novelRate.rate.count %>)
+            <%= novel.novelRate.rate.avg.rate ? novel.novelRate.rate.avg.rate.toFixed(1) : '0.0' %>
+            (<%= novel.novelRate.rate.count %>)
           </span>
         </div>
 
@@ -55,15 +55,27 @@
             Rate novel
           </button>
 
-          <button class="novel-btn save-btn">
+          <% if (novel.isSaved) { %>
+          <button class="novel-btn save-btn save-btn-saved" id="save-btn" data-novel-id="<%= novel.id %>">
             <i class="bi bi-bookmark-fill"></i>
-            <span>Save</span>
+            <span id="save-btn-label">Saved</span>
           </button>
+          <% } else { %>
+          <button class="novel-btn save-btn" id="save-btn" data-novel-id="<%= novel.id %>">
+            <i class="bi bi-bookmark-fill"></i>
+            <span id="save-btn-label">Save</span>
+          </button>
+          <% } %>
 
-          <a href="/novels/<%= novel.id %>/chapter/<%= lastChapter.id %>" class="novel-btn">
+          <% if (novel.lastChapter) { %>
+          <a href="/novels/<%= novel.id %>/chapter/<%= novel.lastChapter.id %>" class="novel-btn">
             Continue reading
           </a>
-
+          <% } else { %>
+          <a href="#" class="novel-btn disable">
+            Continue reading
+          </a>
+          <% } %>
         </div>
 
       </div>

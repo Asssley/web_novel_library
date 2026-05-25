@@ -113,6 +113,23 @@ export class ChapterService {
     return chapter;
   }
 
+  async findFirst(novelId: string) {
+    const chapter = await this.prismaService.chapter.findFirst({
+      where: {
+        chapterNumber: 1,
+        novel: {
+          isHidden: false,
+          id: novelId
+        }
+      },
+      select: {
+        id: true,
+      }
+    });
+
+    return chapter;
+  }
+
   async update(userId: string, novelId: string, chapterId: string, dto: UpdateChapterDto) {
     const novel = await this.prismaService.novel.findUnique({
       where: {
