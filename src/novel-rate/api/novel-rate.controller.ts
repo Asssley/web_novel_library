@@ -1,9 +1,9 @@
 import { Body, Controller, Param, Post, Req, UseGuards } from '@nestjs/common';
-import { NovelRateService } from './novel-rate.service.js';
-import { RateDto } from './dto/rate.dto.js';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
+import { NovelRateService } from '../novel-rate.service.js';
+import { RateDto } from '../dto/rate.dto.js';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard.js';
 
-@Controller('novel-rate/:novelId')
+@Controller('api/novel-rate/:novelId')
 export class NovelRateController {
   constructor(private readonly novelRateService: NovelRateService) { }
 
