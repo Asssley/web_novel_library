@@ -72,7 +72,9 @@ export class NovelController {
         "pages/manage-novel.css",
         "parts/pagination.css",
       ],
-      scripts: []
+      scripts: [
+        "delete-novel.js",
+      ]
     };
   }
 
