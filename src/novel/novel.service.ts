@@ -58,7 +58,7 @@ export class NovelService {
         },
       });
 
-      return { data: { id: novel.id } };
+      return  { id: novel.id };
     } catch (err) {
       this.deleteImage(imagePath);
       throw err;

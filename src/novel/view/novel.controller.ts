@@ -76,6 +76,26 @@ export class NovelController {
     };
   }
 
+  @Get("/add")
+  @Render("pages/novel-form")
+  async getCreateNovelForm(
+    @Req() req
+  ) {
+
+    return {
+      novel: null,
+      user: req.user,
+      title: "Add novel",
+      styles: [
+        "pages/forms.css",
+      ],
+      scripts: [
+        "novel-form.js"
+      ]
+    };
+  }
+  
+
   @Get(":id")
   @Render("pages/novel")
   async getById(

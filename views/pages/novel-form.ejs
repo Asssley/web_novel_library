@@ -1,0 +1,96 @@
+<div class="create-novel-page">
+
+  <h1 class="page-title">
+    <%= novel ? 'Edit Novel' : 'Create Novel' %>
+  </h1>
+
+  <form id="novelForm" class="create-form" enctype="multipart/form-data">
+
+    <!-- TITLE -->
+    <div class="form-group">
+      <label>Title</label>
+      <input type="text" name="title" required value="<%= novel?.title || '' %>" />
+    </div>
+
+    <!-- DESCRIPTION -->
+    <div class="form-group">
+      <label>Description</label>
+      <textarea name="description" rows="6" required><%= novel?.description || '' %></textarea>
+    </div>
+
+    <!-- LANGUAGE -->
+    <div class="form-group">
+      <label>Language</label>
+      <select name="language" required>
+        <option value="UKRAINIAN" <%= novel?.language === 'UKRAINIAN' ? 'selected' : '' %>>
+          Ukrainian
+        </option>
+        <option value="ENGLISH" <%= novel?.language === 'ENGLISH' ? 'selected' : '' %>>
+          English
+        </option>
+      </select>
+    </div>
+
+    <!-- GENRES -->
+    <div class="form-group">
+
+      <label>Genres</label>
+
+      <div class="checkboxes-grid">
+
+        <% const allGenres = [
+      'FANTASY',
+      'ACTION',
+      'ADVENTURE',
+      'ROMANCE',
+      'DRAMA',
+      'COMEDY',
+      'SCI_FI',
+      'MYSTERY',
+      'HORROR',
+      'SUPERNATURAL',
+      'ISEKAI',
+      'REINCARNATION',
+      'REGRESSION',
+      'SLICE_OF_LIFE'
+    ]; %>
+
+        <% allGenres.forEach(g => { %>
+
+        <label class="checkbox">
+
+          <input type="checkbox" name="genres" value="<%= g %>" <%= novel?.genres?.includes(g) ? 'checked' : '' %> />
+
+          <span>
+            <%= g.replaceAll('_', ' ').toLowerCase() %>
+          </span>
+
+        </label>
+
+        <% }) %>
+
+      </div>
+
+    </div>
+    <!-- IMAGE -->
+    <div class="form-group">
+      <label>Cover image</label>
+
+      <% if (novel?.imagePath) { %>
+      <img src="/images/uploads/<%= novel.imagePath %>" class="preview-img" />
+      <% } %>
+
+      <input type="file" name="image" accept="image/*" />
+    </div>
+
+    <!-- ERROR -->
+    <div id="errorBox" class="error-box hidden"></div>
+
+    <!-- SUBMIT -->
+    <button type="submit" class="submit-btn">
+      <%= novel ? 'Update novel' : 'Create novel' %>
+    </button>
+
+  </form>
+
+</div>

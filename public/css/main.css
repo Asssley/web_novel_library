@@ -3,11 +3,11 @@
 
   --color-white: #ffffff;
   --color-main: #a4b6a0;
-  --color-main-dark: #5a6159;
+  --color-main-dark: #50574f;
 
   --color-btn-hover: #858f83;
   --color-btn-press: #485046;
-  --color-bg: var(--color-white)
+  --color-bg: var(--color-white);
   --color-text: var(--color-main-dark);
   --color-text-chapter: #000000;
 
