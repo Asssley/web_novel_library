@@ -21,5 +21,5 @@ resetBtn.addEventListener('click', () => {
 });
 
 resetBtn.addEventListener('click', () => {
-  window.location.href = '/novels';
+  window.location.reload();
 });
