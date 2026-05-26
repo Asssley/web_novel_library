@@ -1,5 +1,5 @@
 import { Controller, Get, Render, Req } from '@nestjs/common';
-import { UserService } from './user.service.js';
+import { UserService } from '../user.service.js';
 
 @Controller('user')
 export class UserController {
@@ -18,7 +18,9 @@ export class UserController {
       styles: [
         "pages/profile.css"
       ],
-      scripts: []
+      scripts: [
+        "log-out.js"
+      ]
     };
   }
 }
