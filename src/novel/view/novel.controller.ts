@@ -82,7 +82,7 @@ export class NovelController {
     @Req() req,
     @Param("id") novelId: string
   ) {
-    const novel = await this.novelService.getFullNovelInfo(req.user.id, novelId)
+    const novel = await this.novelService.getFullNovelInfo(req.user?.id, novelId)
 
     return {
       novel,
