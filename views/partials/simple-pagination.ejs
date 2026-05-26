@@ -1,0 +1,38 @@
+  <!-- Pagination-->
+  <%
+  const prevParams = new URLSearchParams();
+  prevParams.set('page', pagination.page - 1);
+
+  const nextParams = new URLSearchParams();
+  nextParams.set('page', pagination.page + 1);
+%>
+
+  <div class="pagination">
+
+    <% if (pagination.page > 1) { %>
+    <a href="<%= path %>?<%= prevParams.toString() %>" class="pagination-btn">
+      ‹ Prev
+    </a>
+    <% } else { %>
+    <div class="pagination-btn disabled">
+      ‹ Prev
+    </div>
+    <% } %>
+
+    <div class="pagination-info">
+      <span><%= pagination.page %></span>
+      <span class="pagination-sep">/</span>
+      <span><%= pagination.totalPages %></span>
+    </div>
+
+    <% if (pagination.page < pagination.totalPages) { %>
+    <a href="<%= path %>?<%= nextParams.toString() %>" class="pagination-btn">
+      Next ›
+    </a>
+    <% } else { %>
+    <div class="pagination-btn disabled">
+      Next ›
+    </div>
+    <% } %>
+
+  </div>

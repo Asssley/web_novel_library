@@ -1,0 +1,55 @@
+<div class="my-novels-page">
+
+  <div class="top-bar">
+
+    <h1 class="page-title">My novels</h1>
+
+    <div class="top-actions">
+
+      <a href="/novels/add" class="add-btn">
+        + Add novel
+      </a>
+
+    </div>
+
+  </div>
+
+  <%if (!novels.length) { %>
+  <div class="d-flex justify-content-center nothing-found-label">
+    Nothing found
+  </div>
+  <% } else { %>
+
+  <div class="novels-list">
+
+    <% novels.forEach(novel => { %>
+
+    <a href="/novels/my/<%= novel.id %>" class="novel-item">
+
+      <!-- IMAGE -->
+      <div class="novel-thumb">
+        <img src="/images/uploads/<%= novel.imagePath %>" alt="<%= novel.title %>">
+      </div>
+
+      <!-- INFO -->
+      <div class="novel-info">
+
+        <h2 class="novel-title">
+          <%= novel.title %>
+        </h2>
+
+        <div class="novel-meta">
+          <div>Chapters: <%= novel.chaptersCount %></div>
+          <div>Rating: <%= novel.rating.average %> (<%= novel.rating.count %>)</div>
+        </div>
+
+      </div>
+
+    </a>
+
+    <% }) %>
+
+  </div>
+  <%- include("../partials/novel-pagination", { filters, pagination, path: "/novels/my"}) %>
+  <% } %>
+</div>

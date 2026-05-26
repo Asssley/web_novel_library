@@ -1,0 +1,158 @@
+/* Top bar */
+.top-bar {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+/* TITLE */
+.page-title {
+  font-size: 26px;
+  margin: 0;
+}
+
+/* ACTIONS (right side) */
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ADD BUTTON */
+.add-btn {
+  background: var(--color-main);
+  color: var(--color-text);
+  padding: 8px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 1.2rem;
+  transition: 0.2s ease;
+  white-space: nowrap;
+}
+
+.add-btn:hover {
+  color: var(--color-white);
+  background: var(--color-btn-hover);
+}
+
+.add-btn:active {
+  background: var(--color-btn-press);
+  scale: 0.95;
+}
+
+.my-novels-page {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.page-title {
+  width: 100%;
+  max-width: 600px;
+  font-size: 2rem;
+  margin-bottom: 16px;
+}
+
+/* List wrapper */
+.novels-list {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Item as link */
+.novel-item {
+  display: flex;
+  gap: 14px;
+  padding: 12px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: inherit;
+  background: #fff;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+
+  align-items: flex-end;
+
+  transition: 0.2s ease;
+}
+
+.novel-item:hover {
+  transform: translateY(-2px);
+  background: #f9f9f9;
+}
+
+/* Image */
+.novel-thumb img {
+  width: 70px;
+  height: 95px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Info */
+.novel-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 95px;
+  flex: 1;
+}
+
+.novel-title {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.novel-meta {
+  font-size: 13px;
+  color: #666;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+
+  .top-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .top-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .page-title {
+    font-size: 22px;
+  }
+
+  .my-novels-page {
+    padding: 12px;
+  }
+
+  .novel-item {
+    align-items: flex-start;
+  }
+
+  .novel-thumb img {
+    width: 60px;
+    height: 85px;
+  }
+
+  .novel-title {
+    font-size: 15px;
+  }
+
+  .novel-meta {
+    font-size: 12px;
+  }
+}

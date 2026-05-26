@@ -1,0 +1,98 @@
+<div class="novel-manage-page">
+
+  <!-- HEADER -->
+  <div class="novel-manage-header">
+
+    <a href="/novels/<%= novel.id %>">
+      <div class="novel-preview">
+        <img src="/images/uploads/<%= novel.imagePath %>" alt="<%= novel.title %>">
+      </div>
+    </a>
+
+    <div class="novel-main">
+
+      <div class="novel-info">
+        <h1 class="novel-title">
+          <a href="/novels/<%= novel.id %>">
+            <%= novel.title %>
+          </a>
+        </h1>
+        <p class="novel-subtitle">Manage your novel content and chapters</p>
+      </div>
+
+      <!-- ACTIONS BAR -->
+      <div class="novel-actions-bar">
+
+        <!-- LEFT: main actions -->
+        <div class="actions-left">
+
+          <a href="/novels/<%= novel.id %>/chapter/create" class="action-card success">
+            Add chapter
+          </a>
+
+          <a href="/novels/<%= novel.id %>/edit" class="action-card primary">
+            Edit novel
+          </a>
+
+        </div>
+
+        <!-- RIGHT: delete actions -->
+        <div class="actions-right">
+
+          <form method="POST" action="/novels/<%= novel.id %>/chapter/delete-last">
+            <button type="submit" class="action-card warning">
+              Delete last chapter
+            </button>
+          </form>
+
+          <form method="POST" action="/novels/<%= novel.id %>/delete">
+            <button type="submit" class="action-card danger">
+              Delete novel
+            </button>
+          </form>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTERS -->
+  <div class="chapters-section">
+
+    <h2 class="section-title">Chapters</h2>
+
+    <% if (!chapters.chapters.length) { %>
+    <div class="empty-state">No chapters yet</div>
+    <% } else { %>
+
+    <div class="chapters-list">
+
+      <% chapters.chapters.forEach(ch => { %>
+
+      <a href="/chapters/<%= ch.id %>" class="chapter-item">
+
+        <div class="chapter-number">
+          #<%= ch.chapterNumber %>
+        </div>
+
+        <div class="chapter-title">
+          <%= ch.title %>
+        </div>
+
+      </a>
+
+      <% }) %>
+
+    </div>
+
+    <%- include("../partials/simple-pagination", {
+        pagination: chapters.pagination,
+        path: `/novels/my/${novel.id}`
+      }) %>
+
+    <% } %>
+
+  </div>
+
+</div>

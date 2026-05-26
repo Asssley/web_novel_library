@@ -1,0 +1,215 @@
+.novel-manage-page {
+  max-width: 700px;
+  margin: auto;
+}
+
+/* HEADER */
+.novel-manage-header {
+  display: flex;
+  gap: 24px;
+  background: linear-gradient(145deg, #ffffff, #f6f7fb);
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  padding: 22px;
+}
+
+/* IMAGE */
+.novel-preview {
+  flex-shrink: 0;
+}
+
+.novel-preview img {
+  width: 150px;
+  height: 210px;
+  object-fit: cover;
+  border-radius: 14px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+  transition: 0.25s ease;
+}
+
+.novel-preview img:hover {
+  transform: scale(1.02);
+}
+
+/* MAIN */
+.novel-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* TITLE */
+.novel-title {
+  font-size: 28px;
+  margin: 0;
+  font-weight: 800;
+}
+
+.novel-subtitle {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #666;
+}
+
+.novel-info a {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.novel-info a:hover {
+  text-decoration: underline;
+}
+
+/* =========================
+   ACTION BAR
+========================= */
+
+.novel-actions-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+}
+
+/* LEFT GROUP */
+.actions-left {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+/* RIGHT GROUP */
+.actions-right {
+  width: 50%;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+/* FORMS */
+.actions-right form {
+  margin: 0;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.action-card {
+  width: 100%;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: 0.2s ease;
+  background: var(--color-main);
+  color: var(--color-text);
+}
+
+.action-card:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+}
+
+.warning {
+  background: #f59e0b;
+  color: white;
+}
+
+.danger {
+  background: #ef4444;
+  color: white;
+}
+
+/* =========================
+   CHAPTERS
+========================= */
+
+.chapters-section {
+  margin-top: 30px;
+}
+
+/* Chapter list */
+.chapters-list {
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chapter-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+  text-decoration: none;
+  color: inherit;
+}
+
+.chapter-title {
+  font-weight: 600;
+}
+
+.chapter-number {
+  font-size: 13px;
+  color: #666;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 800px) {
+
+  .novel-manage-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .novel-preview img {
+    width: min(300px, 80vw);
+    height: auto;
+  }
+
+  .novel-title {
+    font-size: 24px;
+  }
+
+  /* STACK GROUPS */
+  .novel-actions-bar {
+    flex-direction: column;
+  }
+
+  .actions-left,
+  .actions-right {
+    grid-template-columns: 1fr;
+  }
+
+  /* DELETE stays in row */
+  .actions-right {
+    width: 100%;
+    display: flex;
+    gap: 12px;
+  }
+
+  .actions-right form {
+    flex: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .novel-preview img {
+    width: min(250px, 80vw);
+    height: auto;
+  }
+
+}

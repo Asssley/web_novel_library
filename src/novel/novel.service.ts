@@ -10,6 +10,8 @@ import { NovelRateService } from '../novel-rate/novel-rate.service.js';
 import { BookmarksService } from '../bookmarks/bookmarks.service.js';
 import { ChapterService } from '../chapter/chapter.service.js';
 import { SavedService } from '../saved/saved.service.js';
+import { GetUserNovelsDto } from './dto/get-user-novels.dto.js';
+import { GetChaptetrsQueryDto } from '../chapter/dto/get-chapters-query.dto.js';
 
 
 @Injectable()
@@ -164,17 +166,16 @@ export class NovelService {
 
     // sorting
     let orderBy: any = {};
-    
+
     if (sortBy === "rates") {
       orderBy = {
         weightedRate: order
       }
-    } else { 
+    } else {
       orderBy = {
         [sortBy]: order,
       };
     }
-
 
     const [novels, total] = await Promise.all([
       this.prismaService.novel.findMany({
@@ -203,6 +204,115 @@ export class NovelService {
         totalPages: Math.ceil(total / limit),
       },
       filters: dto,
+    };
+  }
+
+  async getUserNovels(
+    userId: string,
+    dto: GetUserNovelsDto,
+  ) {
+    const page = dto.page ?? 1;
+    const limit = dto.limit ?? 10;
+
+    const skip = (page - 1) * limit;
+
+    const where = {
+      userId,
+      isHidden: false,
+    };
+
+    const [novels, total] = await Promise.all([
+      this.prismaService.novel.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: {
+          updatedAt: "desc",
+        },
+
+        select: {
+          id: true,
+          title: true,
+          imagePath: true,
+          weightedRate: true,
+
+          _count: {
+            select: {
+              chapters: true,
+              rates: true,
+            },
+          },
+
+          rates: {
+            select: {
+              rate: true,
+            },
+          },
+        },
+      }),
+
+      this.prismaService.novel.count({
+        where,
+      }),
+    ]);
+
+
+    return {
+      novels: novels.map(novel => {
+        const count = novel.rates.length;
+
+        const average =
+          count > 0
+            ? novel.rates.reduce((sum, r) => sum + r.rate, 0) / count
+            : 0;
+
+        return {
+          id: novel.id,
+          title: novel.title,
+          imagePath: novel.imagePath,
+
+          chaptersCount: novel._count.chapters,
+
+          rating: {
+            average: Number(average.toFixed(2)),
+            count: novel._count.rates,
+          },
+        };
+      }),
+
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+
+      filters: dto,
+    };
+  }
+
+  async getNovelForManage(novelId: string, dto: GetChaptetrsQueryDto) {
+    const novel = await this.prismaService.novel.findFirst({
+      where: {
+        id: novelId,
+        isHidden: false,
+      },
+      select: {
+        id: true,
+        title: true,
+        imagePath: true,
+      },
+    });
+
+    if (!novel) {
+      throw new NotFoundException();
+    }
+
+    const chapters = await this.chapterService.findAll(novelId, dto);
+
+    return {
+      novel,
+      chapters,
     };
   }
 
