@@ -79,9 +79,7 @@ export class ChapterService {
     ]);
 
     return {
-      chapters: chapters.map(ch => ({
-        ...ch,
-      })),
+      chapters: chapters,
       pagination: {
         page,
         limit,
