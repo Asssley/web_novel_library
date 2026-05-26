@@ -112,7 +112,8 @@ export class NovelController {
         "pages/novel.css"
       ],
       scripts: [
-        "novel-page.js"
+        "save-novel.js",
+        "rate-novel.js"
       ]
     };
   }
