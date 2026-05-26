@@ -21,9 +21,8 @@
 
 .group-header h2 {
   font-size: 2rem;
-  font-family: var(--font-base-decorative);
   color: var(--color-text);
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .novels-row {

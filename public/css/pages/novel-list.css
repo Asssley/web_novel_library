@@ -3,7 +3,6 @@
 .nothing-found-label {
   margin-top: 10vh;
   font-size: 2rem;
-  font-family: var(--font-base-decorative);
   font-weight: 700;
   color: var(--color-text);
 }
@@ -23,11 +22,9 @@
   flex: 1;
   min-width: 0;
 
-  font-size: 1.5rem;
-  font-family: var(--font-base-decorative);
-  font-weight: 700;
+  font-size: 2rem;
   color: var(--color-text);
-
+  font-weight: 500;
   white-space: normal;
   overflow-wrap: anywhere;
   word-break: break-word;

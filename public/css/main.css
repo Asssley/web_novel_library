@@ -1,17 +1,21 @@
 :root {
-  --font-base-decorative: "Kalam", cursive;
   --font-base: "Roboto Flex", sans-serif;
 
-  
   --color-white: #ffffff;
   --color-main: #a4b6a0;
   --color-main-dark: #5a6159;
-  
+
   --color-btn-hover: #858f83;
   --color-btn-press: #485046;
-  --color-bg: var(--color-white);
+  --color-bg: var(--color-white)
   --color-text: var(--color-main-dark);
   --color-text-chapter: #000000;
+
+  /* For dark mode */
+  /*
+  --color-bg: #3f413e;
+  --color-text: rgb(187, 196, 183);
+  */
 }
 
 html,
@@ -28,6 +32,7 @@ body {
   flex-direction: column;
   background: var(--color-bg);
   font-family: var(--font-base);
+  color: var(--color-text);
 }
 
 .page-content {
@@ -132,7 +137,6 @@ body {
   padding-top: 7vh;
   padding-right: 5vw;
   padding-left: 5vw;
-  font-family: var(--font-base-decorative);
   background: var(--color-main);
   color: var(--color-text);
   margin-top: 40px;

@@ -99,7 +99,6 @@
 /* DESCRIPTION */
 .novel-description h2 {
   margin-bottom: 10px;
-  font-family: var(--font-base-decorative);
 }
 
 .novel-description p {
@@ -162,4 +161,123 @@
   .novel-description p {
     word-break: break-word;
   }
+}
+
+/* =========================
+   RATING MODAL
+========================= */
+
+.rating-modal {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.55);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 999;
+}
+
+.rating-modal.hidden {
+  display: none;
+}
+
+.rating-modal-content {
+  position: relative;
+
+  width: min(400px, 90%);
+  padding: 28px;
+
+  border-radius: 18px;
+
+  background: white;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+
+  animation: modalAppear 0.2s ease;
+}
+
+@keyframes modalAppear {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* CLOSE BUTTON */
+
+.rating-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+
+  width: 34px;
+  height: 34px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #f3f4f6;
+
+  cursor: pointer;
+
+  font-size: 16px;
+  transition: 0.2s;
+}
+
+.rating-close:hover {
+  background: #e5e7eb;
+}
+
+/* STARS */
+
+.rating-stars {
+  display: flex;
+  gap: 8px;
+}
+
+.star-btn {
+  border: none;
+  background: transparent;
+
+  cursor: pointer;
+
+  font-size: 42px;
+  line-height: 1;
+
+  color: #cbd5e1;
+
+  transition: 0.15s ease;
+}
+
+/* hover effect */
+.star-btn.hovered {
+  color: #facc15;
+}
+
+/* selected */
+.star-btn.selected {
+  color: #facc15;
+}
+
+/* SUCCESS */
+
+.rating-success {
+  font-size: 15px;
+  font-weight: 600;
+  color: #16a34a;
+}
+
+.rating-success.hidden {
+  display: none;
 }
