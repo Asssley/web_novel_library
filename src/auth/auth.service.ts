@@ -88,7 +88,8 @@ export class AuthService {
       httpOnly: true,
       secure: !isDev(),
       sameSite: 'lax',
-      path: "/"
+      path: "/",
+      maxAge: 1000 * 60 * 60 * 24 * 365
     });
   }
 }
