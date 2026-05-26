@@ -51,9 +51,37 @@
       <div class="novel-actions">
         <div class="action-row">
 
-          <button class="novel-btn">
+          <button class="novel-btn" id="openRatingModal" data-novel-id="<%= novel.id %>">
             Rate novel
           </button>
+
+          <div class="rating-modal hidden" id="ratingModal">
+
+            <div class="rating-modal-content">
+
+              <button class="rating-close" id="closeRatingModal">
+                ✕
+              </button>
+
+              <h2>Rate this novel</h2>
+
+              <div class="rating-stars" id="ratingStars">
+
+                <button class="star-btn" data-rate="1">☆</button>
+                <button class="star-btn" data-rate="2">☆</button>
+                <button class="star-btn" data-rate="3">☆</button>
+                <button class="star-btn" data-rate="4">☆</button>
+                <button class="star-btn" data-rate="5">☆</button>
+
+              </div>
+
+              <div class="rating-success hidden" id="ratingSuccess">
+                Thank you for your rating!
+              </div>
+
+            </div>
+
+          </div>
 
           <% if (novel.isSaved) { %>
           <button class="novel-btn save-btn save-btn-saved" id="save-btn" data-novel-id="<%= novel.id %>">
