@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import { Controller, Post, Body, Param, Delete, UseGuards, Req, Put } from '@nestjs/common';
 import { ChapterService } from '../chapter.service.js';
 import { CreateChapterDto } from '../dto/create-chapter.dto.js';
 import { UpdateChapterDto } from '../dto/update-chapter.dto.js';
