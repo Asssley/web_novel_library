@@ -59,10 +59,10 @@
     </div>
   </div>
 
-  
+
   <!-- CHAPTERS -->
   <div class="chapters-section">
-    
+
     <h2 class="section-title">Chapters</h2>
     <div>To edit chapters select one from the list below</div>
 
@@ -83,12 +83,18 @@
 
       <a href="/novels/<%= novel.id %>/chapters/<%= ch.id %>/edit" class="chapter-item">
 
-        <div class="chapter-number">
-          #<%= ch.chapterNumber %>
+        <div class="chapter-left">
+          <div class="chapter-number">
+            <%= ch.chapterNumber %>.
+          </div>
+  
+          <div class="chapter-title">
+            <%= ch.title %>
+          </div>
         </div>
 
-        <div class="chapter-title">
-          <%= ch.title %>
+        <div class="chapter-updated-time">
+          <%= ch.updatedAt.toLocaleDateString() %>
         </div>
 
       </a>

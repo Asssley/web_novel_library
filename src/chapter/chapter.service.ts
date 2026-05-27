@@ -65,9 +65,10 @@ export class ChapterService {
           id: true,
           chapterNumber: true,
           title: true,
+          updatedAt: true
         }
       }),
-
+      
       this.prismaService.chapter.count({
         where: {
           novelId: novelId,

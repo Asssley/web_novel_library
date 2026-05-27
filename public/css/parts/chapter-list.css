@@ -11,6 +11,7 @@
 
 .chapter-item {
   display: flex;
+  font-size: 1rem;
   justify-content: space-between;
   padding: 5px 5px;
   border-radius: 10px;
@@ -19,12 +20,34 @@
   color: inherit;
 }
 
+.chapter-item:hover {
+  box-shadow: 0 7px 5px rgba(0, 0, 0, 0.1);
+}
+
+.chapter-item:active {
+  scale: 0.99;
+}
+
 .chapter-title {
   font-weight: 500;
-  font-size: 1.1rem;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .chapter-number {
-  font-size: 1.1rem;
-  margin-right: 15px;
+  margin: 0 15px;
+}
+
+.chapter-left {
+  display: flex;
+  flex-direction: row;
+
+  flex: 1;
+  min-width: 0;
+}
+
+.chapter-updated-time {
+  margin-left: 15px;
 }
