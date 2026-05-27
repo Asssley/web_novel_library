@@ -113,12 +113,35 @@ export class ChapterService {
         chapterNumber: true,
         title: true,
         text: true,
+        novel: {
+          select: {
+            id: true,
+            title: true
+          }
+        }
       }
     });
 
     if (!chapter) throw new NotFoundException();
 
     return chapter;
+  }
+
+  async getIdByChapterNumber(novelId: string, chapterNumber: number) {
+    const chapter = await this.prismaService.chapter.findFirst({
+      where: {
+        chapterNumber: chapterNumber,
+        novel: {
+          id: novelId,
+          isHidden: false
+        }
+      },
+      select: {
+        id: true,
+      }
+    });
+    
+    return chapter?.id ?? null;
   }
 
   async findFirst(novelId: string) {
@@ -161,6 +184,21 @@ export class ChapterService {
       novel,
       ...chaptersData,
     };
+  }
+
+  async getChapterPageData(novelId: string, chapterId: string) {
+    const chapter = await this.getById(chapterId);
+    
+    const [prevChapterId, nextChapterId ] = await Promise.all([
+      this.getIdByChapterNumber(novelId, chapter.chapterNumber - 1),
+      this.getIdByChapterNumber(novelId, chapter.chapterNumber + 1)
+    ]);
+
+    return {
+      chapter,
+      prevChapterId,
+      nextChapterId
+    }
   }
 
   async update(userId: string, novelId: string, chapterId: string, dto: UpdateChapterDto) {

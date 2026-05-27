@@ -68,5 +68,25 @@ export class ChapterController {
     };
   }
 
+  @Get("/:chapterId")
+  @Render("pages/read-chapter")
+  async getChapter(
+    @Req() req,
+    @Param("novelId") novelId: string,
+    @Param("chapterId") chapterId: string
+  ) {
+    const data = await this.chapterService.getChapterPageData(novelId, chapterId);
+
+    return {
+      ...data,
+      user: req.user,
+      title: data.chapter.title,
+      styles: [
+        "pages/read-chapter.css",
+        "parts/pagination.css"
+      ],
+      scripts: []
+    };
+  }
 
 }

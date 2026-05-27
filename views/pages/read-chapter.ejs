@@ -1,0 +1,34 @@
+<div class="chapter-page">
+
+  <div class="chapter-page-header">
+    <a href="/novels/<%= chapter.novel.id %>">
+      <h2 class="novel-title">
+        <%= chapter.novel.title %>
+      </h2>
+    </a>
+    <div class="chapter-title">
+      <h4>Chapter <%= chapter.chapterNumber %>: <%= chapter.title %></h4>
+    </div>
+  </div>
+
+  <div class="chapter-content">
+
+    <% chapter.text.split('\n').forEach(paragraph => { %>
+
+    <% if (paragraph.trim()) { %>
+    <p><%= paragraph %></p>
+    <% } %>
+
+    <% }) %>
+
+  </div>
+
+  <div class="d-flex justify-content-center">
+    <%- include("../partials/chapter-pagination", {
+    novelId: chapter.novel.id,
+    nextChapterId: nextChapterId,
+    prevChapterId: prevChapterId,
+    chapterNumber: chapter.chapterNumber
+  }) %>
+  </div>
+</div>

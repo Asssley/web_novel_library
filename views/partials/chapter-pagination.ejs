@@ -1,0 +1,27 @@
+<div class="pagination">
+
+  <% if (prevChapterId) { %>
+  <a href="/novels/<%= novelId %>/chapters/<%= prevChapterId %>" class="pagination-btn">
+    ‹ Prev
+  </a>
+  <% } else { %>
+  <div class="pagination-btn disabled">
+    ‹ Prev
+  </div>
+  <% } %>
+
+  <div class="pagination-info">
+    <span><%= chapterNumber %></span>
+  </div>
+
+  <% if (nextChapterId) { %>
+  <a href="/novels/<%= novelId %>/chapters/<%= nextChapterId %>" class="pagination-btn">
+    Next ›
+  </a>
+  <% } else { %>
+  <div class="pagination-btn disabled">
+    Next ›
+  </div>
+  <% } %>
+
+</div>
