@@ -21,5 +21,5 @@ resetBtn.addEventListener('click', () => {
 });
 
 resetBtn.addEventListener('click', () => {
-  window.location.reload();
+  window.location.href = window.location.pathname;
 });
