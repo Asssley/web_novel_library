@@ -1,8 +1,8 @@
 import { Controller, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
-import { ChapterService } from './chapter.service.js';
-import { CreateChapterDto } from './dto/create-chapter.dto.js';
-import { UpdateChapterDto } from './dto/update-chapter.dto.js';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
+import { ChapterService } from '../chapter.service.js';
+import { CreateChapterDto } from '../dto/create-chapter.dto.js';
+import { UpdateChapterDto } from '../dto/update-chapter.dto.js';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard.js';
 
 @Controller('novels/:novelId/chapters')
 export class ChapterController {

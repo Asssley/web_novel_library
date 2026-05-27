@@ -1,9 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ChapterService } from './chapter.service.js';
-import { ChapterController } from './chapter.controller.js';
+import { ChapterController as ChapterApiController } from './api/chapter.controller.js';
+import { ChapterController as ChapterViewController} from './api/chapter.controller.js';
 
 @Module({
-  controllers: [ChapterController],
+  controllers: [
+    ChapterApiController,
+    ChapterViewController,
+  ],
   providers: [ChapterService],
   exports: [ChapterService]
 })
