@@ -19,7 +19,7 @@ export class ChapterController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Patch(':id')
+  @Put(':id')
   async update(
     @Req() req,
     @Param("novelId") novelId: string,
@@ -31,11 +31,11 @@ export class ChapterController {
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  async remove(
+  async delete(
     @Req() req,
     @Param("novelId") novelId: string,
     @Param('id') chapterId: string,
   ) {
-    return this.chapterService.remove(req.user.id, novelId, chapterId);
+    return this.chapterService.delete(req.user.id, novelId, chapterId);
   }
 }

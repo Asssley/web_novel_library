@@ -42,7 +42,7 @@ export class ChapterService {
     return { succes: true }
   }
 
-  async findAll(novelId: string, dto: GetChaptetrsQueryDto) {
+  async getAll(novelId: string, dto: GetChaptetrsQueryDto) {
     const page = dto.page ?? 1;
     const limit = dto.limit ?? 50;
 
@@ -90,7 +90,7 @@ export class ChapterService {
     };
   }
 
-  async findOne(chapterId: string) {
+  async getById(chapterId: string) {
     const chapter = await this.prismaService.chapter.findUnique({
       where: {
         id: chapterId,
@@ -159,7 +159,7 @@ export class ChapterService {
     return { succes: true };
   }
 
-  async remove(userId: string, novelId: string, chapterId: string) {
+  async delete(userId: string, novelId: string, chapterId: string) {
     const novel = await this.prismaService.novel.findUnique({
       where: {
         id: novelId,
