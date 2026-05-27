@@ -4,7 +4,7 @@ import { CreateChapterDto } from '../dto/create-chapter.dto.js';
 import { UpdateChapterDto } from '../dto/update-chapter.dto.js';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard.js';
 
-@Controller('novels/:novelId/chapters')
+@Controller('api/novels/:novelId/chapters')
 export class ChapterController {
   constructor(private readonly chapterService: ChapterService) { }
 
