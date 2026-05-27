@@ -1,9 +1,9 @@
-const deleteNovelForm = document.getElementById("deleteNovelForm");
+const deleteNovelForm = document.getElementById("delete-novel-form");
 
 deleteNovelForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const confirmed = confirm("Are you sure you want to delete this novel?");
+  const confirmed = confirm("Are you sure want to delete this novel?");
 
   if (!confirmed) return;
 

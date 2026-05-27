@@ -30,6 +30,15 @@ export class ChapterController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Delete('delete-last')
+  async deleteLast(
+    @Req() req,
+    @Param("novelId") novelId: string
+  ) {
+    return this.chapterService.deleteLast(req.user.id, novelId);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async delete(
     @Req() req,

@@ -197,7 +197,7 @@ export class ChapterService {
         novelId: novelId
       },
     });
-  
+
     await this.prismaService.novel.update({
       where: {
         id: novelId
@@ -208,5 +208,48 @@ export class ChapterService {
     });
 
     return { succes: true }
+  }
+
+  async deleteLast(userId: string, novelId: string) {
+    const novel = await this.prismaService.novel.findUnique({
+      where: {
+        id: novelId,
+        userId,
+      },
+      select: {
+        id: true,
+        isHidden: true,
+      },
+    });
+
+    if (!novel) throw new ForbiddenException();
+    if (novel.isHidden) throw new NotFoundException();
+
+    const lastChapter = await this.prismaService.chapter.findFirst({
+      where: {
+        novelId,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (!lastChapter) throw new NotFoundException();
+
+    await this.prismaService.chapter.delete({
+      where: {
+        id: lastChapter.id,
+      },
+    });
+
+    await this.prismaService.novel.update({
+      where: { id: novelId },
+      data: { updatedAt: new Date() },
+    });
+
+    return { success: true };
   }
 }

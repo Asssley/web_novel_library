@@ -75,6 +75,7 @@ export class NovelController {
       ],
       scripts: [
         "delete-novel.js",
+        "delete-last-chapter.js",
       ]
     };
   }
