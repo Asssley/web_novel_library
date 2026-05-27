@@ -3,10 +3,14 @@ import { CreateChapterDto } from './dto/create-chapter.dto.js';
 import { UpdateChapterDto } from './dto/update-chapter.dto.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { GetChaptetrsQueryDto } from './dto/get-chapters-query.dto.js';
+import { BookmarksService as BookmarkService } from '../bookmark/bookmark.service.js';
 
 @Injectable()
 export class ChapterService {
-  constructor(private readonly prismaService: PrismaService) { }
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly bookmarkService: BookmarkService,
+  ) { }
 
   async create(userId: string, novelId: string, dto: CreateChapterDto) {
     const novel = await this.prismaService.novel.findUnique({
@@ -186,13 +190,17 @@ export class ChapterService {
     };
   }
 
-  async getChapterPageData(novelId: string, chapterId: string) {
+  async getChapterPageData(userId: string | null, novelId: string, chapterId: string) {
     const chapter = await this.getById(chapterId);
     
     const [prevChapterId, nextChapterId ] = await Promise.all([
       this.getIdByChapterNumber(novelId, chapter.chapterNumber - 1),
       this.getIdByChapterNumber(novelId, chapter.chapterNumber + 1)
     ]);
+
+    if (userId) {
+      await this.bookmarkService.update(userId, novelId, chapterId);
+    }
 
     return {
       chapter,

@@ -7,7 +7,7 @@ import { v4 as uuid } from 'uuid';
 import { NovelInfo } from './interfaces/novel-info.interface.js';
 import { GetNovelsQueryDto } from './dto/get-novels-query.dto.js';
 import { NovelRateService } from '../novel-rate/novel-rate.service.js';
-import { BookmarksService } from '../bookmarks/bookmarks.service.js';
+import { BookmarksService } from '../bookmark/bookmark.service.js';
 import { ChapterService } from '../chapter/chapter.service.js';
 import { SavedService } from '../saved/saved.service.js';
 import { GetUserNovelsDto } from './dto/get-user-novels.dto.js';
@@ -111,6 +111,7 @@ export class NovelService {
     try {
       const bookmark = await this.bookmarksService.getBookmark(userId ?? "", novel.id);
       lastChapterId = bookmark.id;
+      hasReadBefore = (bookmark?.chapterNumber ?? 0) > 1;
     } catch (err) {
       if (err instanceof HttpException && err.getStatus() === 500) {
         throw err;
@@ -118,7 +119,7 @@ export class NovelService {
 
       const firstChapter = await this.chapterService.findFirst(novel.id);
       lastChapterId = firstChapter?.id ?? null;
-      hasReadBefore = (firstChapter?.chapterNumber! ?? 0) > 1;
+      hasReadBefore = (firstChapter?.chapterNumber ?? 0) > 1;
     }
 
     isSaved = await this.SavedService.checkIfSaved(userId ?? "", novel.id);

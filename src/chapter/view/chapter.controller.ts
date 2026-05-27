@@ -75,7 +75,7 @@ export class ChapterController {
     @Param("novelId") novelId: string,
     @Param("chapterId") chapterId: string
   ) {
-    const data = await this.chapterService.getChapterPageData(novelId, chapterId);
+    const data = await this.chapterService.getChapterPageData(req.user.id, novelId, chapterId);
 
     return {
       ...data,

@@ -8,7 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import { NovelModule } from './novel/novel.module.js';
 import { SavedModule } from './saved/saved.module.js';
 import { ChapterModule } from './chapter/chapter.module.js';
-import { BookmarksModule } from './bookmarks/bookmarks.module.js';
+import { BookmarkModule } from './bookmark/bookmark.module.js';
 import { NovelRateModule } from './novel-rate/novel-rate.module.js';
 import { APP_GUARD } from '@nestjs/core';
 import { OptionalJwtAuthGuard } from './auth/guards/optional-jwt-auth.guard.js';
@@ -22,7 +22,7 @@ import { OptionalJwtAuthGuard } from './auth/guards/optional-jwt-auth.guard.js';
     NovelModule,
     SavedModule,
     ChapterModule,
-    BookmarksModule,
+    BookmarkModule,
     NovelRateModule
   ],
   controllers: [AppController],
