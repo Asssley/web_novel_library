@@ -1,0 +1,42 @@
+<div class="form-page">
+
+  <h1 class="page-title">
+    <%= chapter ? 'Edit Chapter' : 'Create Chapter' %>
+  </h1>
+
+  <form id="chapterForm" class="main-form">
+
+    <!-- TITLE -->
+    <div class="form-group">
+      <label>Chapter title</label>
+      <input
+        type="text"
+        name="title"
+        required
+        value="<%= chapter?.title || '' %>"
+      />
+    </div>
+
+    <!-- TEXT -->
+    <div class="form-group">
+      <label>Content</label>
+
+      <textarea
+        name="text"
+        rows="12"
+        required
+      ><%= chapter?.text || '' %></textarea>
+
+    </div>
+
+    <!-- ERROR -->
+    <div id="errorBox" class="error-box hidden"></div>
+
+    <!-- SUBMIT -->
+    <button type="submit" class="submit-btn">
+      <%= chapter ? 'Update chapter' : 'Create chapter' %>
+    </button>
+
+  </form>
+
+</div>
