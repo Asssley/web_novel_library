@@ -15,7 +15,7 @@ export class ChapterController {
     return {
       chapter: null,
       user: req.user,
-      title: "Add novel",
+      title: "Add chapter",
       styles: [
         "pages/forms.css",
       ],
@@ -37,7 +37,7 @@ export class ChapterController {
     return {
       ...data,
       user: req.user,
-      title: "Add novel",
+      title: data.novel.title,
       styles: [
         "pages/chapter-list.css",
         "parts/chapter-list.css",
