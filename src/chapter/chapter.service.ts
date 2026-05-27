@@ -30,12 +30,21 @@ export class ChapterService {
 
     const chapterNumber = novel._count.chapters + 1
 
-    const chapter = await this.prismaService.chapter.create({
+    await this.prismaService.chapter.create({
       data: {
         novelId: novelId,
         chapterNumber: chapterNumber,
         title: dto.title,
         text: dto.text
+      }
+    });
+
+    await this.prismaService.novel.update({
+      where: {
+        id: novelId
+      },
+      data: {
+        updatedAt: new Date()
       }
     });
 
@@ -68,7 +77,7 @@ export class ChapterService {
           updatedAt: true
         }
       }),
-      
+
       this.prismaService.chapter.count({
         where: {
           novelId: novelId,
@@ -142,8 +151,8 @@ export class ChapterService {
       }
     });
 
-    if (!novel || novel.isHidden) throw new NotFoundException();
     if (!novel) throw new ForbiddenException();
+    if (novel.isHidden) throw new NotFoundException();
 
 
     const chapter = await this.prismaService.chapter.update({
@@ -155,7 +164,14 @@ export class ChapterService {
       }
     });
 
-    if (!chapter) throw new NotFoundException();
+    await this.prismaService.novel.update({
+      where: {
+        id: novelId
+      },
+      data: {
+        updatedAt: new Date()
+      }
+    });
 
     return { succes: true };
   }
@@ -172,8 +188,8 @@ export class ChapterService {
       }
     });
 
-    if (!novel || novel.isHidden) throw new NotFoundException();
     if (!novel) throw new ForbiddenException();
+    if (novel.isHidden) throw new NotFoundException();
 
     const chapter = await this.prismaService.chapter.delete({
       where: {
@@ -181,8 +197,15 @@ export class ChapterService {
         novelId: novelId
       },
     });
-
-    if (!chapter) throw new NotFoundException();
+  
+    await this.prismaService.novel.update({
+      where: {
+        id: novelId
+      },
+      data: {
+        updatedAt: new Date()
+      }
+    });
 
     return { succes: true }
   }
