@@ -25,8 +25,8 @@
         <div>
           <span class="meta-label">Rating:</span>
           <span>
-            <%= novel.novelRate.rate.avg.rate ? novel.novelRate.rate.avg.rate.toFixed(1) : '0.0' %>
-            (<%= novel.novelRate.rate.count %>)
+            <%= novelRate.rate.avg.rate ? novelRate.rate.avg.rate.toFixed(1) : '0.0' %>
+            (<%= novelRate.rate.count %>)
           </span>
         </div>
 
@@ -98,27 +98,27 @@
           <!-- If user readed before, show 'kontinue reading' othervise show start reading -->
           <!-- after that check if the last chapter is available, it could be deleted, -->
           <!-- or even has not be added yet -->
-          <% if (novel.hasReadedBefore) { %>
-          <% if (novel.lastChapter) { %>
-          <a href="/novels/<%= novel.id %>/chapter/<%= novel.lastChapter.id %>" class="novel-btn">
-            Continue reading
-          </a>
-          <% } else { %>
-          <a href="#" class="novel-btn disable">
-            Continue reading
-          </a>
-          <% } %>
-          <% } else { %>
-          <% if (novel.lastChapter) { %>
-          <a href="/novels/<%= novel.id %>/chapter/<%= novel.lastChapter.id %>" class="novel-btn">
-            Start reading
-          </a>
-          <% } else { %>
-          <a href="#" class="novel-btn disable">
-            Start reading
-          </a>
-          <% } %>
-          <% } %>
+          <div>
+
+            <% const buttonText = hasReadBefore
+              ? 'Continue reading'
+              : 'Start reading'; %>
+
+            <% if (lastChapterId) { %>
+
+            <a href="/novels/<%= novel.id %>/chapters/<%= lastChapterId %>" class="novel-btn">
+              <%= buttonText %>
+            </a>
+
+            <% } else { %>
+
+            <a href="#" class="novel-btn disable">
+              <%= buttonText %>
+            </a>
+
+            <% } %>
+
+          </div>
         </div>
 
       </div>

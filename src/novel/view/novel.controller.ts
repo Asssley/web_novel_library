@@ -127,12 +127,12 @@ export class NovelController {
     @Req() req,
     @Param("id") novelId: string
   ) {
-    const novel = await this.novelService.getFullNovelInfo(req.user?.id, novelId)
+    const data = await this.novelService.getFullNovelInfo(req.user?.id, novelId)
 
     return {
-      novel,
+      ...data,
       user: req.user,
-      title: novel.title,
+      title: data.novel.title,
       styles: [
         "pages/novel.css"
       ],
