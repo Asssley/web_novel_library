@@ -10,13 +10,15 @@
 
   <div class="error-actions">
     <a href="/" class="btn primary">Go home</a>
-    <a href="javascript:history.back()" class="btn secondary">Go back</a>
+    <a href="#" class="btn secondary" onclick="history.back(); return false;">
+      Go back
+    </a>
   </div>
 
   <% if (typeof url !== 'undefined') { %>
-    <div class="error-path">
-      <small>Requested: <%= url %></small>
-    </div>
+  <div class="error-path">
+    <small>Requested: <%= url %></small>
+  </div>
   <% } %>
 
 </div>
