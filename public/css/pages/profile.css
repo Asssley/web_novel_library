@@ -63,38 +63,37 @@
   border-radius: 8px;
   text-decoration: none;
   font-weight: 600;
-  transition: 0.2s;
+  transition: all 0.2s ease;
 }
 
 .btn.primary {
-  background: var(--color-main, #4f46e5);
-  color: white;
+  background: var(--color-main);
 }
 
 .btn.primary:hover {
-  opacity: 0.9;
+  background: var(--color-btn-hover);
+  color: white;
 }
 
-.btn.danger {
+.btn.primary:active {
+  background: var(--color-btn-press);
+  scale: 0.97;
+}
+
+.logout-btn {
   background: #ef4444;
   color: white;
 }
 
-.btn.danger:hover {
-  opacity: 0.85;
-}
-
-.logout-btn {
-  background: #111;
-  color: white;
-  cursor: pointer;
-  border: 2px solid black;
-}
-
 .logout-btn:hover {
-  opacity: 0.85;
-  color: black;
-  border: 2px solid black;
+  background: #e26a6a;
+  color: white;
+}
+
+.logout-btn:active {
+  background: #f02b2b !important;
+  color: white !important;
+  scale: 0.97;
 }
 
 /* Stats */
@@ -125,7 +124,7 @@
 .stat-number {
   font-size: 26px;
   font-weight: 700;
-  color: var(--color-main, #4f46e5);
+  color: var(--color-main);
 }
 
 .stat-label {
@@ -156,7 +155,4 @@
     margin-top: 0;
   }
 
-  .logout-btn {
-    background: #111;
-  }
 }

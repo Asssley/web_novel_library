@@ -26,11 +26,11 @@
         <!-- LEFT: main actions -->
         <div class="actions-left">
 
-          <a href="/novels/<%= novel.id %>/chapter/create" class="action-card success">
+          <a href="/novels/<%= novel.id %>/chapters/add" class="btn success">
             Add chapter
           </a>
 
-          <a href="/novels/<%= novel.id %>/edit" class="action-card primary">
+          <a href="/novels/<%= novel.id %>/edit" class="btn primary">
             Edit novel
           </a>
 
@@ -40,14 +40,14 @@
         <div class="actions-right">
 
           <form method="POST" action="/novels/<%= novel.id %>/chapter/delete-last">
-            <button type="submit" class="action-card warning">
+            <button type="submit" class="btn warning">
               Delete last chapter
             </button>
           </form>
 
           <form id="deleteNovelForm">
 
-            <button type="submit" class="action-card danger">
+            <button type="submit" class="btn danger">
               Delete novel
             </button>
 

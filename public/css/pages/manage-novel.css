@@ -95,7 +95,7 @@
    BUTTONS
 ========================= */
 
-.action-card {
+.btn {
   width: 100%;
   height: 52px;
   display: flex;
@@ -112,20 +112,44 @@
   color: var(--color-text);
 }
 
-.action-card:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.05);
+.btn:hover {
+  background: var(--color-btn-hover);
+  color: white  !important;
 }
+
+.btn:active {
+  background: var(--color-btn-press) !important;
+  scale: 0.97;
+}
+
 
 .warning {
   background: #f59e0b;
   color: white;
 }
 
+.warning:hover {
+  background: #eea82e;
+}
+
+.warning:active {
+  background: #da8a01 !important;
+}
+
+
 .danger {
   background: #ef4444;
   color: white;
 }
+
+.danger:hover {
+  background: #dd5353;
+}
+
+.danger:active {
+  background: #c51e1e  !important;
+}
+
 
 /* =========================
    CHAPTERS
