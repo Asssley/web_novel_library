@@ -1,0 +1,16 @@
+<div class="error-page">
+
+  <div class="error-code"><%= status || 500 %></div>
+
+  <h1 class="error-title">Something went wrong</h1>
+
+  <p class="error-text">
+    <%= message || 'Unexpected error occurred' %>
+  </p>
+
+  <div class="error-actions">
+    <a href="/" class="btn primary">Go home</a>
+    <a href="javascript:history.back()" class="btn secondary">Go back</a>
+  </div>
+
+</div>

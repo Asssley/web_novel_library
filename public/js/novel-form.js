@@ -31,8 +31,8 @@ form.addEventListener("submit", async (e) => {
   const isEdit = window.location.pathname.includes("/edit");
 
   const url = isEdit
-    ? `/novels/${novelId}`
-    : "/novels";
+    ? `/api/novels/${novelId}`
+    : "/api/novels";
 
   const method = isEdit ? "PUT" : "POST";
 

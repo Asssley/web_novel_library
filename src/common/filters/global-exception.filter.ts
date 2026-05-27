@@ -17,6 +17,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     let status = HttpStatus.INTERNAL_SERVER_ERROR;
     let message: string | string[] = 'Internal server error';
 
+    // PRISMA ERRORS
     if (exception instanceof PrismaClientKnownRequestError) {
       if (exception.code === 'P2002') {
         status = HttpStatus.CONFLICT;
@@ -27,7 +28,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         const fields = match?.[1]
           ?.split(',')
           .map(f => f.replace(/`/g, '').trim());
-        
+
         message = fields?.length
           ? fields.map(f => `${f} already exists`)
           : 'Already exists';
@@ -36,6 +37,8 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         message = 'Record not found';
       }
     }
+
+    // HTTP EXCEPTIONS
     else if (exception instanceof HttpException) {
       status = exception.getStatus();
 
@@ -54,7 +57,38 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       console.error(exception);
     }
 
-    response.status(status).json({
+    const isApiRequest =
+      request.url.startsWith('/api') ||
+      request.headers.accept?.includes('application/json');
+
+    // WEB RESPONSE (HTML)
+    if (!isApiRequest) {
+      if (status === HttpStatus.NOT_FOUND) {
+        return response.status(404).render('pages/404', {
+          url: request.url,
+          user: request.user,
+          title: status,
+          styles: [
+            "pages/error.css"
+          ],
+          scripts: []
+        });
+      }
+
+      return response.status(status).render('pages/error', {
+        status,
+        message,
+        user: request.user,
+        title: status,
+        styles: [
+          "pages/error.css"
+        ],
+        scripts: []
+      });
+    }
+
+    // API RESPONSE (JSON) 
+    return response.status(status).json({
       success: false,
       message,
       statusCode: status,
@@ -62,3 +96,4 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     });
   }
 }
+

@@ -6,7 +6,7 @@ import { ImageFile } from '../decorators/image-file.decorator.js';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard.js';
 import { OptionalImageFile } from '../decorators/optional-image-decorator.js';
 
-@Controller('novels')
+@Controller('api/novels')
 export class NovelController {
   constructor(private readonly novelService: NovelService) { }
 
