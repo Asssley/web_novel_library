@@ -1,4 +1,4 @@
-.create-novel-page {
+.form-page {
   max-width: 600px;
   margin: 0 auto;
   font-size: 1.5rem;
@@ -9,13 +9,13 @@
   margin-bottom: 20px;
 }
 
-.create-form {
+.main-form {
   display: flex;
   flex-direction: column;
   gap: 16px;
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
 }
 
 .form-group {
@@ -24,7 +24,9 @@
   gap: 6px;
 }
 
-input, textarea, select {
+input,
+textarea,
+select {
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #ddd;
@@ -44,10 +46,17 @@ textarea {
   cursor: pointer;
   font-size: 15px;
   font-weight: 600;
+  transition: all 0.2s ease;
 }
 
 .submit-btn:hover {
   background: var(--color-btn-hover);
+  color: var(--color-white);
+}
+
+.submit-btn:active {
+  background: var(--color-btn-press);
+  scale: 0.97;
 }
 
 .error-box {
