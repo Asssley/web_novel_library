@@ -97,6 +97,27 @@ export class NovelController {
     };
   }
   
+  @Get("/:id/edit")
+  @Render("pages/novel-form")
+  async getEditNovelForm(
+    @Req() req,
+    @Param("id") novelId: string
+  ) {
+    const novel = await this.novelService.getById(novelId);
+
+    return {
+      novel: novel,
+      user: req.user,
+      title: "Edit novel: " + novel.title,
+      styles: [
+        "pages/forms.css",
+      ],
+      scripts: [
+        "novel-form.js"
+      ]
+    };
+  }
+
 
   @Get(":id")
   @Render("pages/novel")

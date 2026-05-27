@@ -58,7 +58,7 @@ export class NovelService {
         },
       });
 
-      return  { id: novel.id };
+      return { id: novel.id };
     } catch (err) {
       this.deleteImage(imagePath);
       throw err;
@@ -340,24 +340,60 @@ export class NovelService {
     });
   }
 
-  async updateImage(
+  async update(
     userId: string,
     novelId: string,
-    file: Express.Multer.File,
+    file: Express.Multer.File | undefined,
+    dto: CreateNovelDto
   ) {
-    const novel = await this.prismaService.novel.findFirst({
+    const user = await this.prismaService.user.findFirst({
       where: {
-        id: novelId
-      }
+        id: userId,
+        canAddNovel: false,
+      },
     });
 
-    if (!novel) throw new NotFoundException();
+    if (user) throw new ForbiddenException();
 
-    if (novel.userId !== userId) throw new ForbiddenException();
+    const existingNovel = await this.prismaService.novel.findFirst({
+      where: {
+        id: novelId,
+        userId,
+        isHidden: false,
+      },
+    });
 
-    this.saveImage(file, novel.imagePath);
+    if (!existingNovel) {
+      throw new NotFoundException();
+    }
 
-    return { succes: true };
+    const oldImage = existingNovel.imagePath;
+
+    let imagePath = oldImage;
+
+    if (file) {
+      imagePath = await this.saveImage(file);
+    }
+
+    const updated = await this.prismaService.novel.update({
+      where: { id: novelId },
+      data: {
+        title: dto.title,
+        description: dto.description,
+        language: dto.language,
+        imagePath,
+        genres: {
+          deleteMany: {},
+          create: dto.genres.map(g => ({ genre: g })),
+        },
+      },
+    });
+
+    if (file && oldImage) {
+      await this.deleteImage(oldImage);
+    }
+
+    return { id: updated.id };
   }
 
   async deleteById(userId: string, novelId: string) {
@@ -376,14 +412,13 @@ export class NovelService {
   }
 
   private async saveImage(
-    image: Express.Multer.File,
-    imageName?: string,
+    image: Express.Multer.File
   ): Promise<string> {
     const uploadDir = path.join(__dirname, '..', '..', '..', 'public', 'images', 'uploads');
 
     const extension = path.extname(image.originalname);
 
-    const fileName = imageName ?? `${uuid()}${extension}`;
+    const fileName = `${uuid()}${extension}`;
 
     const filePath = path.join(uploadDir, fileName);
 

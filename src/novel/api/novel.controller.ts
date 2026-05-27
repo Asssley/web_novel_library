@@ -1,9 +1,10 @@
-import { Controller, Post, Body, Patch, Param, Delete, UseInterceptors, Req, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Patch, Param, Delete, UseInterceptors, Req, UseGuards, Put } from '@nestjs/common';
 import { NovelService } from '../novel.service.js';
 import { CreateNovelDto } from '../dto/create-novel.dto.js';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ImageFile } from '../decorators/image-file.decorator.js';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard.js';
+import { OptionalImageFile } from '../decorators/optional-image-decorator.js';
 
 @Controller('novels')
 export class NovelController {
@@ -22,13 +23,14 @@ export class NovelController {
 
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('image'))
-  @Patch("update-image/:id")
-  async updateImage(
+  @Put(":id")
+  async update(
     @Req() req,
-    @ImageFile() file: Express.Multer.File,
-    @Param("id") novelId: string
+    @Param("id") novelId,
+    @OptionalImageFile() file: Express.Multer.File,
+    @Body() createNovelDto: CreateNovelDto
   ) {
-    return this.novelService.updateImage(req.user.id, novelId, file);
+    return await this.novelService.update(req.user.id, novelId, file, createNovelDto);
   }
 
   @UseGuards(JwtAuthGuard)
