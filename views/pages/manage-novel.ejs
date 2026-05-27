@@ -69,14 +69,6 @@
     <% if (!chapters.length) { %>
     <div class="empty-state">No chapters yet</div>
     <% } else { %>
-    <div class="d-flex justify-content-center">
-      <%- include("../partials/simple-pagination", {
-        pagination: pagination,
-        path: `/novels/my/${novel.id}`
-      }) %>
-    </div>
-
-
     <div class="chapters-list">
 
       <% chapters.forEach(ch => { %>
