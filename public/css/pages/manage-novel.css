@@ -150,43 +150,6 @@
   background: #c51e1e  !important;
 }
 
-
-/* =========================
-   CHAPTERS
-========================= */
-
-.chapters-section {
-  margin-top: 30px;
-}
-
-/* Chapter list */
-.chapters-list {
-  margin-top: 25px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.chapter-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 12px 14px;
-  border-radius: 10px;
-  background: #fff;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
-  text-decoration: none;
-  color: inherit;
-}
-
-.chapter-title {
-  font-weight: 600;
-}
-
-.chapter-number {
-  font-size: 13px;
-  color: #666;
-}
-
 /* =========================
    MOBILE
 ========================= */

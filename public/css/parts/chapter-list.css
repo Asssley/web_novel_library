@@ -1,0 +1,30 @@
+.chapters-section {
+  margin-top: 30px;
+}
+
+.chapters-list {
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chapter-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 5px;
+  border-radius: 10px;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.06);
+  text-decoration: none;
+  color: inherit;
+}
+
+.chapter-title {
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+
+.chapter-number {
+  font-size: 1.1rem;
+  margin-right: 15px;
+}

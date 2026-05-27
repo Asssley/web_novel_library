@@ -308,11 +308,11 @@ export class NovelService {
       throw new NotFoundException();
     }
 
-    const chapters = await this.chapterService.findAll(novelId, dto);
+    const chapters = await this.chapterService.getAll(novelId, dto);
 
     return {
       novel,
-      chapters,
+      ...chapters,
     };
   }
 

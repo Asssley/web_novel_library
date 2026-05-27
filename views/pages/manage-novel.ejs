@@ -59,20 +59,22 @@
     </div>
   </div>
 
+  
   <!-- CHAPTERS -->
   <div class="chapters-section">
 
     <h2 class="section-title">Chapters</h2>
+    <div>To edit chapters select one from the list below</div>
 
-    <% if (!chapters.chapters.length) { %>
+    <% if (!chapters.length) { %>
     <div class="empty-state">No chapters yet</div>
     <% } else { %>
 
     <div class="chapters-list">
 
-      <% chapters.chapters.forEach(ch => { %>
+      <% chapters.forEach(ch => { %>
 
-      <a href="/chapters/<%= ch.id %>" class="chapter-item">
+      <a href="/novels/<%= novel.id %>/chapters/<%= ch.id %>/edit" class="chapter-item">
 
         <div class="chapter-number">
           #<%= ch.chapterNumber %>
@@ -88,10 +90,12 @@
 
     </div>
 
+    <div class="d-flex justify-content-center">
     <%- include("../partials/simple-pagination", {
-        pagination: chapters.pagination,
+        pagination: pagination,
         path: `/novels/my/${novel.id}`
       }) %>
+    </div>
 
     <% } %>
 

@@ -70,6 +70,7 @@ export class NovelController {
       title: "Manage - " + data.novel.title,
       styles: [
         "pages/manage-novel.css",
+        "parts/chapter-list.css",
         "parts/pagination.css",
       ],
       scripts: [
@@ -96,7 +97,7 @@ export class NovelController {
       ]
     };
   }
-  
+
   @Get("/:id/edit")
   @Render("pages/novel-form")
   async getEditNovelForm(
