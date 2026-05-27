@@ -169,8 +169,8 @@ export class NovelService {
 
     if (sortBy === "rates") {
       orderBy = {
-        weightedRate: order
-      }
+        avgRate: order,
+      };
     } else {
       orderBy = {
         [sortBy]: order,
@@ -234,7 +234,6 @@ export class NovelService {
           id: true,
           title: true,
           imagePath: true,
-          weightedRate: true,
 
           _count: {
             select: {

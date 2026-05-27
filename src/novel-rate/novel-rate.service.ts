@@ -24,42 +24,20 @@ export class NovelRateService {
       },
     });
 
-    const stats = await this.prismaService.novelRate.aggregate({
+    const newAvg = await this.prismaService.novelRate.aggregate({
       where: {
-        novelId,
+        novelId
       },
       _avg: {
-        rate: true,
-      },
-      _count: {
-        rate: true,
-      },
+        rate: true
+      }
     });
-
-    const averageRate = stats._avg.rate || 0;
-    const ratingsCount = stats._count.rate || 0;
-
-    const globalStats = await this.prismaService.novelRate.aggregate({
-      _avg: {
-        rate: true,
-      },
-    });
-
-    const globalAverage = globalStats._avg.rate || 0;
-
-    const minVotes = 10;
-
-    const weightedRate =
-      (ratingsCount / (ratingsCount + minVotes)) * averageRate +
-      (minVotes / (ratingsCount + minVotes)) * globalAverage;
 
     await this.prismaService.novel.update({
-      where: {
-        id: novelId,
-      },
+      where: { id: novelId },
       data: {
-        weightedRate,
-      },
+        avgRate: newAvg._avg.rate ?? 0
+      }
     });
 
     return { success: true };

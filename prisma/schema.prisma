@@ -42,8 +42,6 @@ model Novel {
 
   genres NovelGenre[]
 
-  weightedRate Float @default(0)
-
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @map("user_id")
 
@@ -52,6 +50,8 @@ model Novel {
   rates       NovelRate[]
   savedNovels SavedNovels[]
   bookMarks   Bookmark[]
+
+  avgRate Float @default(0)
 
   isHidden  Boolean  @default(false) @map("is_hidden")
   createdAt DateTime @default(now()) @map("created_at")

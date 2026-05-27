@@ -54,9 +54,9 @@ export class SavedService {
     if (sortBy === "rates") {
       orderBy = {
         novel: {
-          weightedRate: order
-        }
-      }
+          avgRate: order,
+        },
+      };
     } else {
       orderBy = {
         novel: {
