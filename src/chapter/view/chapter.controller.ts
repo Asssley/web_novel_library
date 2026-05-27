@@ -1,5 +1,6 @@
-import { Controller, Get, Param, Render, Req } from '@nestjs/common';
+import { Controller, Get, Param, Query, Render, Req } from '@nestjs/common';
 import { ChapterService } from '../chapter.service.js';
+import { GetChaptetrsQueryDto } from '../dto/get-chapters-query.dto.js';
 
 @Controller('novels/:novelId/chapters')
 export class ChapterController {
@@ -21,6 +22,28 @@ export class ChapterController {
       scripts: [
         "chapter-form.js"
       ]
+    };
+  }
+
+  @Get()
+  @Render("pages/chapter-list")
+  async getChaptersList(
+    @Req() req,
+    @Param("novelId") novelId: string,
+    @Query() dto: GetChaptetrsQueryDto,
+  ) {
+    const data = await this.chapterService.getListPageData(novelId, dto);
+
+    return {
+      ...data,
+      user: req.user,
+      title: "Add novel",
+      styles: [
+        "pages/chapter-list.css",
+        "parts/chapter-list.css",
+        "parts/pagination.css",
+      ],
+      scripts: []
     };
   }
 

@@ -139,6 +139,30 @@ export class ChapterService {
     return chapter;
   }
 
+  async getListPageData(novelId: string, dto: GetChaptetrsQueryDto) {
+    const novel = await this.prismaService.novel.findUnique({
+      where: {
+        id: novelId,
+        isHidden: false,
+      },
+      select: {
+        id: true,
+        title: true,
+      },
+    });
+
+    if (!novel) {
+      throw new NotFoundException();
+    }
+
+    const chaptersData = await this.getAll(novelId, dto);
+
+    return {
+      novel,
+      ...chaptersData,
+    };
+  }
+
   async update(userId: string, novelId: string, chapterId: string, dto: UpdateChapterDto) {
     const novel = await this.prismaService.novel.findUnique({
       where: {

@@ -1,0 +1,56 @@
+<div class="chapter-list-page">
+
+  <div class="chapter-list-header">
+    <a href="/novels/<%= novel.id %>">
+      <h2 class="novel-title">
+        <%= novel.title %>
+      </h2>
+    </a>
+  </div>
+
+  <!-- CHAPTERS -->
+  <div class="chapters-section">
+
+    <h2 class="section-title">Chapter list</h2>
+
+    <% if (!chapters.length) { %>
+    <div class="empty-state">No chapters yet</div>
+    <% } else { %>
+    <div class="chapters-list">
+
+      <% chapters.forEach(ch => { %>
+
+      <a href="/novels/<%= novel.id %>/chapters/<%= ch.id %>" class="chapter-item">
+
+        <div class="chapter-left">
+          <div class="chapter-number">
+            <%= ch.chapterNumber %>.
+          </div>
+  
+          <div class="chapter-title">
+            <%= ch.title %>
+          </div>
+        </div>
+
+        <div class="chapter-updated-time">
+          <%= ch.updatedAt.toLocaleDateString() %>
+        </div>
+
+      </a>
+
+      <% }) %>
+
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <%- include("../partials/simple-pagination", {
+        pagination: pagination,
+        path: `/novels/${novel.id}/chapters`
+      }) %>
+    </div>
+
+    <% } %>
+
+  </div>
+
+</div>

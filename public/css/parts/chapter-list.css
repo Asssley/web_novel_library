@@ -1,12 +1,16 @@
 .chapters-section {
   margin-top: 30px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .chapters-list {
-  margin-top: 25px;
+  padding-top: 30px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  flex: 1;
 }
 
 .chapter-item {
@@ -50,4 +54,14 @@
 
 .chapter-updated-time {
   margin-left: 15px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: center;
+  margin: 30px;
+  text-align: center;
+  font-size: 2rem;
 }
