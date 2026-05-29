@@ -133,7 +133,7 @@
   <!-- DESCRIPTION -->
   <div class="novel-description">
 
-    <h2>Description</h2>
+    <h2 class="text-center">Description</h2>
 
     <p>
       <%= novel.description %>
@@ -141,4 +141,54 @@
 
   </div>
 
+  <!-- COMMENTS -->
+  <div class="comments-section">
+    <h3 class="comments-title text-center">Comments</h3>
+
+    <!-- FORM -->
+    <div class="comment-form">
+
+      <form id="commentForm">
+        <div class="d-flex flex-row justify-content-between comment-form-header">
+          <h5>Add a comment</h5>
+          <button type="submit">Submit</button>
+        </div>
+
+        <textarea name="text" placeholder="Write your comment..." required></textarea>
+      </form>
+    </div>
+
+    <!-- LIST -->
+
+    <% if (!comments.length) { %>
+    <div class="empty-state">No comments yet</div>
+    <% } %>
+
+    <% comments.forEach(comment => { %>
+    <div class="comment-card" data-id="<%= comment.id %>">
+
+      <div class="comment-header">
+        <span class="comment-user"><%= comment.user.nickname %></span>
+        <span class="comment-date">
+          <%= new Date(comment.createdAt).toLocaleString() %>
+        </span>
+      </div>
+
+      <div class="comment-text">
+        <%= comment.text %>
+      </div>
+
+      <!-- ACTIONS -->
+      <div class="comment-actions d-flex justify-content-end">
+
+        <% if (user && user.id === comment.user.id) { %>
+        <button class="delete-comment-btn">Delete</button>
+        <% } %>
+
+      </div>
+
+    </div>
+    <% }) %>
+
+  </div>
 </div>

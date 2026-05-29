@@ -6,6 +6,7 @@ import { NovelRateModule } from '../novel-rate/novel-rate.module.js';
 import { BookmarkModule } from '../bookmark/bookmark.module.js';
 import { ChapterModule } from '../chapter/chapter.module.js';
 import { SavedModule } from '../saved/saved.module.js';
+import { CommentModule } from '../comment/comment.module.js';
 
 
 @Module({
@@ -19,7 +20,8 @@ import { SavedModule } from '../saved/saved.module.js';
     NovelRateModule,
     BookmarkModule,
     ChapterModule,
-    SavedModule
+    SavedModule,
+    CommentModule
   ]
 })
 export class NovelModule { }

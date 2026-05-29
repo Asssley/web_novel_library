@@ -2,6 +2,7 @@ import { Controller, Param, Get, Render, Query, Req, HttpException } from '@nest
 import { NovelService } from '../novel.service.js';
 import { GetNovelsQueryDto } from '../dto/get-novels-query.dto.js';
 import { GetUserNovelsDto } from '../dto/get-user-novels.dto.js';
+import { GetCommentsQueryDto } from '../../comment/dto/get-comments-query.dto.js';
 
 @Controller('novels')
 export class NovelController {
@@ -125,20 +126,25 @@ export class NovelController {
   @Render("pages/novel")
   async getById(
     @Req() req,
-    @Param("id") novelId: string
+    @Param("id") novelId: string,
+    @Query() dto: GetCommentsQueryDto,
   ) {
-    const data = await this.novelService.getFullNovelInfo(req.user?.id, novelId)
+    const data = await this.novelService.getFullNovelInfo(req.user?.id, novelId, dto)
+
+    console.log(data)
 
     return {
       ...data,
       user: req.user,
       title: data.novel.title,
       styles: [
-        "pages/novel.css"
+        "pages/novel.css",
+        "parts/comment-section.css"
       ],
       scripts: [
         "save-novel.js",
-        "rate-novel.js"
+        "rate-novel.js",
+        "comment-novel.js"
       ]
     };
   }

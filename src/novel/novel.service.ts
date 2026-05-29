@@ -12,6 +12,8 @@ import { ChapterService } from '../chapter/chapter.service.js';
 import { SavedService } from '../saved/saved.service.js';
 import { GetUserNovelsDto } from './dto/get-user-novels.dto.js';
 import { GetChaptetrsQueryDto } from '../chapter/dto/get-chapters-query.dto.js';
+import { CommentService } from '../comment/comment.service.js';
+import { GetCommentsQueryDto } from '../comment/dto/get-comments-query.dto.js';
 
 
 @Injectable()
@@ -22,7 +24,7 @@ export class NovelService {
     private readonly bookmarksService: BookmarksService,
     private readonly chapterService: ChapterService,
     private readonly SavedService: SavedService,
-    // TODO: private readonly commentService: CommentService,
+    private readonly commentService: CommentService,
   ) { }
   async create(
     userId: string,
@@ -101,7 +103,7 @@ export class NovelService {
     return novel;
   }
 
-  async getFullNovelInfo(userId: string | null, novelId: string) {
+  async getFullNovelInfo(userId: string | null, novelId: string, dto: GetCommentsQueryDto) {
     const novel = await this.getById(novelId);
     const novelRate = await this.rateService.getRate(novel.id);
     let lastChapterId: string | null = null;
@@ -124,12 +126,15 @@ export class NovelService {
 
     isSaved = await this.SavedService.checkIfSaved(userId ?? "", novel.id);
 
+    const comments = await this.commentService.getAll(novelId, dto); 
+
     return {
       novel,
       novelRate,
       lastChapterId,
       isSaved,
-      hasReadBefore
+      hasReadBefore,
+      ...comments
     };
   }
 

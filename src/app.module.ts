@@ -12,6 +12,7 @@ import { BookmarkModule } from './bookmark/bookmark.module.js';
 import { NovelRateModule } from './novel-rate/novel-rate.module.js';
 import { APP_GUARD } from '@nestjs/core';
 import { OptionalJwtAuthGuard } from './auth/guards/optional-jwt-auth.guard.js';
+import { CommentModule } from './comment/comment.module.js';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import { OptionalJwtAuthGuard } from './auth/guards/optional-jwt-auth.guard.js';
     SavedModule,
     ChapterModule,
     BookmarkModule,
-    NovelRateModule
+    NovelRateModule,
+    CommentModule
   ],
   controllers: [AppController],
   providers: [
