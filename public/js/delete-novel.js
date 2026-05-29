@@ -10,7 +10,7 @@ deleteNovelForm.addEventListener("submit", async (e) => {
   try {
     const novelId = window.location.pathname.split("/").pop();
 
-    const res = await fetch(`/novels/${novelId}`, {
+    const res = await fetch(`/api/novels/${novelId}`, {
       method: "DELETE",
     });
 

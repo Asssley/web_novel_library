@@ -131,8 +131,6 @@ export class NovelController {
   ) {
     const data = await this.novelService.getFullNovelInfo(req.user?.id, novelId, dto)
 
-    console.log(data)
-
     return {
       ...data,
       user: req.user,
