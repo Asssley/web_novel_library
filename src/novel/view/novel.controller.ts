@@ -1,8 +1,9 @@
-import { Controller, Param, Get, Render, Query, Req, HttpException } from '@nestjs/common';
+import { Controller, Param, Get, Render, Query, Req, HttpException, UseGuards } from '@nestjs/common';
 import { NovelService } from '../novel.service.js';
 import { GetNovelsQueryDto } from '../dto/get-novels-query.dto.js';
 import { GetUserNovelsDto } from '../dto/get-user-novels.dto.js';
 import { GetCommentsQueryDto } from '../../comment/dto/get-comments-query.dto.js';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard.js';
 
 @Controller('novels')
 export class NovelController {
@@ -33,6 +34,7 @@ export class NovelController {
     };
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get("my")
   @Render("pages/user-novels")
   async getUserNovels(
@@ -56,6 +58,7 @@ export class NovelController {
     };
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get("my/:id")
   @Render("pages/manage-novel")
   async manageNovel(
@@ -81,6 +84,7 @@ export class NovelController {
     };
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get("/add")
   @Render("pages/novel-form")
   async getCreateNovelForm(
@@ -100,6 +104,7 @@ export class NovelController {
     };
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get("/:id/edit")
   @Render("pages/novel-form")
   async getEditNovelForm(
@@ -120,7 +125,6 @@ export class NovelController {
       ]
     };
   }
-
 
   @Get(":id")
   @Render("pages/novel")

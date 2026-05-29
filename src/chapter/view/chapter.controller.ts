@@ -1,11 +1,13 @@
-import { Controller, Get, Param, Query, Render, Req } from '@nestjs/common';
+import { Controller, Get, Param, Query, Render, Req, UseGuards } from '@nestjs/common';
 import { ChapterService } from '../chapter.service.js';
 import { GetChaptetrsQueryDto } from '../dto/get-chapters-query.dto.js';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard.js';
 
 @Controller('novels/:novelId/chapters')
 export class ChapterController {
   constructor(private readonly chapterService: ChapterService) { }
 
+  @UseGuards(JwtAuthGuard)
   @Get("/add")
   @Render("pages/chapter-form")
   async getCreateNovelForm(
@@ -47,6 +49,7 @@ export class ChapterController {
     };
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get("/:chapterId/edit")
   @Render("pages/chapter-form")
   async getEditNovelForm(

@@ -1,11 +1,13 @@
-import { Controller, Req, Get, Render, Query } from '@nestjs/common';
+import { Controller, Req, Get, Render, Query, UseGuards } from '@nestjs/common';
 import { SavedService } from '../saved.service.js';
 import { GetSavedNovelsQueryDto } from '../dto/get-saved-novels-query.dto.js';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard.js';
 
 @Controller('/saved')
 export class SavedController {
   constructor(private readonly savedService: SavedService) { }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   @Render("pages/saved")
   async getList(
