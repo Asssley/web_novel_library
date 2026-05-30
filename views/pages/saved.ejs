@@ -19,8 +19,11 @@
   <div class="filters-modal hidden" id="filtersModal">
     <div class="filters-content">
 
-      <h3>Filters</h3>
-
+      <div class="d-flex justify-content-between">
+        <h3>Filters</h3>
+        <button type="button" class="btn-close" id="btn-close" aria-label="Close"></button>
+      </div>
+      
       <form id="filtersForm" method="GET" action="/saved">
 
         <!-- Sort -->
@@ -32,7 +35,7 @@
             <option value="rates" <%= filters?.sortBy === 'rating' ? 'selected' : '' %>>
               Rating
             </option>
-            
+
             <option value="updatedAt" <%= filters?.sortBy === 'updatedAt' ? 'selected' : '' %>>
               Updated
             </option>
@@ -74,7 +77,7 @@
   </div>
 
   <!-- List of novels -->
-  
+
   <%if (!novels.length) { %>
   <div class="d-flex justify-content-center nothing-found-label">
     Nothing found

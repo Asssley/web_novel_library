@@ -73,6 +73,10 @@
   color: var(--color-text);
 }
 
+.btn-close {
+  max-width: 20px;
+}
+
 .filters-content form {
   display: flex;
   flex-direction: column;

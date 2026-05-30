@@ -1,4 +1,5 @@
 const btn = document.getElementById('filtersBtn');
+const btnClose = document.getElementById('btn-close');
 const modal = document.getElementById('filtersModal');
 const resetBtn = document.getElementById('resetFilters');
 const form = document.getElementById('filtersForm');
@@ -12,6 +13,10 @@ modal.addEventListener('click', (e) => {
   if (e.target === modal) {
     modal.classList.add('hidden');
   }
+});
+
+btnClose.addEventListener('click', (e) => {
+  modal.classList.add('hidden');
 });
 
 // Reset filters
