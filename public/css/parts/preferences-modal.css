@@ -1,0 +1,32 @@
+.modal-content {
+  max-width: 700px;
+  padding: 10px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+  border-bottom: none;
+}
+
+.modal-title {
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.form-control,
+.form-select{
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--color-main-dark) 20%, transparent);
+  color: var(--color-text);
+  border-radius: 10px;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--color-main);
+  box-shadow: none;
+}

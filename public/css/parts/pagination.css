@@ -32,7 +32,7 @@
 
 .pagination-btn:hover {
   color: var(--color-white);
-  background: var(--color-main-dark);
+  background: var(--color-btn-hover);
 }
 
 .pagination-btn.disabled {

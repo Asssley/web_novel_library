@@ -12,7 +12,9 @@
   min-height: 100px;
   padding: 10px;
   border-radius: 8px;
-  border: 1px solid #ddd;
+  background: var(--color-bg);
+  color: var(--color-text);
+  border: 1px solid var(--color-main);
   resize: vertical;
 }
 
@@ -24,6 +26,15 @@
   color: var(--color-text);
   border-radius: 6px;
   cursor: pointer;
+}
+
+.comment-form button:hover {
+  background: var(--color-btn-hover);
+}
+
+.comment-form button:active {
+  background: var(--color-btn-press);
+  scale: 0.97;
 }
 
 .comment-card {
@@ -64,6 +75,16 @@
   border-radius: 6px;
   cursor: pointer;
 }
+
+.delete-comment-btn:hover {
+  background:  #ca6161;
+}
+
+.delete-comment-btn:active {
+  background:  #c72d2d;
+  scale: 0.97;
+}
+
 
 @media (max-width: 700px) {
   .comment-header {

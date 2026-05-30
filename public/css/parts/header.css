@@ -1,0 +1,176 @@
+.custom-navbar {
+  background: var(--color-bg);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 7vh;
+}
+
+/* Logo */
+
+.logo-img {
+  height: 7vh;
+  object-fit: contain;
+}
+
+/* Search */
+
+.search-wrapper {
+  width: 100%;
+  max-width: 360px;
+}
+
+.search-box {
+  padding: 3px;
+  display: flex;
+  align-items: center;
+
+  background: var(--color-main);
+  border-radius: 18px;
+  overflow: hidden;
+
+  padding-left: 14px;
+}
+
+.search-box input {
+  background: transparent;
+  color: var(--color-text);
+}
+
+.search-box input::placeholder {
+  color: var(--color-text);
+  font-style: italic;
+}
+
+.search-btn {
+  border: none;
+  background: transparent;
+
+  width: 6vh;
+  height: 6vh;
+
+  font-size: 1.3rem;
+  color: var(--color-text);
+}
+
+/* Links */
+
+.custom-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  font-size: 1.4rem;
+  color: var(--color-text) !important;
+
+  padding: 12px 8px;
+}
+
+.custom-link i {
+  color: var(--color-main);
+  font-size: 1.5rem;
+}
+
+/* Desktop avatar */
+
+.avatar-circle {
+  width: 7vh;
+  height: 7vh;
+
+  border-radius: 50%;
+  background: var(--color-main);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-decoration: none;
+}
+
+.avatar-circle i {
+  color: var(--color-main-dark);
+  font-size: 2rem;
+}
+
+/* Burger */
+
+.burger-circle {
+  width: 7vh;
+  height: 7vh;
+
+  border-radius: 50%;
+  background: var(--color-main);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar-toggler-icon-custom {
+  width: 28px;
+  height: 2px;
+
+  background: #222;
+  position: relative;
+  display: block;
+}
+
+.navbar-toggler-icon-custom::before,
+.navbar-toggler-icon-custom::after {
+  content: "";
+
+  width: 28px;
+  height: 2px;
+
+  background: #222;
+
+  position: absolute;
+  left: 0;
+}
+
+.navbar-toggler-icon-custom::before {
+  top: -8px;
+}
+
+.navbar-toggler-icon-custom::after {
+  top: 8px;
+}
+
+/* Mobile profile */
+
+.mobile-avatar {
+  width: 9vh;
+  height: 9vh;
+
+  border-radius: 50%;
+  background: var(--color-main);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-avatar i {
+  font-size: 3rem;
+  color: var(--color-main-dark);
+}
+
+/* Mobile */
+
+@media (max-width: 991px) {
+
+  .navbar-collapse {
+    padding-bottom: 1.5rem;
+  }
+
+  .custom-link {
+    font-size: 1.5rem;
+    padding: 14px 0;
+  }
+
+  .custom-link i {
+    font-size: 1.5rem;
+  }
+
+  .search-wrapper {
+    max-width: 100%;
+  }
+}

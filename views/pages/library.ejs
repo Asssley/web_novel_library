@@ -21,7 +21,10 @@
   <div class="filters-modal hidden" id="filtersModal">
     <div class="filters-content">
 
-      <h3>Filters</h3>
+      <div class="filters-header">
+        <h3>Filters</h3>
+
+      </div>
 
       <form id="filtersForm" method="GET" action="/novels">
 
@@ -139,7 +142,7 @@
   </div>
 
   <!-- List of novels -->
-  
+
   <%if (!novels.length) { %>
   <div class="d-flex justify-content-center nothing-found-label">
     Nothing found

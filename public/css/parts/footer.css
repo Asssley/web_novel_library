@@ -1,0 +1,13 @@
+.footer {
+  padding-top: 7vh;
+  padding-right: 5vw;
+  padding-left: 5vw;
+  background: var(--color-main);
+  color: var(--color-text);
+  margin-top: 40px;
+}
+
+.footer a {
+  color: var(--color-text);
+  font-size: 1.5rem;
+}

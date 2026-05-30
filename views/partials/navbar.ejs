@@ -56,8 +56,7 @@
         <% } %>
 
         <li class="nav-item">
-          <a class="nav-link custom-link" href="#">
-            <i class="bi bi-gear-fill"></i>
+          <a class="nav-link custom-link" href="#" data-bs-toggle="modal" data-bs-target="#preferencesModal"> <i class="bi bi-gear-fill"></i>
             <span>Preferences</span>
           </a>
         </li>
@@ -73,3 +72,5 @@
     </div>
   </div>
 </nav>
+
+<%- include("preferences-modal") %>

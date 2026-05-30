@@ -1,0 +1,44 @@
+<div class="modal fade" id="preferencesModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Preferences</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+
+        <!-- Theme -->
+        <div class="mb-3">
+          <label class="form-label">Theme</label>
+          <select id="themeSelect" class="form-select">
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+        </div>
+
+        <!-- Language -->
+        <div class="mb-3">
+          <label class="form-label">Language</label>
+          <select id="langSelect" class="form-select">
+            <option value="en">English</option>
+            <option value="uk">Українська</option>
+          </select>
+        </div>
+
+
+        <!-- Font size -->
+        <div class="mb-3">
+          <div class="d-flex justify-content-between">
+            <label class="form-label">Font size</label>
+            <div><span id="fontSizeValue"></span>px</div>
+          </div>
+          <input id="fontSizeRange" type="range" min="16" max="20" step="1" class="form-range">
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>

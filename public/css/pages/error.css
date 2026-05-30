@@ -36,6 +36,15 @@
   color: var(--color-main-dark);
 }
 
+.btn:hover {
+  background: var(--color-btn-hover) !important;
+}
+
+.btn:active {
+  background: var(--color-btn-press) !important; 
+  scale: 0.97;
+}
+
 .error-path {
   margin-top: 20px;
   font-size: 15px;

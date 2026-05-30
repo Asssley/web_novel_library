@@ -7,7 +7,7 @@
 .novel-manage-header {
   display: flex;
   gap: 24px;
-  background: linear-gradient(145deg, #ffffff, #f6f7fb);
+  background: var(--color-bg);
   border-radius: 16px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   padding: 22px;
