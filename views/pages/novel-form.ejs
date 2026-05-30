@@ -22,11 +22,11 @@
     <div class="form-group">
       <label>Language</label>
       <select name="language" required>
-        <option value="UKRAINIAN" <%= novel?.language === 'UKRAINIAN' ? 'selected' : '' %>>
-          Ukrainian
-        </option>
         <option value="ENGLISH" <%= novel?.language === 'ENGLISH' ? 'selected' : '' %>>
           English
+        </option>
+        <option value="UKRAINIAN" <%= novel?.language === 'UKRAINIAN' ? 'selected' : '' %>>
+          Ukrainian
         </option>
       </select>
     </div>
