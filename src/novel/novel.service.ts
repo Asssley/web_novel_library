@@ -14,6 +14,10 @@ import { GetUserNovelsDto } from './dto/get-user-novels.dto.js';
 import { GetChaptetrsQueryDto } from '../chapter/dto/get-chapters-query.dto.js';
 import { CommentService } from '../comment/comment.service.js';
 import { GetCommentsQueryDto } from '../comment/dto/get-comments-query.dto.js';
+import { Lang } from '../generated/enums.js';
+import { TranslationService } from '../translation/translation.service.js';
+import { mapNovelDetails } from '../common/mappers/novel-detail.mapper.js';
+import { mapNovelList } from '../common/mappers/novel-list.mapper.js';
 
 
 @Injectable()
@@ -25,6 +29,7 @@ export class NovelService {
     private readonly chapterService: ChapterService,
     private readonly SavedService: SavedService,
     private readonly commentService: CommentService,
+    private readonly translationService: TranslationService,
   ) { }
   async create(
     userId: string,
@@ -60,6 +65,20 @@ export class NovelService {
         },
       });
 
+      const targetLang = novel.language === 'ENGLISH' ? "UKRAINIAN" : "ENGLISH";
+
+      const translatedTitle = await this.translationService.translate(dto.description, targetLang);
+      const translatedDescription = await this.translationService.translate(dto.title, targetLang);
+
+      await this.prismaService.novelTranslation.create({
+        data: {
+          novelId: novel.id,
+          title: translatedTitle,
+          description: translatedDescription,
+          language: targetLang
+        }
+      });
+
       return { id: novel.id };
     } catch (err) {
       this.deleteImage(imagePath);
@@ -67,7 +86,7 @@ export class NovelService {
     }
   }
 
-  async getById(novelId: string) {
+  async getById(novelId: string, lang: Lang) {
     const result = await this.prismaService.novel.findFirst({
       where: {
         id: novelId,
@@ -83,6 +102,15 @@ export class NovelService {
           select: {
             genre: true,
           },
+        },
+        translations: {
+          where: {
+            language: lang
+          },
+          select: {
+            title: true,
+            description: true
+          }
         },
         user: {
           select: {
@@ -103,8 +131,11 @@ export class NovelService {
     return novel;
   }
 
-  async getFullNovelInfo(userId: string | null, novelId: string, dto: GetCommentsQueryDto) {
-    const novel = await this.getById(novelId);
+  async getFullNovelInfo(userId: string | null, novelId: string, dto: GetCommentsQueryDto, lang: Lang) {
+    const novelData = await this.getById(novelId, lang);
+
+    const novel = mapNovelDetails(novelData, lang);
+
     const novelRate = await this.rateService.getRate(novel.id);
     let lastChapterId: string | null = null;
     let hasReadBefore = false;
@@ -119,14 +150,14 @@ export class NovelService {
         throw err;
       }
 
-      const firstChapter = await this.chapterService.findFirst(novel.id);
+      const firstChapter = await this.chapterService.findFirst(novel.id, lang);
       lastChapterId = firstChapter?.id ?? null;
       hasReadBefore = (firstChapter?.chapterNumber ?? 0) > 1;
     }
 
     isSaved = await this.SavedService.checkIfSaved(userId ?? "", novel.id);
 
-    const comments = await this.commentService.getAll(userId, novelId, dto); 
+    const comments = await this.commentService.getAll(userId, novelId, dto);
 
     return {
       novel,
@@ -138,7 +169,7 @@ export class NovelService {
     };
   }
 
-  async getList(dto: GetNovelsQueryDto) {
+  async getList(dto: GetNovelsQueryDto, lang: Lang) {
     const page = dto.page ?? 1;
     const limit = dto.limit ?? 20;
 
@@ -193,6 +224,14 @@ export class NovelService {
           id: true,
           imagePath: true,
           title: true,
+          translations: {
+            where: {
+              language: lang
+            },
+            select: {
+              title: true,
+            }
+          },
         }
       }),
 
@@ -200,9 +239,7 @@ export class NovelService {
     ]);
 
     return {
-      novels: novels.map(n => ({
-        ...n,
-      })),
+      novels: mapNovelList(novels),
       pagination: {
         page,
         limit,
@@ -306,6 +343,7 @@ export class NovelService {
         id: true,
         title: true,
         imagePath: true,
+        language: true
       },
     });
 
@@ -313,7 +351,7 @@ export class NovelService {
       throw new NotFoundException();
     }
 
-    const chapters = await this.chapterService.getAll(novelId, dto);
+    const chapters = await this.chapterService.getAll(novelId, dto, novel.language);
 
     return {
       novel,
@@ -321,28 +359,28 @@ export class NovelService {
     };
   }
 
-  getPopular(limit = 5) {
+  getPopular(limit = 5, lang: Lang) {
     return this.getList({
       limit,
       sortBy: 'rates',
       order: 'desc',
-    });
+    }, lang);
   }
 
-  getLatest(limit = 5) {
+  getLatest(limit = 5, lang: Lang) {
     return this.getList({
       limit,
       sortBy: 'createdAt',
       order: 'desc',
-    });
+    }, lang);
   }
 
-  getRecentlyUpdated(limit = 5) {
+  getRecentlyUpdated(limit = 5, lang: Lang) {
     return this.getList({
       limit,
       sortBy: 'updatedAt',
       order: 'desc',
-    });
+    }, lang);
   }
 
   async update(
@@ -397,6 +435,30 @@ export class NovelService {
     if (file && oldImage) {
       await this.deleteImage(oldImage);
     }
+
+    const targetLang = existingNovel.language === 'ENGLISH' ? "UKRAINIAN" : "ENGLISH";
+
+    const translatedTitle = await this.translationService.translate(dto.title, targetLang);
+    const translatedDescription = await this.translationService.translate(dto.description, targetLang);
+
+    await this.prismaService.novelTranslation.upsert({
+      where: {
+        novelId_language: {
+          novelId: novelId,
+          language: targetLang
+        }
+      },
+      update: {
+        title: translatedTitle,
+        description: translatedDescription,
+      },
+      create: {
+        novelId: existingNovel.id,
+        language: targetLang,
+        title: translatedTitle,
+        description: translatedDescription,
+      }
+    });
 
     return { id: updated.id };
   }

@@ -34,7 +34,7 @@ export class ChapterController {
     @Param("novelId") novelId: string,
     @Query() dto: GetChaptetrsQueryDto,
   ) {
-    const data = await this.chapterService.getListPageData(novelId, dto);
+    const data = await this.chapterService.getListPageData(novelId, dto, req.lang);
 
     return {
       ...data,
@@ -56,8 +56,8 @@ export class ChapterController {
     @Req() req,
     @Param("chapterId") chapterId: string
   ) {
-    const chapter = await this.chapterService.getById(chapterId);
-
+    const chapter = await this.chapterService.getById(chapterId, req.lang);
+    
     return {
       chapter: chapter,
       user: req.user,
@@ -78,7 +78,7 @@ export class ChapterController {
     @Param("novelId") novelId: string,
     @Param("chapterId") chapterId: string
   ) {
-    const data = await this.chapterService.getChapterPageData(req.user.id, novelId, chapterId);
+    const data = await this.chapterService.getChapterPageData(req.user.id, novelId, chapterId, req.lang);
 
     return {
       ...data,

@@ -1,201 +1,217 @@
-generator client {
-  provider = "prisma-client"
-  output   = "../src/generated"
-}
+  generator client {
+    provider = "prisma-client"
+    output   = "../src/generated"
+  }
 
-datasource db {
-  provider = "postgresql"
-}
+  datasource db {
+    provider = "postgresql"
+  }
 
-model User {
-  id String @id @default(uuid())
+  model User {
+    id String @id @default(uuid())
 
-  nickname String @unique()
-  role     Role   @default(USER)
+    nickname String @unique()
+    role     Role   @default(USER)
 
-  email    String @unique
-  password String
+    email    String @unique
+    password String
 
-  novels      Novel[]
-  savedNovels SavedNovels[]
-  comments    Comment[]
-  bookmarks   Bookmark[]
+    novels      Novel[]
+    savedNovels SavedNovels[]
+    comments    Comment[]
+    bookmarks   Bookmark[]
 
-  novelRates   NovelRate[]
-  commentRates CommentRate[]
+    novelRates   NovelRate[]
+    commentRates CommentRate[]
 
-  canComment  Boolean @default(true) @map("can_comment")
-  canAddNovel Boolean @default(true) @map("can_add_novel")
+    canComment  Boolean @default(true) @map("can_comment")
+    canAddNovel Boolean @default(true) @map("can_add_novel")
 
-  createdAt DateTime @default(now()) @map("created_at")
+    createdAt DateTime @default(now()) @map("created_at")
 
-  @@map("users")
-}
+    @@map("users")
+  }
 
-model Novel {
-  id String @id @default(uuid())
+  model Novel {
+    id String @id @default(uuid())
 
-  title       String @unique
-  description String
-  imagePath   String @map("image_path")
-  language    Lang
+    title       String @unique
+    description String
+    imagePath   String @map("image_path")
+    language    Lang
 
-  genres NovelGenre[]
+    genres NovelGenre[]
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String @map("user_id")
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String @map("user_id")
 
-  chapters    Chapter[]
-  comments    Comment[]
-  rates       NovelRate[]
-  savedNovels SavedNovels[]
-  bookMarks   Bookmark[]
+    chapters    Chapter[]
+    comments    Comment[]
+    rates       NovelRate[]
+    savedNovels SavedNovels[]
+    bookMarks   Bookmark[]
 
-  avgRate Float @default(0)
+    translations NovelTranslation[]
 
-  isHidden  Boolean  @default(false) @map("is_hidden")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @default(now()) @map("updated_at")
+    avgRate Float @default(0)
 
-  @@map("novels")
-}
+    isHidden  Boolean  @default(false) @map("is_hidden")
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @default(now()) @map("updated_at")
 
-model NovelGenre {
-  novel   Novel  @relation(fields: [novelId], references: [id], onDelete: Cascade)
-  novelId String @map("novel_id")
+    @@map("novels")
+  }
 
-  genre Genre
+  model NovelGenre {
+    novel   Novel  @relation(fields: [novelId], references: [id], onDelete: Cascade)
+    novelId String @map("novel_id")
 
-  @@id([novelId, genre])
-  @@map("novel_genres")
-}
+    genre Genre
 
-model SavedNovels {
-  novel   Novel  @relation(fields: [novelId], references: [id], onDelete: Cascade)
-  novelId String @map("novel_id")
+    @@id([novelId, genre])
+    @@map("novel_genres")
+  }
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String @map("user_id")
+  model SavedNovels {
+    novel   Novel  @relation(fields: [novelId], references: [id], onDelete: Cascade)
+    novelId String @map("novel_id")
 
-  @@id([novelId, userId])
-  @@map("saved_novels")
-}
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String @map("user_id")
 
-model Chapter {
-  id String @id @default(uuid())
+    @@id([novelId, userId])
+    @@map("saved_novels")
+  }
 
-  title String
-  text  String
+  model Chapter {
+    id String @id @default(uuid())
 
-  chapterNumber Int @map("chapter_number")
+    title String
+    text  String
 
-  novel   Novel  @relation(fields: [novelId], references: [id], onDelete: Cascade)
-  novelId String @map("novel_id")
+    chapterNumber Int @map("chapter_number")
 
-  bookmarks    Bookmark[]
-  translations Translation[]
+    novel   Novel  @relation(fields: [novelId], references: [id], onDelete: Cascade)
+    novelId String @map("novel_id")
 
-  updatedAt DateTime @updatedAt @map("updated_at")
-  createdAt DateTime @default(now()) @map("created_at")
+    bookmarks    Bookmark[]
+    translations ChapterTranslation[]
 
-  @@unique([chapterNumber, novelId])
-  @@map("chapters")
-}
+    updatedAt DateTime @updatedAt @map("updated_at")
+    createdAt DateTime @default(now()) @map("created_at")
 
-model Translation {
-  title    String
-  text     String
-  language Lang
+    @@unique([chapterNumber, novelId])
+    @@map("chapters")
+  }
 
-  chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
-  chapterId String  @map("chapter_id")
+  model NovelTranslation {
+    id String @id @default(uuid())
 
-  updatedAt DateTime @updatedAt @map("updated_at")
-  createdAt DateTime @default(now()) @map("created_at")
+    title       String @unique
+    description String
+    language    Lang
 
-  @@unique([chapterId, language])
-  @@map("translations")
-}
+    novel   Novel  @relation(fields: [novelId], references: [id], onDelete: Cascade)
+    novelId String @map("novel_id")
 
-model Bookmark {
-  chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
-  chapterId String  @map("chapter_id")
+    @@unique([novelId, language])
+    @@map("novel_translations")
+  }
 
-  novel   Novel  @relation(fields: [novelId], references: [id], onDelete: Cascade)
-  novelId String @map("novel_id")
-  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId  String @map("user_id")
+  model ChapterTranslation {
+    title    String
+    text     String
+    language Lang
 
-  @@unique([novelId, userId])
-  @@map("bookmarks")
-}
+    chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+    chapterId String  @map("chapter_id")
 
-model Comment {
-  id String @id @default(uuid())
+    updatedAt DateTime @updatedAt @map("updated_at")
+    createdAt DateTime @default(now()) @map("created_at")
 
-  text String
+    @@unique([chapterId, language])
+    @@map("chapter_translations")
+  }
 
-  novel   Novel  @relation(fields: [novelId], references: [id], onDelete: Cascade)
-  novelId String @map("novel_id")
-  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId  String @map("user_id")
+  model Bookmark {
+    chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+    chapterId String  @map("chapter_id")
 
-  rates CommentRate[]
+    novel   Novel  @relation(fields: [novelId], references: [id], onDelete: Cascade)
+    novelId String @map("novel_id")
+    user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId  String @map("user_id")
 
-  isHidden  Boolean  @default(false) @map("is_hidden")
-  createdAt DateTime @default(now()) @map("created_at")
+    @@unique([novelId, userId])
+    @@map("bookmarks")
+  }
 
-  @@map("comments")
-}
+  model Comment {
+    id String @id @default(uuid())
 
-model NovelRate {
-  novel   Novel  @relation(fields: [novelId], references: [id], onDelete: Cascade)
-  novelId String @map("novel_id")
-  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId  String @map("user_id")
+    text String
 
-  rate Int
+    novel   Novel  @relation(fields: [novelId], references: [id], onDelete: Cascade)
+    novelId String @map("novel_id")
+    user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId  String @map("user_id")
 
-  @@unique([userId, novelId])
-  @@map("novel_rates")
-}
+    rates CommentRate[]
 
-model CommentRate {
-  comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
-  commentId String  @map("comment_id")
-  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String  @map("user_id")
+    isHidden  Boolean  @default(false) @map("is_hidden")
+    createdAt DateTime @default(now()) @map("created_at")
 
-  isPositive Boolean @map("is_positive")
+    @@map("comments")
+  }
 
-  @@unique([userId, commentId])
-  @@map("comment_rates")
-}
+  model NovelRate {
+    novel   Novel  @relation(fields: [novelId], references: [id], onDelete: Cascade)
+    novelId String @map("novel_id")
+    user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId  String @map("user_id")
 
-enum Role {
-  USER
-  ADMIN
-  SUPERADMIN
-}
+    rate Int
 
-enum Genre {
-  FANTASY
-  ACTION
-  ADVENTURE
-  ROMANCE
-  DRAMA
-  COMEDY
-  SCI_FI
-  MYSTERY
-  HORROR
-  SUPERNATURAL
-  ISEKAI
-  REINCARNATION
-  REGRESSION
-  SLICE_OF_LIFE
-}
+    @@unique([userId, novelId])
+    @@map("novel_rates")
+  }
 
-enum Lang {
-  UKRAINIAN
-  ENGLISH
-}
+  model CommentRate {
+    comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+    commentId String  @map("comment_id")
+    user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId    String  @map("user_id")
+
+    isPositive Boolean @map("is_positive")
+
+    @@unique([userId, commentId])
+    @@map("comment_rates")
+  }
+
+  enum Role {
+    USER
+    ADMIN
+    SUPERADMIN
+  }
+
+  enum Genre {
+    FANTASY
+    ACTION
+    ADVENTURE
+    ROMANCE
+    DRAMA
+    COMEDY
+    SCI_FI
+    MYSTERY
+    HORROR
+    SUPERNATURAL
+    ISEKAI
+    REINCARNATION
+    REGRESSION
+    SLICE_OF_LIFE
+  }
+
+  enum Lang {
+    UKRAINIAN
+    ENGLISH
+  }

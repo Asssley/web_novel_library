@@ -7,6 +7,7 @@ import { BookmarkModule } from '../bookmark/bookmark.module.js';
 import { ChapterModule } from '../chapter/chapter.module.js';
 import { SavedModule } from '../saved/saved.module.js';
 import { CommentModule } from '../comment/comment.module.js';
+import { TranslationModule } from '../translation/translation.module.js';
 
 
 @Module({
@@ -21,7 +22,8 @@ import { CommentModule } from '../comment/comment.module.js';
     BookmarkModule,
     ChapterModule,
     SavedModule,
-    CommentModule
+    CommentModule,
+    TranslationModule
   ]
 })
 export class NovelModule { }

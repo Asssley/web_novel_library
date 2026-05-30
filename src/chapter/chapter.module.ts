@@ -3,6 +3,7 @@ import { ChapterService } from './chapter.service.js';
 import { ChapterController as ChapterApiController } from './api/chapter.controller.js';
 import { ChapterController as ChapterViewController} from './view/chapter.controller.js';
 import { BookmarkModule } from '../bookmark/bookmark.module.js';
+import { TranslationModule } from '../translation/translation.module.js';
 
 @Module({
   controllers: [
@@ -11,6 +12,6 @@ import { BookmarkModule } from '../bookmark/bookmark.module.js';
   ],
   providers: [ChapterService],
   exports: [ChapterService],
-  imports: [BookmarkModule]
+  imports: [BookmarkModule, TranslationModule]
 })
 export class ChapterModule {}

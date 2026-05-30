@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { PrismaModule } from './prisma/prisma.module.js';
@@ -14,6 +14,8 @@ import { APP_GUARD } from '@nestjs/core';
 import { OptionalJwtAuthGuard } from './auth/guards/optional-jwt-auth.guard.js';
 import { CommentModule } from './comment/comment.module.js';
 import { CommentRateModule } from './comment-rate/comment-rate.module.js';
+import { TranslationModule } from './translation/translation.module.js';
+import { LanguageMiddleware } from './common/middleware/language.middleware.js';
 
 @Module({
   imports: [
@@ -27,15 +29,23 @@ import { CommentRateModule } from './comment-rate/comment-rate.module.js';
     BookmarkModule,
     NovelRateModule,
     CommentModule,
-    CommentRateModule
+    CommentRateModule,
+    TranslationModule
   ],
   controllers: [AppController],
   providers: [
     AppService,
     {
-      provide:APP_GUARD,
-      useClass:OptionalJwtAuthGuard
+      provide: APP_GUARD,
+      useClass: OptionalJwtAuthGuard
     }
   ],
 })
-export class AppModule { }
+
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LanguageMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
+  }
+}

@@ -2,6 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { CreateSavedDto } from './dto/create-saved.dto.js';
 import { GetSavedNovelsQueryDto } from './dto/get-saved-novels-query.dto.js';
+import { Lang } from '../generated/enums.js';
+import { mapNovelList } from '../common/mappers/novel-list.mapper.js';
 
 @Injectable()
 export class SavedService {
@@ -30,7 +32,7 @@ export class SavedService {
     return { succes: true }
   }
 
-  async getSavedList(userId: string, dto: GetSavedNovelsQueryDto) {
+  async getSavedList(userId: string, dto: GetSavedNovelsQueryDto, lang: Lang) {
     const page = dto.page ?? 1;
     const limit = dto.limit ?? 20;
 
@@ -78,6 +80,14 @@ export class SavedService {
               id: true,
               imagePath: true,
               title: true,
+              translations: {
+                where: {
+                  language: lang
+                },
+                select: {
+                  title: true,
+                }
+              },
             }
           }
         }
@@ -87,7 +97,7 @@ export class SavedService {
     ]);
 
     return {
-      novels: novels.map(n => n.novel),
+      novels: mapNovelList(novels.map(item => item.novel)),
       pagination: {
         page,
         limit,

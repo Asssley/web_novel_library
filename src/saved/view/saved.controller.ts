@@ -14,7 +14,7 @@ export class SavedController {
     @Req() req,
     @Query() dto: GetSavedNovelsQueryDto,
   ) {
-    const data = await this.savedService.getSavedList(req.user.id, dto);
+    const data = await this.savedService.getSavedList(req.user.id, dto, req.lang);
 
     return {
       ...data,

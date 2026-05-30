@@ -4,12 +4,17 @@ import { UpdateChapterDto } from './dto/update-chapter.dto.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { GetChaptetrsQueryDto } from './dto/get-chapters-query.dto.js';
 import { BookmarksService as BookmarkService } from '../bookmark/bookmark.service.js';
+import { TranslationService } from '../translation/translation.service.js';
+import { Lang } from '../generated/enums.js';
+import { mapListPage } from '../common/mappers/chapter-list.mapper.js';
+import { mapChapterPage } from '../common/mappers/chapter-details.mapper.js';
 
 @Injectable()
 export class ChapterService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly bookmarkService: BookmarkService,
+    private readonly translationService: TranslationService,
   ) { }
 
   async create(userId: string, novelId: string, dto: CreateChapterDto) {
@@ -20,6 +25,7 @@ export class ChapterService {
       },
       select: {
         userId: true,
+        language: true,
         _count: {
           select: {
             chapters: true
@@ -34,7 +40,7 @@ export class ChapterService {
 
     const chapterNumber = novel._count.chapters + 1
 
-    await this.prismaService.chapter.create({
+    const chapter = await this.prismaService.chapter.create({
       data: {
         novelId: novelId,
         chapterNumber: chapterNumber,
@@ -52,10 +58,24 @@ export class ChapterService {
       }
     });
 
+    const targetLang = novel.language === 'ENGLISH' ? "UKRAINIAN" : "ENGLISH";
+
+    const translatedText = await this.translationService.translate(dto.text, targetLang);
+    const translatedTitle = await this.translationService.translate(dto.title, targetLang);
+
+    await this.prismaService.chapterTranslation.create({
+      data: {
+        chapterId: chapter.id,
+        title: translatedTitle,
+        text: translatedText,
+        language: targetLang
+      }
+    });
+
     return { succes: true }
   }
 
-  async getAll(novelId: string, dto: GetChaptetrsQueryDto) {
+  async getAll(novelId: string, dto: GetChaptetrsQueryDto, lang: Lang) {
     const page = dto.page ?? 1;
     const limit = dto.limit ?? 50;
 
@@ -78,7 +98,15 @@ export class ChapterService {
           id: true,
           chapterNumber: true,
           title: true,
-          updatedAt: true
+          updatedAt: true,
+          translations: {
+            where: {
+              language: lang
+            },
+            select: {
+              title: true,
+            }
+          }
         }
       }),
 
@@ -100,11 +128,10 @@ export class ChapterService {
         total,
         totalPages: Math.ceil(total / limit),
       },
-      filters: dto,
     };
   }
 
-  async getById(chapterId: string) {
+  async getById(chapterId: string, lang: Lang) {
     const chapter = await this.prismaService.chapter.findUnique({
       where: {
         id: chapterId,
@@ -117,10 +144,27 @@ export class ChapterService {
         chapterNumber: true,
         title: true,
         text: true,
+        translations: {
+          where: {
+            language: lang
+          },
+          select: {
+            title: true,
+            text: true
+          }
+        },
         novel: {
           select: {
             id: true,
-            title: true
+            title: true,
+            translations: {
+              where: {
+                language: lang
+              },
+              select: {
+                title: true,
+              }
+            }
           }
         }
       }
@@ -144,11 +188,11 @@ export class ChapterService {
         id: true,
       }
     });
-    
+
     return chapter?.id ?? null;
   }
 
-  async findFirst(novelId: string) {
+  async findFirst(novelId: string, lang: Lang) {
     const chapter = await this.prismaService.chapter.findFirst({
       where: {
         chapterNumber: 1,
@@ -159,14 +203,28 @@ export class ChapterService {
       },
       select: {
         id: true,
-        chapterNumber: true
+        chapterNumber: true,
+        translations: {
+          where: {
+            language: lang
+          },
+          select: {
+            title: true,
+            text: true
+          }
+        }
+
       }
     });
 
     return chapter;
   }
 
-  async getListPageData(novelId: string, dto: GetChaptetrsQueryDto) {
+  async getListPageData(
+    novelId: string,
+    dto: GetChaptetrsQueryDto,
+    lang: Lang,
+  ) {
     const novel = await this.prismaService.novel.findUnique({
       where: {
         id: novelId,
@@ -175,6 +233,14 @@ export class ChapterService {
       select: {
         id: true,
         title: true,
+        translations: {
+          where: {
+            language: lang,
+          },
+          select: {
+            title: true,
+          },
+        },
       },
     });
 
@@ -182,31 +248,36 @@ export class ChapterService {
       throw new NotFoundException();
     }
 
-    const chaptersData = await this.getAll(novelId, dto);
+    const chaptersData = await this.getAll(novelId, dto, lang);
 
-    return {
-      novel,
-      ...chaptersData,
-    };
+    return mapListPage(novel, chaptersData);
   }
 
-  async getChapterPageData(userId: string | null, novelId: string, chapterId: string) {
-    const chapter = await this.getById(chapterId);
-    
-    const [prevChapterId, nextChapterId ] = await Promise.all([
+  async getChapterPageData(
+    userId: string | null,
+    novelId: string,
+    chapterId: string,
+    lang: Lang,
+  ) {
+    const chapter = await this.getById(chapterId, lang);
+
+    const [prevChapterId, nextChapterId] = await Promise.all([
       this.getIdByChapterNumber(novelId, chapter.chapterNumber - 1),
-      this.getIdByChapterNumber(novelId, chapter.chapterNumber + 1)
+      this.getIdByChapterNumber(novelId, chapter.chapterNumber + 1),
     ]);
 
     if (userId) {
       await this.bookmarkService.update(userId, novelId, chapterId);
     }
 
-    return {
+
+    const res = mapChapterPage({
       chapter,
       prevChapterId,
-      nextChapterId
-    }
+      nextChapterId,
+    });
+
+    return res;
   }
 
   async update(userId: string, novelId: string, chapterId: string, dto: UpdateChapterDto) {
@@ -217,7 +288,8 @@ export class ChapterService {
       },
       select: {
         id: true,
-        isHidden: true
+        isHidden: true,
+        language: true
       }
     });
 
@@ -240,6 +312,36 @@ export class ChapterService {
       },
       data: {
         updatedAt: new Date()
+      }
+    });
+
+    const targetLang = novel.language === 'ENGLISH' ? "UKRAINIAN" : "ENGLISH";
+
+    let data: any = {}
+
+    if (dto.text) {
+      const translatedText = await this.translationService.translate(dto.text, targetLang);
+      data.translatedText = translatedText;
+    }
+    if (dto.title) {
+      const translatedTitle = await this.translationService.translate(dto.title, targetLang);
+      data.translatedTitle = translatedTitle;
+    }
+
+    await this.prismaService.chapterTranslation.upsert({
+      where: {
+        chapterId_language: {
+          chapterId: chapter.id,
+          language: targetLang
+        }
+      },
+      update: {
+        ...data
+      },
+      create: {
+        chapterId: chapter.id,
+        language: targetLang,
+        ...data
       }
     });
 

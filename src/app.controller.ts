@@ -10,7 +10,7 @@ export class AppController {
   @Get()
   @Render("pages/home")
   async getHomePage(@Req() req) {
-    const data = await this.appService.getHomePage()
+    const data = await this.appService.getHomePage(req.lang)
 
     return {
       ...data,

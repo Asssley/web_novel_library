@@ -17,7 +17,7 @@ export class NovelController {
     @Req() req,
     @Query() dto: GetNovelsQueryDto,
   ) {
-    const data = await this.novelService.getList(dto);
+    const data = await this.novelService.getList(dto, req.lang);
 
     return {
       ...data,
@@ -111,7 +111,7 @@ export class NovelController {
     @Req() req,
     @Param("id") novelId: string
   ) {
-    const novel = await this.novelService.getById(novelId);
+    const novel = await this.novelService.getById(novelId, req.lang);
 
     return {
       novel: novel,
@@ -133,8 +133,8 @@ export class NovelController {
     @Param("id") novelId: string,
     @Query() dto: GetCommentsQueryDto,
   ) {
-    const data = await this.novelService.getFullNovelInfo(req.user?.id, novelId, dto)
-console.log(data)
+    const data = await this.novelService.getFullNovelInfo(req.user?.id, novelId, dto, req.lang);
+    
     return {
       ...data,
       user: req.user,
