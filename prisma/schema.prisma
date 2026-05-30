@@ -55,7 +55,6 @@
 
     avgRate Float @default(0)
 
-    isHidden  Boolean  @default(false) @map("is_hidden")
     createdAt DateTime @default(now()) @map("created_at")
     updatedAt DateTime @default(now()) @map("updated_at")
 
@@ -158,7 +157,6 @@
 
     rates CommentRate[]
 
-    isHidden  Boolean  @default(false) @map("is_hidden")
     createdAt DateTime @default(now()) @map("created_at")
 
     @@map("comments")

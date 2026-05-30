@@ -90,7 +90,6 @@ export class NovelService {
     const result = await this.prismaService.novel.findFirst({
       where: {
         id: novelId,
-        isHidden: false,
       },
       select: {
         id: true,
@@ -178,9 +177,7 @@ export class NovelService {
     const sortBy = dto.sortBy ?? 'rates';
     const order = dto.order ?? 'desc';
 
-    const where: any = {
-      isHidden: false,
-    };
+    const where: any = { };
 
     // search
     if (dto.search) {
@@ -259,14 +256,11 @@ export class NovelService {
 
     const skip = (page - 1) * limit;
 
-    const where = {
-      userId,
-      isHidden: false,
-    };
-
     const [novels, total] = await Promise.all([
       this.prismaService.novel.findMany({
-        where,
+        where: {
+          userId: userId
+        },
         skip,
         take: limit,
         orderBy: {
@@ -294,7 +288,9 @@ export class NovelService {
       }),
 
       this.prismaService.novel.count({
-        where,
+        where: {
+          userId: userId
+        },
       }),
     ]);
 
@@ -337,7 +333,6 @@ export class NovelService {
     const novel = await this.prismaService.novel.findFirst({
       where: {
         id: novelId,
-        isHidden: false,
       },
       select: {
         id: true,
@@ -402,7 +397,6 @@ export class NovelService {
       where: {
         id: novelId,
         userId,
-        isHidden: false,
       },
     });
 

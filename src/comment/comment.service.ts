@@ -15,7 +15,6 @@ export class CommentService {
     const novel = await this.prisma.novel.findUnique({
       where: {
         id: novelId,
-        isHidden: false,
       },
       select: {
         id: true,
@@ -57,7 +56,6 @@ export class CommentService {
       this.prisma.comment.findMany({
         where: {
           novelId,
-          isHidden: false,
         },
         skip,
         take: limit,
@@ -86,7 +84,6 @@ export class CommentService {
       this.prisma.comment.count({
         where: {
           novelId,
-          isHidden: false,
         },
       }),
     ]);

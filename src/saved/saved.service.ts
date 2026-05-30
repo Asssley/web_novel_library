@@ -10,18 +10,18 @@ export class SavedService {
   constructor(private readonly prismaService: PrismaService) { }
 
   async create(userId: string, dto: CreateSavedDto) {
-    const novel = this.prismaService.novel.findUnique({
-      where: {
-        id: dto.novelId,
-        isHidden: false
-      },
-      select: {
-        id: true
-      }
-    });
+    // const novel = this.prismaService.novel.findUnique({
+    //   where: {
+    //     id: dto.novelId,
+    //     isHidden: false
+    //   },
+    //   select: {
+    //     id: true
+    //   }
+    // });
 
-    if (!novel) throw new NotFoundException();
-
+    // if (!novel) throw new NotFoundException();
+    //TODO:
     const savedNovel = await this.prismaService.savedNovels.create({
       data: {
         userId: userId,
@@ -40,15 +40,6 @@ export class SavedService {
 
     const sortBy = dto.sortBy ?? 'rates';
     const order = dto.order ?? 'asc';
-
-    const where: any = {
-      userId: userId,
-      novel: {
-        is: {
-          isHidden: false
-        }
-      }
-    };
 
     // sorting
     let orderBy: any = {};
@@ -70,7 +61,9 @@ export class SavedService {
 
     const [novels, total] = await Promise.all([
       this.prismaService.savedNovels.findMany({
-        where,
+        where: {
+          userId: userId
+        },
         skip,
         take: limit,
         orderBy,
@@ -93,7 +86,11 @@ export class SavedService {
         }
       }),
 
-      this.prismaService.savedNovels.count({ where }),
+      this.prismaService.savedNovels.count({
+        where: {
+          userId: userId
+        },
+      }),
     ]);
 
     return {

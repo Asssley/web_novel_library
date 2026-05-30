@@ -21,7 +21,6 @@ export class ChapterService {
     const novel = await this.prismaService.novel.findUnique({
       where: {
         id: novelId,
-        isHidden: false
       },
       select: {
         userId: true,
@@ -85,9 +84,6 @@ export class ChapterService {
       this.prismaService.chapter.findMany({
         where: {
           novelId: novelId,
-          novel: {
-            isHidden: false
-          }
         },
         skip,
         take: limit,
@@ -113,9 +109,6 @@ export class ChapterService {
       this.prismaService.chapter.count({
         where: {
           novelId: novelId,
-          novel: {
-            isHidden: false
-          }
         },
       }),
     ]);
@@ -135,9 +128,6 @@ export class ChapterService {
     const chapter = await this.prismaService.chapter.findUnique({
       where: {
         id: chapterId,
-        novel: {
-          isHidden: false
-        }
       },
       select: {
         id: true,
@@ -181,7 +171,6 @@ export class ChapterService {
         chapterNumber: chapterNumber,
         novel: {
           id: novelId,
-          isHidden: false
         }
       },
       select: {
@@ -197,7 +186,6 @@ export class ChapterService {
       where: {
         chapterNumber: 1,
         novel: {
-          isHidden: false,
           id: novelId
         }
       },
@@ -228,7 +216,6 @@ export class ChapterService {
     const novel = await this.prismaService.novel.findUnique({
       where: {
         id: novelId,
-        isHidden: false,
       },
       select: {
         id: true,
@@ -288,14 +275,11 @@ export class ChapterService {
       },
       select: {
         id: true,
-        isHidden: true,
         language: true
       }
     });
 
     if (!novel) throw new ForbiddenException();
-    if (novel.isHidden) throw new NotFoundException();
-
 
     const chapter = await this.prismaService.chapter.update({
       where: {
@@ -321,11 +305,11 @@ export class ChapterService {
 
     if (dto.text) {
       const translatedText = await this.translationService.translate(dto.text, targetLang);
-      data.translatedText = translatedText;
+      data.text = translatedText;
     }
     if (dto.title) {
       const translatedTitle = await this.translationService.translate(dto.title, targetLang);
-      data.translatedTitle = translatedTitle;
+      data.title = translatedTitle;
     }
 
     await this.prismaService.chapterTranslation.upsert({
@@ -356,12 +340,10 @@ export class ChapterService {
       },
       select: {
         id: true,
-        isHidden: true
       }
     });
 
     if (!novel) throw new ForbiddenException();
-    if (novel.isHidden) throw new NotFoundException();
 
     const chapter = await this.prismaService.chapter.delete({
       where: {
@@ -390,12 +372,10 @@ export class ChapterService {
       },
       select: {
         id: true,
-        isHidden: true,
       },
     });
 
     if (!novel) throw new ForbiddenException();
-    if (novel.isHidden) throw new NotFoundException();
 
     const lastChapter = await this.prismaService.chapter.findFirst({
       where: {
