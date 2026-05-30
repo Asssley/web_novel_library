@@ -23,7 +23,12 @@ export class ChapterService {
         id: novelId,
       },
       select: {
-        userId: true,
+        user: {
+          select: {
+            id: true,
+            canAddNovel: true
+          }
+        },
         language: true,
         _count: {
           select: {
@@ -35,7 +40,7 @@ export class ChapterService {
 
     if (!novel) throw new NotFoundException();
 
-    if (novel.userId !== userId) throw new ForbiddenException();
+    if (novel.user.id !== userId || !novel.user.canAddNovel) throw new ForbiddenException();
 
     const chapterNumber = novel._count.chapters + 1
 
@@ -271,15 +276,22 @@ export class ChapterService {
     const novel = await this.prismaService.novel.findUnique({
       where: {
         id: novelId,
-        userId: userId,
       },
       select: {
         id: true,
-        language: true
+        language: true,
+        user: {
+          select: {
+            id: true,
+            canAddNovel: true
+          }
+        }
       }
     });
 
-    if (!novel) throw new ForbiddenException();
+    if (!novel) throw new NotFoundException();
+
+    if (novel.user.id !== userId || !novel.user.canAddNovel) throw new ForbiddenException();
 
     const chapter = await this.prismaService.chapter.update({
       where: {
