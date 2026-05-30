@@ -134,7 +134,7 @@ export class NovelController {
     @Query() dto: GetCommentsQueryDto,
   ) {
     const data = await this.novelService.getFullNovelInfo(req.user?.id, novelId, dto)
-
+console.log(data)
     return {
       ...data,
       user: req.user,

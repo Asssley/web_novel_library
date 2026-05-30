@@ -67,6 +67,39 @@
   margin-top: 10px;
 }
 
+.comment-actions {
+  margin-top: 10px;
+}
+
+.comment-reactions {
+  display: flex;
+  gap: 10px;
+}
+
+.reaction-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.reaction-btn:hover {
+  background: rgba(0,0,0,0.05);
+}
+
+.reaction-btn.active-like {
+  color: #22c55e;
+}
+
+.reaction-btn.active-dislike {
+  color: #ef4444;
+}
+
 .delete-comment-btn {
   background: #ef4444;
   border: none;

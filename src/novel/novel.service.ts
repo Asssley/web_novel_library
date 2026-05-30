@@ -126,7 +126,7 @@ export class NovelService {
 
     isSaved = await this.SavedService.checkIfSaved(userId ?? "", novel.id);
 
-    const comments = await this.commentService.getAll(novelId, dto); 
+    const comments = await this.commentService.getAll(userId, novelId, dto); 
 
     return {
       novel,

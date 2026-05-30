@@ -54,3 +54,33 @@ document.addEventListener("click", async (e) => {
     alert(err.message);
   }
 });
+
+
+// LIKES AND DISLIKES
+document.addEventListener("click", async (e) => {
+  const likeBtn = e.target.closest(".like-btn");
+  const dislikeBtn = e.target.closest(".dislike-btn");
+
+  if (!likeBtn && !dislikeBtn) return;
+
+  const btn = likeBtn || dislikeBtn;
+  const commentId = btn.dataset.id;
+
+  const rate = Boolean(likeBtn);
+  const novelId = window.location.pathname.split("/")[2];
+
+  const res = await fetch(`/api/novels/${novelId}/comments/${commentId}/rate`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ rate })
+  });
+
+  const data = await res.json();
+
+  console.log(data)
+  if (!data.success) return;
+
+  window.location.reload();
+});

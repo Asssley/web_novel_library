@@ -13,6 +13,7 @@ import { NovelRateModule } from './novel-rate/novel-rate.module.js';
 import { APP_GUARD } from '@nestjs/core';
 import { OptionalJwtAuthGuard } from './auth/guards/optional-jwt-auth.guard.js';
 import { CommentModule } from './comment/comment.module.js';
+import { CommentRateModule } from './comment-rate/comment-rate.module.js';
 
 @Module({
   imports: [
@@ -25,7 +26,8 @@ import { CommentModule } from './comment/comment.module.js';
     ChapterModule,
     BookmarkModule,
     NovelRateModule,
-    CommentModule
+    CommentModule,
+    CommentRateModule
   ],
   controllers: [AppController],
   providers: [

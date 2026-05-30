@@ -47,7 +47,7 @@ export class CommentService {
     return comment;
   }
 
-  async getAll(novelId: string, dto: GetCommentsQueryDto) {
+  async getAll(userId: string | null, novelId: string, dto: GetCommentsQueryDto) {
     const page = dto.page ?? 1;
     const limit = dto.limit ?? 15;
 
@@ -74,6 +74,12 @@ export class CommentService {
               nickname: true,
             },
           },
+          rates: {
+            select: {
+              isPositive: true,
+              userId: true
+            }
+          }
         },
       }),
 
@@ -85,8 +91,26 @@ export class CommentService {
       }),
     ]);
 
+    const preparedComments = comments.map(comment => {
+      const likesCount = comment.rates.filter(r => r.isPositive).length;
+      const dislikesCount = comment.rates.filter(r => !r.isPositive).length;
+
+      const userRate = userId
+        ? comment.rates.find(r => r.userId === userId)
+        : null;
+
+      return {
+        ...comment,
+        likesCount,
+        dislikesCount,
+        userReaction: userRate
+          ? (userRate.isPositive ? 'like' : 'dislike')
+          : null,
+      };
+    });
+
     return {
-      comments,
+      comments: preparedComments,
       pagination: {
         page,
         limit,

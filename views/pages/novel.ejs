@@ -179,14 +179,32 @@
       </div>
 
       <!-- ACTIONS -->
-      <div class="comment-actions d-flex justify-content-end">
+      <div class="comment-actions d-flex justify-content-between align-items-center">
 
+        <!-- REACTIONS -->
+        <div class="comment-reactions d-flex align-items-center gap-2">
+
+          <button class="like-btn reaction-btn <%= comment.userReaction === 'like' ? 'active-like' : '' %>" data-id="<%= comment.id %>">
+            👍
+            <span class="like-count">
+              <%= comment.likesCount %>
+            </span>
+          </button>
+
+          <button class="dislike-btn reaction-btn <%= comment.userReaction === 'dislike' ? 'active-dislike' : '' %>" data-id="<%= comment.id %>">
+            👎
+            <span class="dislike-count">
+              <%= comment.dislikesCount %>
+            </span>
+          </button>
+        </div>
+
+        <!-- DELETE -->
         <% if (user && user.id === comment.user.id) { %>
         <button class="delete-comment-btn">Delete</button>
         <% } %>
 
       </div>
-
     </div>
     <% }) %>
 
