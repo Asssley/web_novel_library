@@ -6,17 +6,6 @@ export class BookmarksService {
   constructor(private readonly prismaService: PrismaService) { }
 
   async getBookmark(userId: string, novelId: string) {
-    // const novel = await this.prismaService.novel.findUnique({
-    //   where: {
-    //     id: novelId,
-    //   },
-    //   select: {
-    //     id: true
-    //   }
-    // });
-
-    // if (!novel) throw new NotFoundException();
-// TODO: check without this
     const bookmark = await this.prismaService.bookmark.findUnique({
       where: {
         novelId_userId: {

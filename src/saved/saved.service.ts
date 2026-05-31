@@ -10,18 +10,6 @@ export class SavedService {
   constructor(private readonly prismaService: PrismaService) { }
 
   async create(userId: string, dto: CreateSavedDto) {
-    // const novel = this.prismaService.novel.findUnique({
-    //   where: {
-    //     id: dto.novelId,
-    //     isHidden: false
-    //   },
-    //   select: {
-    //     id: true
-    //   }
-    // });
-
-    // if (!novel) throw new NotFoundException();
-    //TODO:
     const savedNovel = await this.prismaService.savedNovels.create({
       data: {
         userId: userId,
