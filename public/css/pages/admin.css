@@ -1,0 +1,123 @@
+/* HEADER */
+.page-heading {
+  margin-bottom: 30px;
+}
+
+.page-heading a {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.current {
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+
+/* FILTERS */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  padding: 16px;
+  background: var(--color-bg);
+  margin-bottom: 20px;
+}
+
+.filters input,
+.filters select {
+  padding: 10px 12px;
+  border: 1px solid var(--color-main-dark);
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+  background: var(--color-bg);
+  min-width: 180px;
+  color: var(--color-text);
+}
+
+.filters input:focus,
+.filters select:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+/* BUTTONS */
+.filters button {
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+.apply-btn {
+  background: var(--color-main);
+  border: 1px solid var(--color-main);
+  color: var(--color-text);
+}
+
+.reset-btn {
+  background: transparent;
+  border: 1px solid var(--color-main-dark);
+  color: var(--color-text);
+}
+
+.apply-btn:hover,
+.reset-btn:hover {
+  background: var(--color-btn-hover);
+}
+
+.apply-btn:active,
+.reset-btn:active {
+  transform: scale(0.97);
+}
+
+/* TABLE */
+.container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.users-table {
+  border-collapse: collapse;
+}
+
+.users-table th,
+.users-table td {
+  border: 1px solid var(--color-main-dark);
+  padding: 10px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* BUTTONS */
+.btn {
+  width: 160px;
+  height: 36px;
+  cursor: pointer;
+  border: none;
+  background: var(--color-main);
+  color: var(--color-text);
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.btn:hover {
+  background: var(--color-btn-hover);
+  color: white;
+}
+
+.btn:active {
+  background: var(--color-btn-press) !important;
+  color: white;
+  scale: 0.97;
+}

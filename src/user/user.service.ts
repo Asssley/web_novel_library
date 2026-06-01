@@ -11,6 +11,7 @@ export class UserService {
       select: {
         id: true,
         nickname: true,
+        role: true,
         email: true,
         createdAt: true,
       },
@@ -28,7 +29,7 @@ export class UserService {
       this.prismaService.novel.count({
         where: { userId },
       }),
-      
+
       this.prismaService.savedNovels.count({
         where: { userId },
       }),

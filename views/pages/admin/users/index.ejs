@@ -1,0 +1,23 @@
+<div>
+
+  <div class="page-heading d-flex justify-content-between">
+    <a href="/admin/users">
+      <h1 class="current">Users</h1>
+    </a>
+    <a href="admin/novels">
+      <h1>Novels</h1>
+    </a>
+    <a href="/admin/comments">
+      <h1>Comments</h1>
+    </a>
+  </div>
+
+  <%- include('./_filters', { dto: filters }) %>
+
+  <%- include('./_table', { users, user: user }) %>
+
+  <%- include('./_pagination', { path: `/admin/users`, filters }) %>
+
+</div>
+
+</div>

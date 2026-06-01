@@ -1,0 +1,70 @@
+<div class="container">
+
+  <% if (users.length) { %>
+  <table class="users-table">
+
+    <thead>
+      <tr>
+        <th>Nickname</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% users.forEach(u => { %>
+      <tr data-id="<%= u.id %>">
+
+        <td><%= u.nickname %></td>
+        <td><%= u.email %></td>
+
+        <td class="actions">
+          <% if (user.role === 'SUPERADMIN') { %>
+
+          <!-- superadmin -->
+          <% if (u.role === 'SUPERADMIN' || user.role === u.role) { %>
+          <button class="btn" disabled>
+            Cannot change
+          </button>
+          <% } else { %>
+          <!-- admin toggle -->
+          <button class="btn" data-action="toggle-admin">
+            <%= u.role === 'ADMIN' ? 'Remove admin' : 'Make admin' %>
+          </button>
+          <% } %>
+          <% } %>
+
+          <!-- comment block -->
+          <% if (u.role === 'SUPERADMIN' || user.role === u.role) { %>
+          <button class="btn" disabled>
+            Cannot change
+          </button>
+          <% } else { %>
+          <button class="btn" data-action="toggle-comment">
+            <%= u.canComment ? 'Block comments' : 'Unblock comments' %>
+          </button>
+          <% } %>
+
+          <!-- novel block -->
+          <% if (u.role === 'SUPERADMIN' || user.role === u.role) { %>
+          <button class="btn" disabled>
+            Cannot change
+          </button>
+          <% } else { %>
+          <button class="btn" data-action="toggle-novel">
+            <%= u.canAddNovel ? 'Block novels' : 'Unblock novels' %>
+          </button>
+          <% } %>
+
+        </td>
+
+      </tr>
+      <% }) %>
+    </tbody>
+
+  </table>
+  <% } else { %>
+    <h3>No results</h3>
+  <% } %>
+
+</div>

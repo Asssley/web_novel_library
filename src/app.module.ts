@@ -16,6 +16,7 @@ import { CommentModule } from './comment/comment.module.js';
 import { CommentRateModule } from './comment-rate/comment-rate.module.js';
 import { TranslationModule } from './translation/translation.module.js';
 import { LanguageMiddleware } from './common/middleware/language.middleware.js';
+import { AdminModule } from './admin/admin.module.js';
 
 @Module({
   imports: [
@@ -30,7 +31,8 @@ import { LanguageMiddleware } from './common/middleware/language.middleware.js';
     NovelRateModule,
     CommentModule,
     CommentRateModule,
-    TranslationModule
+    TranslationModule,
+    AdminModule
   ],
   controllers: [AppController],
   providers: [

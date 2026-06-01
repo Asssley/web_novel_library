@@ -9,30 +9,23 @@ import { GetCommentsQueryDto } from './dto/get-comments-query.dto.js';
 
 @Injectable()
 export class CommentService {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prismaService: PrismaService) { }
 
   async create(userId: string, novelId: string, dto: CreateCommentDto) {
-    const novel = await this.prisma.novel.findUnique({
+    const user = await this.prismaService.user.findUnique({
       where: {
-        id: novelId,
+        id: userId
       },
       select: {
-        id: true,
-        user: {
-          select: {
-            canComment: true
-          }
-        }
-      },
+        canComment: true
+      }
     });
 
-    if (!novel) throw new NotFoundException();
-
-    if (novel.user.canComment === false) {
+    if (!user?.canComment) {
       throw new ForbiddenException('Comments are disabled');
     }
 
-    const comment = await this.prisma.comment.create({
+    const comment = await this.prismaService.comment.create({
       data: {
         text: dto.text,
         userId,
@@ -53,7 +46,7 @@ export class CommentService {
     const skip = (page - 1) * limit;
 
     const [comments, total] = await Promise.all([
-      this.prisma.comment.findMany({
+      this.prismaService.comment.findMany({
         where: {
           novelId,
         },
@@ -81,7 +74,7 @@ export class CommentService {
         },
       }),
 
-      this.prisma.comment.count({
+      this.prismaService.comment.count({
         where: {
           novelId,
         },
@@ -118,7 +111,7 @@ export class CommentService {
   }
 
   async delete(userId: string, commentId: string) {
-    const comment = await this.prisma.comment.findUnique({
+    const comment = await this.prismaService.comment.findUnique({
       where: { id: commentId },
       select: {
         id: true,
@@ -132,7 +125,7 @@ export class CommentService {
       throw new ForbiddenException();
     }
 
-    await this.prisma.comment.delete({
+    await this.prismaService.comment.delete({
       where: { id: commentId },
     });
 

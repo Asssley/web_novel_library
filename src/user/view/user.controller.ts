@@ -13,7 +13,7 @@ export class UserController {
     @Req() req
   ) {
     const data = await this.userService.getUserStats(req.user.id);
-
+    
     return {
       ...data,
       title: "Profile",
