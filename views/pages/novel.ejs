@@ -151,7 +151,11 @@
       <form id="commentForm">
         <div class="d-flex flex-row justify-content-between comment-form-header">
           <h5>Add a comment</h5>
+          <% if (user) { %>
           <button type="submit">Submit</button>
+          <% } else { %>
+          <button disabled type="submit">Submit</button>
+          <% } %>
         </div>
 
         <textarea name="text" placeholder="Write your comment..." required></textarea>
@@ -184,6 +188,7 @@
         <!-- REACTIONS -->
         <div class="comment-reactions d-flex align-items-center gap-2">
 
+          <% if (user) { %>
           <button class="like-btn reaction-btn <%= comment.userReaction === 'like' ? 'active-like' : '' %>" data-id="<%= comment.id %>">
             👍
             <span class="like-count">
@@ -197,6 +202,21 @@
               <%= comment.dislikesCount %>
             </span>
           </button>
+          <% } else { %>
+          <button disabled class="like-btn reaction-btn <%= comment.userReaction === 'like' ? 'active-like' : '' %>" data-id="<%= comment.id %>">
+            👍
+            <span class="like-count">
+              <%= comment.likesCount %>
+            </span>
+          </button>
+
+          <button disabled class="dislike-btn reaction-btn <%= comment.userReaction === 'dislike' ? 'active-dislike' : '' %>" data-id="<%= comment.id %>">
+            👎
+            <span class="dislike-count">
+              <%= comment.dislikesCount %>
+            </span>
+          </button>
+          <% } %>
         </div>
 
         <!-- DELETE -->
