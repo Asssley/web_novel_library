@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service.js';
 import { GetUsersQueryDto } from './dto/get-users-for-admin-query.dto.js';
 import { Role } from '../generated/enums.js';
 import { GetNovelsQueryDto } from './dto/get-novels-for-admin-query.dto.js';
+import { GetCommentsQueryDto } from './dto/get-comments-for-admin-query.dto.js';
 
 @Injectable()
 export class AdminService {
@@ -166,6 +167,81 @@ export class AdminService {
     };
   }
 
+  async getComments(dto: GetCommentsQueryDto) {
+    const page = dto.page ?? 1;
+    const limit = 20;
+    const skip = (page - 1) * limit;
+
+    const where: any = {};
+
+    if (dto.search?.trim()) {
+      where.OR = [
+        {
+          text: {
+            contains: dto.search,
+            mode: 'insensitive',
+          },
+        },
+        {
+          user: {
+            nickname: {
+              contains: dto.search,
+              mode: 'insensitive',
+            },
+          },
+        },
+      ];
+    }
+
+    const [comments, total] = await Promise.all([
+      this.prismaService.comment.findMany({
+        where,
+        skip,
+        take: limit,
+
+        orderBy: {
+          text: "asc"
+        },
+
+        select: {
+          id: true,
+          text: true,
+          createdAt: true,
+          novel: {
+            select: {
+              title: true
+            }
+          },
+          user: {
+            select: {
+              id: true,
+              nickname: true,
+              role: true
+            },
+          },
+
+        },
+      }),
+
+      this.prismaService.comment.count({
+        where,
+      }),
+    ]);
+
+    return {
+      comments,
+
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+
+      filters: dto,
+    };
+  }
+
   async toggleComment(role: Role, userId: string) {
     const user = await this.getUserOrThrow(userId);
 
@@ -246,6 +322,36 @@ export class AdminService {
 
     await this.prismaService.novel.delete({
       where: { id: novelId },
+    });
+
+    return { success: true };
+  }
+
+  async deleteComment(role: Role, commentId: string) {
+    const comment = await this.prismaService.comment.findUnique({
+      where: { id: commentId },
+      select: {
+        id: true,
+        userId: true,
+        user: {
+          select: {
+            id: true,
+            role: true,
+          },
+        },
+      },
+    });
+
+    if (!comment) throw new NotFoundException('Comment not found');
+
+    if (comment.user.role === role || comment.user.role === Role.SUPERADMIN) {
+      throw new ForbiddenException(
+        'You cannot delete content from user with equal or higher role',
+      );
+    }
+
+    await this.prismaService.comment.delete({
+      where: { id: commentId },
     });
 
     return { success: true };

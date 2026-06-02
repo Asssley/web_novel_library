@@ -52,5 +52,13 @@ export class AdminController {
   }
 
   //Comments
-
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles("ADMIN", "SUPERADMIN")
+  @Delete('comments/:id')
+  deleteComment(
+    @Req() req,
+    @Param('id') id: string
+  ) {
+    return this.adminService.deleteComment(req.user.role, id);
+  }
 }

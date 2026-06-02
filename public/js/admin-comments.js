@@ -5,16 +5,16 @@ resetBtn.addEventListener('click', () => {
 });
 
 const deleteButtons = document.querySelectorAll(
-  '[data-action="delete-novel"]'
+  '[data-action="delete-comment"]'
 );
 
 deleteButtons.forEach(button => {
   button.addEventListener('click', async () => {
 
-    const novelId = button.dataset.id;
+    const commentId = button.dataset.id;
 
     const confirmed = confirm(
-      'Are you sure you want to delete this novel?\n\nThis action cannot be undone.'
+      'Are you sure you want to delete this comment?\n\nThis action cannot be undone.'
     );
 
     if (!confirmed) {
@@ -26,7 +26,7 @@ deleteButtons.forEach(button => {
 
     try {
       const response = await fetch(
-        `/api/admin/novels/${novelId}`,
+        `/api/admin/comments/${commentId}`,
         {
           method: 'DELETE',
           headers: {
@@ -42,7 +42,7 @@ deleteButtons.forEach(button => {
       window.location.reload();
 
     } catch (err) {
-      alert('Failed to delete novel.');
+      alert('Failed to delete comment.');
 
       button.disabled = false;
       button.textContent = 'Delete';

@@ -5,6 +5,7 @@ import { RolesGuard } from '../../auth/guards/roles.guard.js';
 import { Roles } from '../../auth/decorators/roles.decorator.js';
 import { GetUsersQueryDto } from '../dto/get-users-for-admin-query.dto.js';
 import { GetNovelsQueryDto } from '../dto/get-novels-for-admin-query.dto.js';
+import { GetCommentsQueryDto } from '../dto/get-comments-for-admin-query.dto.js';
 
 @Controller('admin')
 export class AdminController {
@@ -57,4 +58,29 @@ export class AdminController {
       ]
     }
   }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles("ADMIN", "SUPERADMIN")
+  @Get("comments")
+  @Render("pages/admin/comments")
+  async getCommentsPage(
+    @Req() req,
+    @Query() dto: GetCommentsQueryDto
+  ) {
+    const data = await this.adminService.getComments(dto);
+
+    return {
+      ...data,
+      user: req.user,
+      title: "Admin pannel: comments",
+      styles: [
+        "pages/admin.css",
+        "parts/pagination.css"
+      ],
+      scripts: [
+        "admin-comments.js"
+      ]
+    }
+  }
+
 }

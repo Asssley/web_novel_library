@@ -1,0 +1,88 @@
+<div class="container">
+
+  <% if (comments.length) { %>
+
+  <table class="users-table">
+
+    <colgroup>
+      <col style="width: 30%">
+      <col style="width: 10%">
+      <col style="width: 25%">
+      <col style="width: 25%">
+      <col style="width: 10%">
+    </colgroup>
+
+    <thead>
+      <tr>
+        <th>Comment text</th>
+        <th>Created at</th>
+        <th>Novel</th>
+        <th>Author</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      <% comments.forEach(comment => { %>
+
+      <tr data-id="<%= comment.id %>">
+
+        <td>
+          <%= comment.text %>
+        </td>
+
+        <td>
+          <%= new Date(comment.createdAt).toLocaleString() %>
+        </td>
+        
+        <td>
+          <%= comment.novel.title %>
+        </td>
+        
+        <td>
+          <%= comment.user.nickname %>
+        </td>
+
+
+        <td>
+          <div class="actions">
+
+            <% const cannotManage =
+              comment.user.role === 'SUPERADMIN' ||
+              (user.role === 'ADMIN' && comment.user.role === 'ADMIN');
+            %>
+
+            <% if (cannotManage) { %>
+
+            <span class="cannot-change">
+              Cannot delete
+            </span>
+
+            <% } else { %>
+
+            <button class="btn btn-danger" data-action="delete-comment" data-id="<%= comment.id %>">
+              Delete
+            </button>
+
+            <% } %>
+
+          </div>
+        </td>
+
+
+      </tr>
+
+      <% }) %>
+
+    </tbody>
+
+  </table>
+
+  <% } else { %>
+
+  <h3>No results</h3>
+
+  <% } %>
+
+</div>
