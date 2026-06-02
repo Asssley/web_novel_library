@@ -1,7 +1,8 @@
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service.js';
-import { GetUsersQueryDto, UserStatusFilter } from './dto/get-users-for-admin-query.dto.js';
+import { GetUsersQueryDto } from './dto/get-users-for-admin-query.dto.js';
 import { Role } from '../generated/enums.js';
+import { GetNovelsQueryDto } from './dto/get-novels-for-admin-query.dto.js';
 
 @Injectable()
 export class AdminService {
@@ -95,6 +96,76 @@ export class AdminService {
     };
   }
 
+  async getNovels(dto: GetNovelsQueryDto) {
+    const page = dto.page ?? 1;
+    const limit = 20;
+    const skip = (page - 1) * limit;
+
+    const where: any = {};
+
+    if (dto.search?.trim()) {
+      where.OR = [
+        {
+          title: {
+            contains: dto.search,
+            mode: 'insensitive',
+          },
+        },
+        {
+          user: {
+            nickname: {
+              contains: dto.search,
+              mode: 'insensitive',
+            },
+          },
+        },
+      ];
+    }
+
+    const [novels, total] = await Promise.all([
+      this.prismaService.novel.findMany({
+        where,
+        skip,
+        take: limit,
+
+        orderBy: {
+          title: "asc"
+        },
+
+        select: {
+          id: true,
+          title: true,
+
+          user: {
+            select: {
+              id: true,
+              nickname: true,
+              role: true
+            },
+          },
+
+        },
+      }),
+
+      this.prismaService.novel.count({
+        where,
+      }),
+    ]);
+
+    return {
+      novels,
+
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+
+      filters: dto,
+    };
+  }
+
   async toggleComment(role: Role, userId: string) {
     const user = await this.getUserOrThrow(userId);
 
@@ -148,6 +219,36 @@ export class AdminService {
         role: newRole,
       },
     });
+  }
+
+  async deleteNovel(role: Role, novelId: string) {
+    const novel = await this.prismaService.novel.findUnique({
+      where: { id: novelId },
+      select: {
+        id: true,
+        userId: true,
+        user: {
+          select: {
+            id: true,
+            role: true,
+          },
+        },
+      },
+    });
+
+    if (!novel) throw new NotFoundException('Novel not found');
+
+    if (novel.user.role === role || novel.user.role === Role.SUPERADMIN) {
+      throw new ForbiddenException(
+        'You cannot delete content from user with equal or higher role',
+      );
+    }
+
+    await this.prismaService.novel.delete({
+      where: { id: novelId },
+    });
+
+    return { success: true };
   }
 
   private async getUserOrThrow(id: string) {

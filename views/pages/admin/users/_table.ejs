@@ -3,6 +3,12 @@
   <% if (users.length) { %>
   <table class="users-table">
 
+    <colgroup>
+      <col style="width: 25%">
+      <col style="width: 25%">
+      <col style="width: 50%">
+    </colgroup>
+
     <thead>
       <tr>
         <th>Nickname</th>
@@ -18,43 +24,47 @@
         <td><%= u.nickname %></td>
         <td><%= u.email %></td>
 
-        <td class="actions">
-          <% if (user.role === 'SUPERADMIN') { %>
+        <td>
+          <div class="actions">
 
-          <!-- superadmin -->
-          <% if (u.role === 'SUPERADMIN' || user.role === u.role) { %>
-          <button class="btn" disabled>
-            Cannot change
-          </button>
-          <% } else { %>
-          <!-- admin toggle -->
-          <button class="btn" data-action="toggle-admin">
-            <%= u.role === 'ADMIN' ? 'Remove admin' : 'Make admin' %>
-          </button>
-          <% } %>
-          <% } %>
+            <% if (user.role === 'SUPERADMIN') { %>
 
-          <!-- comment block -->
-          <% if (u.role === 'SUPERADMIN' || user.role === u.role) { %>
-          <button class="btn" disabled>
-            Cannot change
-          </button>
-          <% } else { %>
-          <button class="btn" data-action="toggle-comment">
-            <%= u.canComment ? 'Block comments' : 'Unblock comments' %>
-          </button>
-          <% } %>
+            <!-- superadmin -->
+            <% if (u.role === 'SUPERADMIN' || user.role === u.role) { %>
+            <button class="btn" disabled>
+              Cannot change
+            </button>
+            <% } else { %>
+            <!-- admin toggle -->
+            <button class="btn" data-action="toggle-admin">
+              <%= u.role === 'ADMIN' ? 'Remove admin' : 'Make admin' %>
+            </button>
+            <% } %>
+            <% } %>
 
-          <!-- novel block -->
-          <% if (u.role === 'SUPERADMIN' || user.role === u.role) { %>
-          <button class="btn" disabled>
-            Cannot change
-          </button>
-          <% } else { %>
-          <button class="btn" data-action="toggle-novel">
-            <%= u.canAddNovel ? 'Block novels' : 'Unblock novels' %>
-          </button>
-          <% } %>
+            <!-- comment block -->
+            <% if (u.role === 'SUPERADMIN' || user.role === u.role) { %>
+            <button class="btn" disabled>
+              Cannot change
+            </button>
+            <% } else { %>
+            <button class="btn" data-action="toggle-comment">
+              <%= u.canComment ? 'Block comments' : 'Unblock comments' %>
+            </button>
+            <% } %>
+
+            <!-- novel block -->
+            <% if (u.role === 'SUPERADMIN' || user.role === u.role) { %>
+            <button class="btn" disabled>
+              Cannot change
+            </button>
+            <% } else { %>
+            <button class="btn" data-action="toggle-novel">
+              <%= u.canAddNovel ? 'Block novels' : 'Unblock novels' %>
+            </button>
+            <% } %>
+
+          </div>
 
         </td>
 
@@ -64,7 +74,7 @@
 
   </table>
   <% } else { %>
-    <h3>No results</h3>
+  <h3>No results</h3>
   <% } %>
 
 </div>

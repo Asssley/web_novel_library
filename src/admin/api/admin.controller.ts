@@ -1,10 +1,10 @@
-import { Controller, Param, Post, Req, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { AdminService } from '../admin.service.js';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard.js';
 import { RolesGuard } from '../../auth/guards/roles.guard.js';
 import { Roles } from '../../auth/decorators/roles.decorator.js';
 
-@Controller('admin')
+@Controller('api/admin')
 export class AdminController {
   constructor(private readonly adminService: AdminService) { }
 
@@ -41,6 +41,15 @@ export class AdminController {
 
 
   // Novels
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles("ADMIN", "SUPERADMIN")
+  @Delete('novels/:id')
+  deleteNovel(
+    @Req() req,
+    @Param('id') id: string
+  ) {
+    return this.adminService.deleteNovel(req.user.role, id);
+  }
 
   //Comments
 

@@ -2,10 +2,10 @@
 
   <div class="page-heading d-flex justify-content-between">
     <a href="/admin/users">
-      <h1 class="current">Users</h1>
+      <h1>Users</h1>
     </a>
     <a href="/admin/novels">
-      <h1>Novels</h1>
+      <h1 class="current">Novels</h1>
     </a>
     <a href="/admin/comments">
       <h1>Comments</h1>
@@ -14,9 +14,9 @@
 
   <%- include('./_filters', { dto: filters }) %>
 
-  <%- include('./_table', { users, user: user }) %>
+  <%- include('./_table', { novels, user: user }) %>
 
-  <%- include('./_pagination', { path: `/admin/users`, filters }) %>
+  <%- include('./_pagination', { path: `/admin/novels`, filters }) %>
 
 </div>
 

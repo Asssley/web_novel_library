@@ -1,0 +1,76 @@
+<div class="container">
+
+  <% if (novels.length) { %>
+
+  <table class="users-table">
+
+    <colgroup>
+      <col style="width: 50%">
+      <col style="width: 25%">
+      <col style="width: 25%">
+    </colgroup>
+
+    <thead>
+      <tr>
+        <th>Novel title</th>
+        <th>Author</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      <% novels.forEach(novel => { %>
+
+      <tr data-id="<%= novel.id %>">
+
+        <td>
+          <%= novel.title %>
+        </td>
+
+        <td>
+          <%= novel.user.nickname %>
+        </td>
+
+
+        <td>
+          <div class="actions">
+
+            <% const cannotManage =
+              novel.user.role === 'SUPERADMIN' ||
+              (user.role === 'ADMIN' && novel.user.role === 'ADMIN');
+            %>
+
+            <% if (cannotManage) { %>
+
+            <span class="cannot-change">
+              Cannot delete
+            </span>
+
+            <% } else { %>
+
+            <button class="btn btn-danger" data-action="delete-novel" data-id="<%= novel.id %>">
+              Delete
+            </button>
+
+            <% } %>
+
+          </div>  
+        </td>
+
+
+      </tr>
+
+      <% }) %>
+
+    </tbody>
+
+  </table>
+
+  <% } else { %>
+
+  <h3>No results</h3>
+
+  <% } %>
+
+</div>

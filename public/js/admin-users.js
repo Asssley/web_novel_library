@@ -20,7 +20,7 @@ document.addEventListener('click', async (e) => {
 
   const action = btn.dataset.action;
 
-  let url = `/admin/users/${userId}`;
+  let url = `/api/admin/users/${userId}`;
 
   if (action === 'toggle-admin') url += '/toggle-role';
   if (action === 'toggle-comment') url += '/toggle-comment';
