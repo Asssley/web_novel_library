@@ -16,7 +16,7 @@ export class AdminService {
     const limit = 20;
     const skip = (page - 1) * limit;
 
-    const order = dto.order ?? 'asc';
+    const order = 'asc';
 
     const where: any = {};
 

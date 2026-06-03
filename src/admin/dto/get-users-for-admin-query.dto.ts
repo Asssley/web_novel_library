@@ -33,7 +33,4 @@ export class GetUsersQueryDto {
   @Type(() => Number)
   @Min(1)
   page?: number;
-
-  @IsOptional()
-  order?: 'asc' | 'desc';
 }

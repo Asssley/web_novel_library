@@ -2,20 +2,15 @@
 
   <input type="text" name="search" placeholder="Search by nickname or email" value="<%= dto?.search || '' %>" />
 
-  <select name="order">
-    <option value="asc" <%= dto?.order === 'asc' ? 'selected' : '' %>>Ascending</option>
-    <option value="desc" <%= dto?.order === 'desc' ? 'selected' : '' %>>Descending</option>
-  </select>
-
   <select name="role">
-    <option value="ALL" <%= dto?.role === 'ALL' ? 'selected' : '' %>>All users</option>
+    <option value="ALL" <%= dto?.role === 'ALL' ? 'selected' : '' %>>All roles</option>
     <option value="USER" <%= dto?.role === 'USER' ? 'selected' : '' %>>Users</option>
     <option value="ADMIN" <%= dto?.role === 'ADMIN' ? 'selected' : '' %>>Admins</option>
     <option value="SUPERADMIN" <%= dto?.role === 'SUPERADMIN' ? 'selected' : '' %>>Superadmins</option>
   </select>
 
   <select name="status">
-    <option value="ALL" <%= dto?.status === 'ALL' ? 'selected' : '' %>>All</option>
+    <option value="ALL" <%= dto?.status === 'ALL' ? 'selected' : '' %>>All statuses</option>
     <option value="ACTIVE" <%= dto?.status === 'ACTIVE' ? 'selected' : '' %>>Not blocked</option>
     <option value="NOVEL_BLOCKED" <%= dto?.status === 'NOVEL_BLOCKED' ? 'selected' : '' %>>Blocked from novels</option>
     <option value="COMMENT_BLOCKED" <%= dto?.status === 'COMMENT_BLOCKED' ? 'selected' : '' %>>Blocked from comments</option>
