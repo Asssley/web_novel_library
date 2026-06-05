@@ -155,12 +155,15 @@ export class NovelService {
     }
 
     isSaved = await this.SavedService.checkIfSaved(userId ?? "", novel.id);
+    
+    const chaptersCount = await this.prismaService.chapter.count({where: {novelId}});
 
     const comments = await this.commentService.getAll(userId, novelId, dto);
 
     return {
       novel,
       novelRate,
+      chaptersCount,
       lastChapterId,
       isSaved,
       hasReadBefore,

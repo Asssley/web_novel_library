@@ -1,7 +1,6 @@
-import { Controller, Get, Post, Delete, Param, Body, Query, Req, UseGuards, } from '@nestjs/common';
+import { Controller, Post, Delete, Param, Body, Req, UseGuards, } from '@nestjs/common';
 import { CommentService } from '../comment.service.js';
 import { CreateCommentDto } from '../dto/create-comment.dto.js';
-import { GetCommentsQueryDto } from '../dto/get-comments-query.dto.js';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard.js';
 
 @Controller('api/novels/:novelId/comments')
