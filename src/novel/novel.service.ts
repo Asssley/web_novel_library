@@ -31,6 +31,7 @@ export class NovelService {
     private readonly commentService: CommentService,
     private readonly translationService: TranslationService,
   ) { }
+
   async create(
     userId: string,
     file: Express.Multer.File,
@@ -67,8 +68,8 @@ export class NovelService {
 
       const targetLang = novel.language === 'ENGLISH' ? "UKRAINIAN" : "ENGLISH";
 
-      const translatedTitle = await this.translationService.translate(dto.description, targetLang);
-      const translatedDescription = await this.translationService.translate(dto.title, targetLang);
+      const translatedTitle = await this.translationService.translate(dto.title, targetLang);
+      const translatedDescription = await this.translationService.translate(dto.description, targetLang);
 
       await this.prismaService.novelTranslation.create({
         data: {
